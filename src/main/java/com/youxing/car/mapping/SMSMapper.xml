@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.SmsDao">
+	<resultMap type="com.youxing.car.entity.SMS" id="SmsRM">
+	      <id column="id" property="id" />
+	      <result column="type" property="type" />
+	      <result column="senddate" property="senddate" />
+	      <result column="sendtarget" property="sendtarget" />
+	      <result column="content" property="content" />
+	      <result column="sendcount" property="sendcount" />
+	</resultMap>
+	<!-- 全部字段-->
+	<sql id="COLUMNS">
+     id,type,LEFT(senddate, 19) senddate,sendtarget,content,sendcount
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.SMS">
+		insert into yx_sms (
+			<if test="type != null ">type,</if>
+			<if test="sendtarget != null ">sendtarget,</if>
+			<if test="content != null ">content,</if>
+			<if test="sendcount != null ">sendcount,</if>
+			<if test="senddate != null ">senddate</if>
+		)
+		values (
+			<if test="type != null ">#{type} ,</if>
+			<if test="sendtarget != null ">#{sendtarget},</if>
+			<if test="content != null ">#{content},</if>
+			<if test="sendcount != null ">#{sendcount},</if>
+			now()	
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.SMS">
+		update yx_sms
+		<set>
+			<if test="type != null ">type = #{type} </if>
+			<if test="sendtarget != null ">sendtarget=#{sendtarget}</if>
+			<if test="content != null ">content = #{content}</if>
+			<if test="sendcount != null ">sendcount =#{sendcount}</if>
+			<if test="senddate != null ">senddate = #{senddate}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_sms where id=#{id} 
+	</delete>
+	
+	<delete id="removeByIp" parameterType="com.youxing.car.entity.SMS">
+		delete from yx_sms where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="list">
+		delete from yx_sms where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="SmsRM">
+		select <include refid="COLUMNS" /> from yx_sms
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="SmsRM">
+		select <include refid="COLUMNS" /> from yx_sms
+		<where>
+			<if test="type != null ">type = #{type} </if>
+			<if test="sendtarget != null ">sendtarget=#{sendtarget}</if>
+			<if test="content != null ">content = #{content}</if>
+			<if test="sendcount != null ">sendcount =#{sendcount}</if>
+			<if test="senddate != null ">senddate = #{senddate}</if>
+		</where>
+	</select>
+
+	
+
+	
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.SMS" resultMap="SmsRM">
+		select <include refid="COLUMNS" /> from yx_sms
+		<where>
+			<if test="type != null ">type = #{type} </if>
+			<if test="sendtarget != null ">sendtarget=#{sendtarget}</if>
+			<if test="content != null ">content = #{content}</if>
+			<if test="sendcount != null ">sendcount =#{sendcount}</if>
+			<if test="senddate != null ">senddate = #{senddate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="SmsRM">
+		select <include refid="COLUMNS" /> from yx_sms where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_sms
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_sms
+		<where>
+			<if test="type != null">and type in
+				<foreach collection="type" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="sendtarget != null ">and sendtarget=#{sendtarget}</if>
+			<if test="content != null ">and content = #{content}</if>
+			<if test="sendcount != null ">and sendcount =#{sendcount}</if>
+			<if test="senddate != null ">and senddate = #{senddate}</if>
+			<if test="startDate != null ">and senddate &gt;= #{startDate}</if>
+			<if test="endDate != null ">and senddate &lt;= #{endDate}</if>
+		</where>
+	</select>
+	
+	<select id="pageBy" parameterType="map" resultMap="SmsRM">
+		select <include refid="COLUMNS" /> from yx_sms
+		<where>
+			<if test="type != null">and type in
+				<foreach collection="type" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="sendtarget != null ">and sendtarget=#{sendtarget}</if>
+			<if test="content != null ">and content = #{content}</if>
+			<if test="sendcount != null ">and sendcount =#{sendcount}</if>
+			<if test="senddate != null ">and senddate = #{senddate}</if>
+			<if test="startDate != null ">and senddate &gt;= #{startDate}</if>
+			<if test="endDate != null ">and senddate &lt;= #{endDate}</if>
+		</where>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	
+</mapper>

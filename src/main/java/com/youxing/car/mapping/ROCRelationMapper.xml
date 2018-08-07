@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.ROCRelationDao">
+	<resultMap type="com.youxing.car.entity.ROCRelation" id="ROCRelationRM">
+	      <id column="id" property="id" />
+	      <result column="region" property="region" />
+	      <result column="org" property="org" />
+	      <result column="car_id" property="car_id" />
+	      <result column="type" property="type" />
+	</resultMap>
+	<!-- 全部字段-->
+	<sql id="COLUMNS">
+     id,region,org,car_id,type
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.ROCRelation">
+		insert into yx_region_car_org_relation (region,org,car_id,type)
+		values (#{region},#{org},#{car_id},#{type})
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.ROCRelation">
+		update yx_region_car_org_relation
+		<set>
+			<if test="region != null ">region = #{region}, </if>
+			<if test="org != null ">org = #{org},</if>
+			<if test="car_id != null ">car_id = #{car_id},</if>
+			<if test="type != null ">type = #{type}</if>
+		</set>
+		where region =#{region}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="String">
+		delete from yx_region_car_org_relation where id =#{id}
+	</delete>
+	
+	<delete id="removeByRegionId" parameterType="String">
+		delete from yx_region_car_org_relation where region =#{region}
+	</delete>
+	
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_region_car_org_relation where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="ROCRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_car_org_relation
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="ROCRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_car_org_relation 
+		<where>
+			<if test="region!= null "> and region= #{region}</if>
+			<if test="org != null "> and org = #{org}</if>
+			<if test="car_id != null "> and car_id = #{car_id}</if>
+			<if test="type != null "> and type = #{type}</if>
+		</where>
+	</select>
+
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.ROCRelation" resultMap="ROCRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_car_org_relation
+		<where>
+			<if test="region!= null ">region= #{region}</if>
+			<if test="org != null ">org = #{org}</if>
+			<if test="car != null ">car_id = #{car_id}</if>
+			<if test="type != null ">type = #{type}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="ROCRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_car_org_relation where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_region_relation
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_region_car_org_relation
+		<where>
+			<if test="region!= null ">region!= = #{region!=},</if>
+			<if test="org != null ">org = #{org},</if>
+			<if test="car != null ">car_id = #{car_id}</if>
+			<if test="type != null ">type = #{type}</if>
+		</where>
+	</select>
+	
+	
+	
+</mapper>

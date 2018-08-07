@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+						http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+						http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+						http://www.springframework.org/schema/context
+          				http://www.springframework.org/schema/context/spring-context-3.2.xsd
+          				http://www.springframework.org/schema/aop 
+	                    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
+		 <mvc:default-servlet-handler/>
+	    <aop:aspectj-autoproxy proxy-target-class="true"/>  	
+	
+	<mvc:annotation-driven/>
+	<!-- 开启controller层的aop -->
+	<aop:config proxy-target-class="true"/>  
+		 <mvc:view-controller path="/" view-name="redirect:/login"/>
+	<!-- -->
+	
+	 <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+	 
+
+    <!-- Include a swagger configuration
+    <bean name="/applicationSwaggerConfig" class="com.youxing.car.swagger.SwaggerConfiguration"/>
+	 -->
+	<!-- 包自动 扫描仪-->
+	<context:component-scan base-package="com.youxing.car.controller" />
+	
+	<!-- 配置试图解析器 -->
+	<!-- <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean> -->
+    
+	<!--文件上传试图解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10485760"></property>
+	</bean>
+	
+	<mvc:annotation-driven >
+		<mvc:message-converters>
+	        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	        	<property name = "supportedMediaTypes">
+                      <list>
+                          <value>text/html;charset=UTF-8</value>   
+                     </list>   
+                </property>   
+	        </bean>
+	        <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+            <bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter" />
+	        <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+	        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+    	</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/app/**"/>
+			<mvc:exclude-mapping path="/app/user/login"/>
+			<mvc:exclude-mapping path="/app/code/get"/>
+			<mvc:exclude-mapping path="/app/version/check"/>
+			<mvc:exclude-mapping path="/app/obd/upload"/>
+			<mvc:exclude-mapping path="/app/sys/**"/>
+			<mvc:exclude-mapping path="/app/org/getOrgNameAndId"/>
+			<mvc:exclude-mapping path="/apk/**"/>
+			<bean name="interceptorApp" class="com.youxing.car.interceptor.TokenInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	 <mvc:interceptors>		
+		<mvc:interceptor>
+			<mvc:mapping path="/web/**"/>
+			<mvc:exclude-mapping path="/web/login"/>
+			<mvc:exclude-mapping path="/web/jcaptcha.jpg"/>
+			<mvc:exclude-mapping path="/web/user/login"/>
+			<mvc:exclude-mapping path="/web/user/out"/>
+			<mvc:exclude-mapping path="/web/get/user/org"/>
+			<mvc:exclude-mapping path="/web/exceptions/**"/>
+			<mvc:exclude-mapping path="/web/static/**"/>
+			<mvc:exclude-mapping path="/web/get/gps/by/carNo"/>
+			<mvc:exclude-mapping path="/web/get/gps/all/car"/>
+			<mvc:exclude-mapping path="/web/limit/**"/>
+			<bean name="interceptorWeb" class="com.youxing.car.interceptor.TokenInterceptorWeb" />
+		</mvc:interceptor>			
+	</mvc:interceptors>
+	
+	
+
+	
+	<!-- SpringMVC在超出上传文件限l 制时，会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->  
+    <!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的，而且此时还没有进入到Controller方法中 -->  
+     <bean  class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+        <property name="exceptionMappings">  
+            <props>  
+              <!--   遇到MaxUploadSizeExceededException异常时，自动跳转到/WEB-INF/page/error_fileupload.jsp页面   -->
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error/fileupload</prop>                
+            </props>
+        </property>
+     </bean>
+
+</beans>

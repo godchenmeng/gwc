@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.RolePermissionDao">
+	<resultMap type="com.youxing.car.entity.RolePermission" id="RolePermissionRM">
+		<id column="id" property="id" />
+		<result column="rid" property="rid" />
+		<result column="pid" property="pid" />
+		<result column="createdby" property="createdby" />
+		<result column="createdate" property="createdate" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,rid,pid,createdby,createdate
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.RolePermission">
+		insert into yx_role_permission (id,rid,pid,createdby,createdate)
+		values (#{id},#{rid},#{pid},#{createdby},#{createdate})
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.RolePermission">
+		update yx_role_permission 
+		<set>
+			<if test="rid != null">rid = #{rid},</if>
+			<if test="pid != null">pid = #{pid},</if>
+			<if test="createdby != null">createdby = #{createdby},</if>
+			<if test="createdate != null">createdate = #{createdate}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_role_permission where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_role_permission where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="RolePermissionRM">
+		select <include refid="COLUMNS" /> from yx_role_permission
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="RolePermissionRM">
+		select <include refid="COLUMNS" /> from yx_role_permission
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="rid != null">and rid = #{rid}</if>
+			<if test="pid != null">and pid = #{pid}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="RolePermissionRM">
+		select <include refid="COLUMNS" /> from yx_role_permission
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="rid != null">and rid = #{rid}</if>
+			<if test="pid != null">and pid = #{pid}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="RolePermissionRM">
+		select <include refid="COLUMNS" /> from yx_role_permission
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="rid != null">and rid = #{rid}</if>
+			<if test="pid != null">and pid = #{pid}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.RolePermission" resultMap="RolePermissionRM">
+		select <include refid="COLUMNS" /> from yx_role_permission
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="rid != null">and rid = #{rid}</if>
+			<if test="pid != null">and pid = #{pid}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="RolePermissionRM">
+		select <include refid="COLUMNS" /> from yx_role_permission where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_role_permission
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_role_permission
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="rid != null">and rid = #{rid}</if>
+			<if test="pid != null">and pid = #{pid}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+	
+	<select id="getPermission"  parameterType="long"  resultType="long">
+		select pid from yx_role_permission where rid = #{id}
+	</select>
+	
+	<select id="getRolePermission"  parameterType="long"  resultType="permission">
+		select yp.id,yp.name,yp.parent,yp.status,yp.descr,yp.createdby,yp.createdate,yp.url,yp.css,yp.key
+		from yx_role_permission yrp
+		right join yx_permission yp on yrp.pid=yp.id
+		where yrp.rid = #{id} and yp.type='1' and yp.status = 1
+		order by yp.orders asc
+	</select>
+	
+	
+	<select id="getRolePermissionUrl"  parameterType="long"  resultType="string">
+		select yp.url from yx_role_permission yrp
+		left join yx_permission yp on yrp.pid=yp.id 
+		where  yrp.rid = #{id} 
+		and yp.url is not null and type = 3
+	</select>
+	
+	<!-- 获取当前登录用户，所有非菜单（操作权限）权限列表 -->
+	<select id="getRolePermissionUrlList"  parameterType="long"  resultType="java.util.HashMap">
+		select yp.name,yp.url from  (select pid from yx_role_permission where rid = #{rid}) yr 
+			left join  yx_permission  yp on yr.pid = yp.id
+			where yp.type = 2
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+</mapper>

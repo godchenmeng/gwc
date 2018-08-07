@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.RoleDao">
+	<resultMap type="com.youxing.car.entity.Role" id="RoleRM">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="descr" property="descr" />
+		<result column="status" property="status" />
+		<result column="createby" property="createby" />
+		<result column="createdate" property="createdate" />
+		<result column="org" property="org" />
+		<result column="name" property="text" />
+		<result column="id" property="value" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,name,descr,status,createby,createdate,org
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Role">
+	    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_role (id,name,descr,status,createby,createdate,org)
+		values (#{id},#{name},#{descr},#{status},#{createby},#{createdate},#{org})
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Role">
+		update yx_role 
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="descr != null">descr = #{descr},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="createby != null">createby = #{createby},</if>
+			<if test="createdate != null">createdate = #{createdate}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_role where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_role where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="RoleRM">
+		select <include refid="COLUMNS" /> from yx_role where status ='1'
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="RoleRM">
+		select <include refid="COLUMNS" /> from yx_role
+	    where status ='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="descr != null">and descr = #{descr}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="RoleRM">
+		select <include refid="COLUMNS" /> from yx_role
+		where status ='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name like concat(concat('%',#{name}),'%')</if>
+			<if test="descr != null">and descr = #{descr}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="RoleRM">
+		select <include refid="COLUMNS" /> from yx_role
+		where status ='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="descr != null">and descr = #{descr}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Role" resultMap="RoleRM">
+		select <include refid="COLUMNS" /> from yx_role
+		where status ='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="descr != null">and descr = #{descr}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="RoleRM">
+		select <include refid="COLUMNS" /> from yx_role where id = #{id} and  status ='1'
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_role where status ='1'
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		<!-- select count(DISTINCT name) from yx_role -->
+		select count(id) from yx_role
+		where status ='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name like concat(concat('%',#{name}),'%')</if>
+			<if test="descr != null">and descr = #{descr}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	<!-- 查询角色名称，用于新增角色时判定不能新增同名的 -->
+	<select id="findRoleNames"  resultMap="RoleRM">
+	select name from yx_role  where name is not null and name != '' and status ='1'
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+</mapper>

@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.DriverDao">
+	<resultMap type="com.youxing.car.entity.Driver" id="DriverRM">
+		<id column="id" property="id" />
+		<result column="uid" property="uid" />
+		<result column="driver_no" property="driver_no" />
+		<result column="arrive" property="arrive" />
+		<result column="driver_type" property="driver_type" />
+		<result column="p_image" property="p_image" />
+		<result column="d_inmage_1" property="d_inmage_1" />
+		<result column="d_inmage_2" property="d_inmage_2" />
+		<result column="createdby" property="createdby" />
+		<result column="d_status" property="d_status" />
+		<result column="start" property="start" />
+		<result column="end" property="end" />
+		<result column="texts" property="texts" />
+		<result column="status" property="status" />
+		<result column="createdate" property="createdate" />
+		<result column="plan" property="plan" />
+		<result column="task_status" property="task_status" />
+		<result column="t_image_1" property="t_image_1" />
+		<result column="t_image_2" property="t_image_2" />
+		<result column="id_image_1" property="id_image_1" />
+		<result column="id_image_2" property="id_image_2" />
+		<result column="reason" property="reason" />
+		<result column="driver_status" property="driver_status " />
+	</resultMap>
+	
+	
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,uid,driver_no,arrive,driver_type,p_image,d_inmage_1,d_inmage_2,createdby,
+		d_status,start,end,texts,status,createdate,plan,t_image_1 ,t_image_2
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Driver">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_driver (
+			<if test="uid != null and uid!=''">uid ,</if>
+			<if test="driver_no != null and driver_no!=''">driver_no ,</if>
+			<if test="arrive != null and arrive!=''">arrive ,</if>
+			<if test="driver_type != null and driver_type!=''">driver_type ,</if>
+			<if test="p_image != null and p_image!=''">p_image ,</if>
+			<if test="d_inmage_1 != null and d_inmage_1!=''">d_inmage_1 ,</if>
+			<if test="d_inmage_2 != null and d_inmage_2!=''">d_inmage_2 ,</if>
+			<if test="createdby != null and createdby!=''">createdby ,</if>
+			<if test="d_status != null and d_status!=''">d_status ,</if>
+			<if test="start != null and start!=''">start ,</if>
+			<if test="end != null and end!=''">end ,</if>
+			<if test="t_image_1 != null">t_image_1 ,</if>
+			<if test="t_image_2 != null">t_image_2 ,</if>
+			<if test="id_image_1 != null">id_image_1 ,</if>
+			<if test="id_image_2 != null">id_image_2 ,</if>
+			<if test="reason != null">reason ,</if>
+			<if test="driver_status != null">driver_status ,</if>
+			<if test="texts != null and texts!=''">texts ,</if>
+			<if test="status != null and status!=''">status ,</if>
+			<if test="plan != null and plan!=''">plan,</if>
+			<if test="createdate != null and createdate!=''">createdate</if>
+		)
+		values (
+			<if test="uid != null and uid!=''"> #{uid},</if>
+			<if test="driver_no != null and driver_no!=''"> #{driver_no},</if>
+			<if test="arrive != null and arrive!=''"> #{arrive},</if>
+			<if test="driver_type != null and driver_type!=''"> #{driver_type},</if>
+			<if test="p_image != null and p_image!=''"> #{p_image},</if>
+			<if test="d_inmage_1 != null and d_inmage_1!=''"> #{d_inmage_1},</if>
+			<if test="d_inmage_2 != null and d_inmage_2!=''"> #{d_inmage_2},</if>
+			<if test="createdby != null and createdby!=''"> #{createdby},</if>
+			<if test="d_status != null and d_status!=''"> #{d_status},</if>
+			<if test="start != null and start!=''"> #{start},</if>
+			<if test="end != null and end!=''"> #{end},</if>
+			<if test="t_image_1 != null">#{t_image_1},</if>
+			<if test="t_image_2 != null">#{t_image_2},</if>
+			<if test="id_image_1 != null">#{id_image_1},</if>
+			<if test="id_image_2 != null">#{id_image_2},</if>
+			<if test="reason != null">#{reason},</if>
+			<if test="driver_status != null">#{driver_status},</if>
+			<if test="texts != null and texts!=''"> #{texts},</if>
+			<if test="status != null and status!=''"> #{status},</if>
+			<if test="plan != null and plan!=''"> #{plan},</if>
+			<if test="createdate != null and createdate!=''"> #{createdate}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Driver">
+		update yx_driver 
+		<set>
+			<if test="uid != null">uid = #{uid},</if>
+			<if test="driver_no != null and driver_no!=''">driver_no = #{driver_no},</if>
+			<if test="arrive != null and arrive!=''">arrive = #{arrive},</if>
+			<if test="driver_type != null and driver_type!=''">driver_type = #{driver_type},</if>
+			<if test="p_image != null and p_image!=''">p_image = #{p_image},</if>
+			<if test="d_inmage_1 != null and d_inmage_1!=''">d_inmage_1 = #{d_inmage_1},</if>
+			<if test="d_inmage_2 != null and d_inmage_2!=''">d_inmage_2 = #{d_inmage_2},</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="d_status != null and d_status!=''">d_status = #{d_status},</if>
+			<if test="start != null and start!=''">start = #{start},</if>
+			<if test="end != null and end!=''">end = #{end},</if>
+			<if test="texts != null and texts!=''">texts = #{texts},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="plan != null">plan = #{plan},</if>
+			<if test="t_image_1 != null">t_image_1 = #{t_image_1},</if>
+			<if test="t_image_2 != null">t_image_2 = #{t_image_2},</if>
+			<if test="id_image_1 != null">id_image_1 = #{id_image_1},</if>
+			<if test="id_image_2 != null">id_image_2 = #{id_image_2},</if>
+			<if test="task_status != null and task_status != ''">task_status = #{task_status},</if>
+			<if test="createdate != null and createdate!=''">createdate = #{createdate}</if>
+			
+		</set>
+		where 
+		uid = #{uid}
+	</update>
+	
+	<update id="modifyDriver" parameterType="com.youxing.car.entity.Driver">
+		update yx_driver 
+		<set>
+			<if test="uid != null and uid!=''">uid = #{uid},</if>
+			<if test="driver_no != null and driver_no!=''">driver_no = #{driver_no},</if>
+			<if test="arrive != null and arrive!=''">arrive = #{arrive},</if>
+			<if test="driver_type != null and driver_type!=''">driver_type = #{driver_type},</if>
+			<if test="p_image != null and p_image!=''">p_image = #{p_image},</if>
+			<if test="d_inmage_1 != null and d_inmage_1!=''">d_inmage_1 = #{d_inmage_1},</if>
+			<if test="d_inmage_2 != null and d_inmage_2!=''">d_inmage_2 = #{d_inmage_2},</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="d_status != null and d_status!=''">d_status = #{d_status},</if>
+			<if test="start != null and start!=''">start = #{start},</if>
+			<if test="end != null and end!=''">end = #{end},</if>
+			<if test="texts != null and texts!=''">texts = #{texts},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="plan != null">plan = #{plan},</if>
+			<if test="t_image_1 != null">t_image_1 = #{t_image_1},</if>
+			<if test="t_image_2 != null">t_image_2 = #{t_image_2},</if>
+			<if test="id_image_1 != null">id_image_1 = #{id_image_1},</if>
+			<if test="id_image_2 != null">id_image_2 = #{id_image_2},</if>
+			<if test="reason != null">reason = #{reason},</if>
+			<if test="driver_status != null">driver_status = #{driver_status},</if>
+			<if test="task_status != null and task_status != ''">task_status = #{task_status},</if>
+			<if test="createdate != null and createdate!=''">createdate = #{createdate}</if>
+			
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateTaskStatus" parameterType="Driver">
+		update yx_driver SET task_status = #{task_status} where id = #{id}
+	</update>
+	
+	<!-- web 更新接口 -->
+	<update id="modifyWeb" parameterType="com.youxing.car.entity.Driver">
+		update yx_driver 
+		<set>
+			<if test="uid != null and uid!=''">uid = #{uid},</if>
+			<if test="driver_no != null and driver_no!=''">driver_no = #{driver_no},</if>
+			<if test="arrive != null ">arrive = #{arrive},</if>
+			<if test="driver_type != null and driver_type!=''">driver_type = #{driver_type},</if>
+			<if test="p_image != null and p_image!=''">p_image = #{p_image},</if>
+			<if test="d_inmage_1 != null and d_inmage_1!=''">d_inmage_1 = #{d_inmage_1},</if>
+			<if test="d_inmage_2 != null and d_inmage_2!=''">d_inmage_2 = #{d_inmage_2},</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="d_status != null and d_status!=''">d_status = #{d_status},</if>
+			<if test="start != null ">start = #{start},</if>
+			<if test="end != null ">end = #{end},</if>
+			<if test="t_image_1 != null">t_image_1 = #{t_image_1},</if>
+			<if test="t_image_2 != null">t_image_2 = #{t_image_2},</if>
+			<if test="id_image_1 != null">id_image_1 = #{id_image_1},</if>
+			<if test="id_image_2 != null">id_image_2 = #{id_image_2},</if>
+			<if test="texts != null">texts = #{texts},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="plan != null and plan!=''">plan = #{plan} ,</if>
+			<if test="createdate != null ">createdate = #{createdate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_driver where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_driver where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="DriverRM">
+		select <include refid="COLUMNS" /> from yx_driver
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="DriverRM">
+		select <include refid="COLUMNS" /> from yx_driver
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="uid != null">and uid = #{uid}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="arrive != null">and arrive = #{arrive}</if>
+			<if test="driver_type != null">and driver_type = #{driver_type}</if>
+			<if test="p_image != null">and p_image = #{p_image}</if>
+			<if test="d_inmage_1 != null">and d_inmage_1 = #{d_inmage_1}</if>
+			<if test="d_inmage_2 != null">and d_inmage_2 = #{d_inmage_2}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="d_status != null">and d_status = #{d_status}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="id_image_1 != null">and id_image_1 = #{id_image_1}</if>
+			<if test="id_image_2 != null">and id_image_2 = #{id_image_2}</if>
+			<if test="reason != null">and reason = #{reason}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+			<if test="list != null">and id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="DriverRM">
+		select <include refid="COLUMNS" /> from yx_driver
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="uid != null">and uid = #{uid}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="arrive != null">and arrive = #{arrive}</if>
+			<if test="driver_type != null">and driver_type = #{driver_type}</if>
+			<if test="p_image != null">and p_image = #{p_image}</if>
+			<if test="d_inmage_1 != null">and d_inmage_1 = #{d_inmage_1}</if>
+			<if test="d_inmage_2 != null">and d_inmage_2 = #{d_inmage_2}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="d_status != null">and d_status = #{d_status}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="id_image_1 != null">and id_image_1 = #{id_image_1}</if>
+			<if test="id_image_2 != null">and id_image_2 = #{id_image_2}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		</where>
+		order by createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- web 司机列表接口 -->
+	<select id="pageByWeb" parameterType="map" resultMap="DriverRM">
+		select yd.id,yd.uid,yd.driver_no,yd.arrive,yd.d_status,yd.driver_type,yd.plan,yd.texts,
+		yd.p_image,yd.d_inmage_1,yd.d_inmage_2,yo.name as oname,
+		ym.name,ym.mobile,ym.sex ,ym.card,ym.birth,	yd.start,yd.end
+		from yx_driver yd 
+		left join yx_member  ym on yd.uid = ym.id 
+		left join  yx_org  yo on ym.org = yo.id 
+		where yd.status = 1 and ym.status = 1 and yo.status = 1
+			<if test="driver_no != null and driver_no!=''">and yd.driver_no like CONCAT('%','${driver_no}','%')</if>
+			<if test="driver_name != null and driver_name!=''">and ym.name like CONCAT('%','${driver_name}','%')</if>
+			<if test="driver_type != null">and yd.driver_type like CONCAT('%','${driver_type}','%')</if>			
+			<if test="status != null">and yd.status = #{status}</if>
+			<if test="org != null">and yo.id = #{org}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="d_status != null">and yd.d_status = #{d_status}</if>
+			<if test="task_status != null">and yd.task_status = #{task_status}</if>
+			<if test="list != null">and yo.id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and yd.id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by yd.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- web 司机列表接口 -->
+	<select id="pageByWebCount" parameterType="map" resultType="Integer">
+	select count(*) from (
+		select yd.id,yd.uid,yd.driver_no,yd.arrive,yd.d_status,yd.driver_type,yd.plan,yd.texts,
+		yd.p_image,yd.d_inmage_1,yd.d_inmage_2,yo.name as oname,
+		ym.name,ym.mobile,ym.sex ,ym.card,ym.birth,	yd.start,yd.end
+		from yx_driver yd 
+		left join yx_member  ym on yd.uid = ym.id 
+		left join  yx_org  yo on ym.org = yo.id 
+		where yd.status = 1 and ym.status = 1 and yo.status = 1
+			<if test="driver_no != null and driver_no!=''">and yd.driver_no like CONCAT('%','${driver_no}','%')</if>
+			<if test="driver_name != null and driver_name!=''">and ym.name like CONCAT('%','${driver_name}','%')</if>
+			<if test="driver_type != null">and yd.driver_type like CONCAT('%','${driver_type}','%')</if>			
+			<if test="status != null">and yd.status = #{status}</if>
+			<if test="org != null">and yo.id = #{org}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="d_status != null">and yd.d_status = #{d_status}</if>
+			<if test="task_status != null">and yd.task_status = #{task_status}</if>
+			<if test="list != null">and yo.id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and yd.id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			) t
+	</select>
+	
+	
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="DriverRM">
+		select <include refid="COLUMNS" /> from yx_driver
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="uid != null">and uid = #{uid}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="arrive != null">and arrive = #{arrive}</if>
+			<if test="driver_type != null">and driver_type = #{driver_type}</if>
+			<if test="p_image != null">and p_image = #{p_image}</if>
+			<if test="d_inmage_1 != null">and d_inmage_1 = #{d_inmage_1}</if>
+			<if test="d_inmage_2 != null">and d_inmage_2 = #{d_inmage_2}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="d_status != null">and d_status = #{d_status}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="id_image_1 != null">and id_image_1 = #{id_image_1}</if>
+			<if test="id_image_2 != null">and id_image_2 = #{id_image_2}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Driver" resultMap="DriverRM">
+		select <include refid="COLUMNS" /> from yx_driver
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="uid != null">and uid = #{uid}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="arrive != null">and arrive = #{arrive}</if>
+			<if test="driver_type != null">and driver_type = #{driver_type}</if>
+			<if test="p_image != null">and p_image = #{p_image}</if>
+			<if test="d_inmage_1 != null">and d_inmage_1 = #{d_inmage_1}</if>
+			<if test="d_inmage_2 != null">and d_inmage_2 = #{d_inmage_2}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="d_status != null">and d_status = #{d_status}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="id_image_1 != null">and id_image_1 = #{id_image_1}</if>
+			<if test="id_image_2 != null">and id_image_2 = #{id_image_2}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="DriverRM">
+		select <include refid="COLUMNS" /> from yx_driver where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_driver
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_driver
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="uid != null">and uid = #{uid}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="arrive != null">and arrive = #{arrive}</if>
+			<if test="driver_type != null">and driver_type = #{driver_type}</if>
+			<if test="p_image != null">and p_image = #{p_image}</if>
+			<if test="d_inmage_1 != null">and d_inmage_1 = #{d_inmage_1}</if>
+			<if test="d_inmage_2 != null">and d_inmage_2 = #{d_inmage_2}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="d_status != null">and d_status = #{d_status}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+		</where>
+	</select>
+	
+	<select id="countByWeb" parameterType="map" resultType="integer">
+		select count(yd.id)
+		from (select * from yx_driver where status = '1') yd   
+		left join (select * from yx_member where status = '1') ym on yd.uid = ym.id
+		left join (select * from yx_org where status = '1') yo on ym.org = yo.id
+		where 1=1
+			<if test="driver_no != null and driver_no!=''">and yd.driver_no = #{driver_no}</if>
+			<if test="driver_name != null and driver_name!=''">and ym.name like CONCAT('%','${driver_name}','%')</if>
+			<if test="driver_type != null">and yd.driver_type like CONCAT('%','${driver_type}','%')</if>			
+			<if test="status != null">and yd.status = #{status}</if>
+			<if test="org != null">and yo.id = #{org}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="d_status != null">and yd.d_status = #{d_status}</if>
+			<if test="task_status != null">and yd.task_status = #{task_status}</if>
+			<if test="list != null">and yo.id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and yd.id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	<select id="pageDriver" parameterType="map" resultType="driver">
+	select yd.id,yd.driver_no,yd.arrive,yd.d_status as d_status,yd.status,ym.name as name,ym.mobile as mobile,yd.plan as plan,ym.sex as sex
+	from (select * from  yx_driver where status = '1')  yd
+	left join  yx_member  ym on  yd.uid = ym.id 
+	left join  (select * from  yx_org where status = '1') yo  on  ym.org = yo.id 
+	where   ym.status = 1 
+			<if test="driver_type != null">and yd.driver_type = #{driver_type} </if>			
+			<if test="status != null">and yd.status = #{status}  </if>
+			<if test="org != null">and yo.id = #{org}  </if>
+			<if test="d_status != null">and yd.d_status = #{d_status}</if>
+			<if test="t_image_1 != null">and t_image_1 = #{t_image_1}</if>
+			<if test="t_image_2 != null">and t_image_2 = #{t_image_2}</if>
+			<if test="task_status != null">and yd.task_status = #{task_status}</if>
+			 <!-- and isnull(yd.start)  and isnull(yd.end)  --> 
+			<if test="start != null ">or yd.start &gt; #{end}  </if>
+			<if test="end != null ">or yd.end &lt; #{start}</if>
+			<if test="list != null">  and yo.id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and yd.id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by yd.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="listDr"  resultType="string">
+		select yd.uid from yx_driver yd where yd.status= 1
+	</select>
+	
+	
+	
+	<select id="getDriverNum" parameterType="map" resultType="Integer">
+		select count(*) as dNum from yx_driver yd 
+			left join (select * from yx_member where status = '1') ym  on ym.id = yd.uid  
+			left join (select * from yx_org where status = '1') yo on yo.id = ym.org
+			where yd.status = '1' and  yd.driver_status='4'  
+			<if test="org != null">and yo.id = #{org}</if> 
+			<if test="list != null">and yo.id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	<select id="getDriverListByOrg" parameterType="map" resultType="driver">
+		select yd.id,ym.name,ym.sex,yd.arrive,ym.card,
+		yd.driver_type,ym.mobile as mobile from yx_driver yd
+			left join (select * from yx_member where status = '1') ym on ym.id  = yd.uid
+			left join (select * from yx_org where STATUS = '1') yo on yo.id = ym.org
+			where  yd.status = '1' and  yd.driver_status='4'   
+			<if test="org != null">and yo.id = #{org}</if> 
+			<if test="driverinfo != null">and (ym.mobile like CONCAT('%','${driverinfo}','%')  
+			or ym.name like CONCAT('%','${driverinfo}','%'))</if>
+			<if test="list != null">and yo.id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="getDriverListByOrgNum" parameterType="map" resultType="Integer">
+		select count(*) from yx_driver yd
+			left join (select * from yx_member where status = '1') ym on ym.id  = yd.uid
+			left join (select * from yx_org where STATUS = '1') yo on yo.id = ym.org
+			where  yd.status = '1' and  yd.driver_status='4'  
+			<if test="org != null">and yo.id = #{org}</if> 
+			<if test="driverinfo != null">and (ym.mobile like CONCAT('%','${driverinfo}','%')  
+			or ym.name like CONCAT('%','${driverinfo}','%'))</if>  
+			<if test="list != null">and yo.id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+</mapper>

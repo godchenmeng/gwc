@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.SpeedingDao">
+    <resultMap type="com.youxing.car.entity.Speeding" id="SpeedingRM">
+        <id column="id" property="id" />
+        <result column="speeding_name" property="speeding_name" />
+        <result column="speeding_limit" property="speeding_limit" />
+        <result column="speeding_draw_type" property="speeding_draw_type" />
+        <result column="speeding_draw_path" property="speeding_draw_path" />
+        <result column="speeding_relation_car_ids" property="speeding_relation_car_ids" />
+        <result column="speeding_status" property="speeding_status" />
+        <result column="speeding_org" property="speeding_org" />
+        <result column="speeding_createby" property="speeding_createby" />
+        <result column="speeding_time" property="speeding_time" />
+        <result column="createdate" property="createdate" />
+        <result column="updatedate" property="updatedate" />
+    </resultMap>
+
+    <!-- _____________________________________________________________________________ 全部字段 -->
+    <sql id="COLUMNS">
+        id,speeding_name,speeding_limit,speeding_draw_type,speeding_draw_path,speeding_relation_car_ids,speeding_status,speeding_org,speeding_createby,speeding_time
+    </sql>
+
+
+    <!-- _____________________________________________________________________________ 1.add -->
+
+    <insert id="add" parameterType="com.youxing.car.entity.Speeding">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into yx_speeding (
+        <if test="speeding_name != null and speeding_name!=''">speeding_name ,</if>
+        <if test="speeding_limit != null">speeding_limit ,</if>
+        <if test="speeding_draw_type != null and speeding_draw_type!=''">speeding_draw_type ,</if>
+        <if test="speeding_draw_path != null and speeding_draw_path!=''">speeding_draw_path ,</if>
+        <if test="speeding_relation_car_ids != null and speeding_relation_car_ids!=''">speeding_relation_car_ids ,</if>
+        <if test="speeding_status != null and speeding_status!=''">speeding_status ,</if>
+        <if test="speeding_org != null ">speeding_org ,</if>
+        <if test="speeding_createby != null and speeding_createby!=''">speeding_createby,</if>
+        <if test="speeding_time != null">speeding_time,</if>
+        createdate
+        )
+        values (
+        <if test="speeding_name != null and speeding_name!=''"> #{speeding_name},</if>
+        <if test="speeding_limit != null"> #{speeding_limit},</if>
+        <if test="speeding_draw_type != null and speeding_draw_type!=''">#{speeding_draw_type} ,</if>
+        <if test="speeding_draw_path != null and speeding_draw_path!=''">#{speeding_draw_path} ,</if>
+        <if test="speeding_relation_car_ids != null and speeding_relation_car_ids!=''">#{speeding_relation_car_ids} ,</if>
+        <if test="speeding_status != null and speeding_status!=''"> #{speeding_status},</if>
+        <if test="speeding_org != null "> #{speeding_org},</if>
+        <if test="speeding_createby != null and speeding_createby!=''"> #{speeding_createby},</if>
+        <if test="speeding_time != null"> #{speeding_time},</if>
+        now()
+        )
+    </insert>
+
+
+    <!-- ______________________________________________________________________________ 2.modify -->
+
+    <update id="modify" parameterType="com.youxing.car.entity.Speeding">
+        update yx_speeding
+        <trim prefix="set" suffixOverrides=",">
+            <if test="speeding_name != null and speeding_name!=''">speeding_name = #{speeding_name},</if>
+            <if test="speeding_limit != null">speeding_limit = #{speeding_limit},</if>
+            <if test="speeding_draw_type != null and speeding_draw_type!=''">speeding_draw_type = #{speeding_draw_type},</if>
+            <if test="speeding_draw_path != null and speeding_draw_path!=''">speeding_draw_path = #{speeding_draw_path},</if>
+            <if test="speeding_relation_car_ids != null and speeding_relation_car_ids!=''">speeding_relation_car_ids = #{speeding_relation_car_ids},</if>
+            <if test="speeding_status != null and speeding_status!=''">speeding_status = #{speeding_status},</if>
+            <if test="speeding_createby != null and speeding_createby!=''">speeding_createby = #{speeding_createby},</if>
+            <if test="speeding_time != null">speeding_time = #{speeding_time},</if>
+            <if test="updatedate != null">updatedate = #{updatedate},</if>
+       </trim>
+        where id = #{id}
+    </update>
+
+    <!-- _____________________________________________________________________________ 3.removeById -->
+
+    <delete id="removeById" parameterType="long">
+        delete from yx_speeding where id=#{id}
+    </delete>
+
+
+    <!-- _____________________________________________________________________________ 7.pageBy -->
+
+    <select id="pageBy" parameterType="map" resultMap="SpeedingRM">
+        select <include refid="COLUMNS" />,DATE_FORMAT(createdate,'%Y-%m-%d %H:%i:%s') createdate,DATE_FORMAT(updatedate,'%Y-%m-%d %H:%i:%s') updatedate from yx_speeding
+        <where>
+            <if test="org != null">and speeding_org = #{org}</if>
+            <if test="list != null">and speeding_org in
+                <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by createdate desc
+        limit #{startIdx},#{limit}
+    </select>
+
+
+    <!-- 查询电栅栏名称，用于判断是否重复 -->
+    <select id="findName" resultMap="SpeedingRM">
+        select id,speeding_name from yx_speeding where speeding_name != null or speeding_name != ''
+    </select>
+
+    <!-- _____________________________________________________________________________ 11.countBy -->
+
+    <select id="countBy" parameterType="map" resultType="integer">
+        select count(id) from yx_speeding
+        <where>
+            <if test="org != null">and speeding_org = #{org}</if>
+            <if test="list != null">and speeding_org in
+                <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

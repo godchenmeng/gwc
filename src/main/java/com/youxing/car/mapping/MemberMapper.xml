@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.MemberDao">
+	<resultMap type="com.youxing.car.entity.Member" id="MemberRM">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="sex" property="sex" />
+		<result column="card" property="card" />
+		<result column="mobile" property="mobile" />
+		<result column="birth" property="birth" />
+		<result column="phone" property="phone" />
+		<result column="org" property="org" />
+		<result column="status" property="status" />
+		<result column="driver" property="driver" />
+		<result column="createby" property="createby" />
+		<result column="createdate" property="createdate" />
+		<result column="code" property="code" />
+		<result column="rname" property="rname" />
+		<result column="sms_type" property="sms_type" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,name,sex,card,mobile,birth,phone,org,status,driver,createby,createdate,code,sms_type
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Member">
+	  <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_member (id,name,sex,card,mobile,birth,phone,org,status,driver,createby,createdate,code,sms_type)
+		values (#{id},#{name},#{sex},#{card},#{mobile},#{birth},#{phone},#{org},#{status},#{driver},#{createby},#{createdate},#{code},#{sms_type})
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Member">
+		update yx_member 
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="card != null">card = #{card},</if>
+			<if test="mobile != null">mobile = #{mobile},</if>
+			<if test="birth != null">birth = #{birth},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="org != null">org = #{org},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="driver != null">driver = #{driver},</if>
+			<if test="createby != null">createby = #{createby},</if>
+			<if test="createdate != null">createdate = #{createdate},</if>
+			<if test="code != null">code = #{code},</if>
+			<if test="sms_type != null">sms_type = #{sms_type}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="java.lang.Long">
+		delete from yx_member where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_member where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="MemberRM">
+		select <include refid="COLUMNS" /> from yx_member
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="MemberRM">
+		select <include refid="COLUMNS" /> from yx_member
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="sex != null">and sex = #{sex}</if>
+			<if test="card != null">and card = #{card}</if>
+			<if test="mobile != null">and mobile = #{mobile}</if>
+			<if test="birth != null">and birth = #{birth}</if>
+			<if test="phone != null">and phone = #{phone}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="code != null">and code = #{code}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultType="member">
+      select ym.id,ym.name,ym.sex,ym.card,ym.mobile,ym.birth,ym.phone,ym.org,
+		  ym.status,ym.driver,ym.createby,ym.createdate,ym.code,yo.name oname
+         	from yx_member ym           
+          	left join yx_org yo on ym.org = yo.id
+          where 1=1 and  ym.status = 1 and yo.status = 1
+			<if test="name != null and name!=''">and ym.name  like CONCAT('%','${name}','%')</if>
+			<if test="sex != null">and ym.sex = #{sex}</if>
+			<if test="card != null">and ym.card = #{card}</if>
+			<if test="org != null">and ym.org = #{org}</if>
+			<if test="status != null">and ym.status = #{status}</if>
+			<if test="driver != null and driver!=''">and ym.driver = #{driver}</if>
+			<if test="createby != null">and ym.createby = #{createby}</if>
+			<if test="createdate != null">and ym.createdate = #{createdate}</if>
+			<if test="code != null and code!=''">and ym.code = #{code}</if>
+			<if test="startdate != null and startdate != '' and enddate != null and enddate != ''">and ym.createdate >= #{startdate} and ym.createdate &lt;= #{enddate}</if>
+			<if test="list != null">and ym.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="dlist != null">and ym.id not in 
+				<foreach collection="dlist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by ym.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="MemberRM">
+		select <include refid="COLUMNS" /> from yx_member
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="sex != null">and sex = #{sex}</if>
+			<if test="card != null">and card = #{card}</if>
+			<if test="mobile != null">and mobile = #{mobile}</if>
+			<if test="birth != null">and birth = #{birth}</if>
+			<if test="phone != null">and phone = #{phone}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="code != null">and code = #{code}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Member" resultMap="MemberRM">
+		select <include refid="COLUMNS" /> from yx_member
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="sex != null">and sex = #{sex}</if>
+			<if test="card != null">and card = #{card}</if>
+			<if test="mobile != null">and mobile = #{mobile}</if>
+			<if test="birth != null">and birth = #{birth}</if>
+			<if test="phone != null">and phone = #{phone}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="code != null">and code = #{code}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="MemberRM">
+		select <include refid="COLUMNS" /> from yx_member where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_member
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(ym.id)  from yx_member ym 
+        left join   yx_org yo on ym.org = yo.id
+        where yo.status ='1' and ym.status ='1' 
+			<if test="name != null and name!=''">and ym.name  like CONCAT('%','${name}','%')</if>
+			<if test="sex != null">and ym.sex = #{sex}</if>
+			<if test="card != null">and ym.card = #{card}</if>
+			<if test="org != null">and ym.org = #{org}</if>
+			<if test="status != null">and ym.status = #{status}</if>
+			<if test="driver != null and driver!=''">and ym.driver = #{driver}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="code != null and code!=''">and ym.code = #{code}</if>
+			<if test="list != null">and ym.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="dlist != null">and ym.id not in 
+				<foreach collection="dlist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	<!-- _____________________________________________________________________________ 12.countBy -->
+
+	<select id="countDriverBy" parameterType="map" resultType="integer">
+		   	select count(ym.id) 
+         	from yx_member ym           
+          	left join yx_org yo on ym.org = yo.id
+          where 1=1 and  ym.status = 1 and yo.status = 1
+			<if test="name != null and name!=''">and ym.name  like CONCAT('%','${name}','%')</if>
+			<if test="sex != null">and ym.sex = #{sex}</if>
+			<if test="card != null">and ym.card = #{card}</if>
+			<if test="org != null">and ym.org = #{org}</if>
+			<if test="status != null">and ym.status = #{status}</if>
+			<if test="driver != null and driver!=''">and ym.driver = #{driver}</if>
+			<if test="createby != null">and ym.createby = #{createby}</if>
+			<if test="createdate != null">and ym.createdate = #{createdate}</if>
+			<if test="code != null and code!=''">and ym.code = #{code}</if>
+			<if test="startdate != null and startdate != '' and enddate != null and enddate != ''">and ym.createdate >= #{startdate} and ym.createdate &lt;= #{enddate}</if>
+			<if test="list != null">and ym.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="dlist != null">and ym.id not in 
+				<foreach collection="dlist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	<select id="pageByWeb" parameterType="map" resultType="member"> 
+		  select ym.id,ym.name,ym.sex,ym.card,ym.mobile,ym.birth,ym.phone,ym.org,
+		  ym.status,ym.driver,ym.createby,ym.createdate,ym.code,ym.sms_type,yo.name as oname,yr.name rname
+          from yx_member ym           
+          	left join yx_org yo on ym.org = yo.id
+          	left join yx_user yu on ym.id = yu.mid
+          	left join yx_role yr on yu.role = yr.id
+          where 1=1 and  ym.status = 1 and yo.status = 1 	 
+			<if test="name != null and name!=''">and ym.name  like CONCAT('%','${name}','%')</if>
+			<if test="sex != null">and ym.sex = #{sex}</if>
+			<if test="card != null">and ym.card = #{card}</if>
+			<if test="org != null">and ym.org = #{org}</if>
+			<if test="status != null">and ym.status = #{status}</if>
+			<if test="driver != null and driver!=''">and ym.driver = #{driver}</if>
+			<if test="createby != null">and ym.createby = #{createby}</if>
+			<if test="createdate != null">and ym.createdate = #{createdate}</if>
+			<if test="code != null and code!=''">and ym.code = #{code}</if>
+			<if test="startdate != null and startdate != '' and enddate != null and enddate != ''">and ym.createdate >= #{startdate} and ym.createdate &lt;= #{enddate}</if>
+			<if test="list != null">and ym.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="dlist != null">and ym.id not in 
+				<foreach collection="dlist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by ym.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id = "listMemberAndOrg" parameterType="map" resultMap="MemberRM">
+		select ym.name,ym.org ,ym.mobile,yo.name as oname,yo.short_name,yo.parent,ym.id
+ 			from yx_member ym 
+ 			left join yx_org  yo on  yo.id = ym.org
+ 			where yo.status ='1' and ym.status ='1'
+ 			<if test="list != null">and ym.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	<!-- 通过用户名获取成员对象 -->
+	<select id = "getMember" parameterType="map" resultMap="MemberRM">
+		select ym.id,ym.name,ym.sex,ym.card,ym.mobile,ym.birth,ym.phone,ym.org,ym.status,ym.driver,
+			ym.createby,ym.createdate,ym.code,yo.name as oname from yx_member ym
+			left join yx_org yo on yo.id = ym.org 
+			where yo.status ='1' and ym.status ='1'
+ 			<if test="use_name != null"> and ym.name = #{use_name} </if>
+ 			limit 0,1
+	</select>
+	
+	<!-- 新增用车申请时获取申请人所在机构下的直接部门的人员id -->
+	<select id = "getMemberIds" parameterType="map" resultMap="MemberRM">
+		select ym.id from yx_member ym
+			left join yx_user yu on yu.mid = ym.id 
+			where yu.role in (select rid from yx_role_permission where pid = 13)
+			and yu.status ='1' and ym.status= '1'
+ 			<if test="list != null">and ym.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	<update id="updateSmsType" parameterType="map">
+		update yx_member 
+		<set>
+			<if test="sms_type != null">sms_type = #{sms_type}</if>
+		</set>
+		where status ='1'
+		<if test="idlist != null">and id in 
+				<foreach collection="idlist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="mobilelist != null">and mobile in 
+				<foreach collection="mobilelist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+	</update>
+	
+	<update id="setSmsType" >
+			update yx_member set sms_type = '0' where status ='1'
+	</update>
+	
+	
+	<select id = "getOrgLogo" parameterType="map" resultType="java.util.Map">
+		select ym.org org,yo.logo logo
+ 			from yx_member ym 
+ 			left join yx_org  yo on  yo.id = ym.org
+ 			where yo.status ='1' and ym.status ='1'
+			<if test="ymid != null">and ym.id = #{ymid}</if>
+	</select>	
+
+</mapper>

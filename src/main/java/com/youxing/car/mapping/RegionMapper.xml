@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.RegionDao">
+	<resultMap type="com.youxing.car.entity.Region" id="RegionRM">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="type" property="type" />
+		<result column="status" property="status" />
+		<result column="createdate" property="createdate" />		
+		<result column="createbd" property="createbd" />
+	</resultMap>
+	
+	<resultMap type="com.youxing.car.entity.Region" id="RegionAndRelationRM">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="type" property="type" />
+		<result column="status" property="status" />
+		<result column="createdate" property="createdate" />		
+		<result column="createbd" property="createbd" />
+		<result column="drawing" property="drawing" />
+		<result column="radius" property="radius" />
+		<collection property="regionRelation" ofType="com.youxing.car.entity.RegionRelation">
+		     <id column="r_id" property="id" />
+		      <result column="region_id" property="region_id" />
+		      <result column="lon" property="lon" />
+		      <result column="lat" property="lat" />
+		</collection>
+	</resultMap>
+	
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,name,type,createdate,createbd,drawing,radius
+	</sql>
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Region">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_region (
+			<if test="name != null ">name ,</if>
+			<if test="type != null ">type ,</if>
+			<if test="createbd != null ">createbd ,</if>
+			<if test="status != null ">status ,</if>
+			<if test="drawing != null ">drawing ,</if>
+			<if test="radius != null ">radius ,</if>
+			createdate 
+		)
+		values (
+			<if test="name != null ">#{name} ,</if>
+			<if test="type != null ">#{type} ,</if>
+			<if test="createbd != null ">#{createbd} ,</if>
+			<if test="status != null ">#{status} ,</if>
+			<if test="drawing != null ">#{drawing} ,</if>
+			<if test="radius != null ">#{radius} ,</if>
+			now()
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Region">
+		update yx_region 
+		<set>
+			<if test="name != null ">name = #{name} ,</if>
+			<if test="type != null ">type = #{type} ,</if>
+			<if test="createbd != null ">createbd = #{createbd} ,</if>
+			<if test="status != null ">status = #{status} ,</if>
+			<if test="drawing != null ">drawing = #{drawing} ,</if>
+			createdate=now()
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_region where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_region where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="RegionRM">
+		select <include refid="COLUMNS" /> from yx_region
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="RegionRM">
+		select <include refid="COLUMNS" /> from yx_region
+		where 1=1
+		    <if test="name != null ">and name = #{name}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="createbd != null ">and createbd = #{createbd}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="RegionRM">
+		select <include refid="COLUMNS" /> from yx_region
+		where 1=1
+			 <if test="name != null ">and name = #{name}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="createbd != null ">and createbd = #{createbd}</if>
+		order by createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="RegionRM">
+		select <include refid="COLUMNS" /> from yx_region
+		where 1=1
+			<if test="name != null ">and name = #{name}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="status != null ">and status in(1,2)</if>
+			<if test="createbd != null ">and createbd = #{createbd}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Region" resultMap="RegionRM">
+		select <include refid="COLUMNS" /> from yx_region
+		where 1=1
+			<if test="name != null ">and name = #{name}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="createbd != null ">and createbd = #{createbd}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="RegionRM">
+		select <include refid="COLUMNS" /> from yx_region where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_region
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_region
+		where 1=1
+			 <if test="name != null ">and name = #{name}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="createbd != null ">and createbd = #{createbd}</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	
+	<!-- 关闭限制路径 -->
+	<update id="closeOrOpenOrdeleteRegion" parameterType="map">
+		update yx_region 
+		<set>
+			<if test="status != null ">status=#{status}</if>
+		</set>
+		where 1=1
+		<if test="list != null">and id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+	</update>
+	
+	<select id="findNew" parameterType="String" resultType="Long">
+		select id from yx_region order by createdate desc limit 0,1
+	</select>
+	
+	
+	<select id="findAllRegion"  parameterType="map" resultMap="RegionAndRelationRM">
+		select  yr.id ,yr.name,yr.type,yr.status,yr.createdate,yr.drawing,yr.radius
+		 from (select * from yx_region where status in( '1','2')) yr 
+			left join yx_member ym on ym.id = yr.createbd 
+			left join yx_org yo on yo.id = ym.org
+			where 1=1
+			<if test="status != null">and yr.status = #{status}</if>
+			<if test="name != null">and yr.name like CONCAT('%','${name}','%')</if>
+			limit #{startIdx},#{limit}
+	</select>
+	
+	
+	<select id="countAllRegion"  parameterType="map" resultType="int">
+		select count(yr.id) from yx_region yr 
+			left join yx_member ym on ym.id = yr.createbd 
+			left join yx_org yo on yo.id = ym.org
+			where yr.status = 1
+			<if test="type != null">and yr.type = #{type}</if>
+			<if test="name != null">and yr.name like CONCAT('%','${name}','%')</if>
+	</select>
+	
+	
+	<select id="listOrg" parameterType="map" resultType="selects">
+		select yr.id as value,yr.name as text from yx_region yr left join yx_member ym on ym.id = yr.createbd 
+			left join yx_org yo on yo.id = ym.org
+		<where>			
+			<if test="org != null and org != '' and org != 1">and ym.org = #{org}</if>			
+			<if test="status = 1">and yr.status = #{status}</if>
+			<if test="list != null">and ym.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>  
+			</if>
+			<if test="type = 2">and yr.type = #{type}</if>
+		</where>
+	</select>
+	
+	
+	<select id="findCountRegion"  parameterType="map" resultMap="RegionAndRelationRM">
+		<!-- 区域限制的搅拌站和工地统计 -->
+		 select  yr.id ,yr.name,yr.type,yr.status,yr.createdate,yr.drawing,yr.radius,yl.lon,yl.lat  
+           from yx_region yr  left join  yx_region_relation yl  on yl.region_id =yr.id
+           where yr.status = 1
+			<if test="lon != null">and yl.lon = #{lon}</if>
+			<if test="lat != null">and yl.lat = #{lat}</if>	
+	</select>
+	
+	
+	
+	<!-- 供给次数统计 -->
+	<select id="getSupplyCount"  parameterType="map" resultType="java.util.HashMap">
+		select  count(ycr.car) as times,yc.car_no,yc.id as cid, yo.name 
+			from (select * from yx_car where status = '1' and car_status = '4' and obd = '1') yc  
+		    left join (select * from yx_car_ranks	where (TIMESTAMPDIFF(MINUTE,intime,outtime)) > 30  
+		    <if test="start != null">and createdate &gt;= #{start}</if>
+			<if test="end != null">and createdate  &lt;= #{end}</if>
+		    ) ycr  on yc.id  = ycr.car
+			left join (select * from yx_org where status = '1')  yo on yo.id = yc.org
+			where 1=1
+			<if test="car != null">and yc.id  in
+				<foreach collection="car" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+	            </foreach>  
+			</if>
+			<if test="list != null">and yc.org  in
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+	            </foreach>  
+			</if>
+			group by yc.id
+			limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="getSupplyCountNum"  parameterType="map" resultType="Integer">
+		select count(*) from 
+		(select  count(ycr.car) as times,yc.car_no,yc.id as cid, yo.name 
+			from (select * from yx_car where status = '1' and car_status = '4' and obd = '1') yc  
+		    left join (select * from yx_car_ranks	where (TIMESTAMPDIFF(MINUTE,intime,outtime)) > 30  
+		    <if test="start != null">and createdate &gt;= #{start}</if>
+			<if test="end != null">and createdate  &lt;= #{end}</if>
+		    ) ycr  on yc.id  = ycr.car
+			left join (select * from yx_org where status = '1')  yo on yo.id = yc.org
+			where 1=1
+			<if test="car != null">and yc.id  in
+				<foreach collection="car" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+	            </foreach>  
+			</if>
+			<if test="list != null">and yc.org  in
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+	            </foreach>  
+			</if>
+			group by yc.id
+			) t
+			
+	</select>
+	
+	
+	<select id="getSupplyByCarId"  parameterType="map" resultType="java.util.HashMap">
+	select count(yr.name) as times,yr.name from 
+			(
+			select * from yx_car_ranks	where (TIMESTAMPDIFF(MINUTE,intime,outtime)) > 30  
+		    <if test="start != null">and createdate &gt;= #{start}</if>
+			<if test="end != null">and createdate  &lt;= #{end}</if>
+		    )  ycr 
+			left join yx_region yr on yr.id = ycr.region
+			where ycr.car = #{car_id}
+			group by ycr.region
+			limit #{startIdx},#{limit}
+	</select>
+	
+	
+	<!-- 根据车牌号查询供给次数 -->
+	<select id="getSupplyByCarIdNum"  parameterType="map" resultType="Integer">
+	select count(*)  from
+	 (
+		select count(yr.name) as times,yr.name from 
+			(
+			select * from yx_car_ranks	where (TIMESTAMPDIFF(MINUTE,intime,outtime)) > 30  
+		    <if test="start != null">and createdate &gt;= #{start}</if>
+			<if test="end != null">and createdate  &lt;= #{end}</if>
+		    )  ycr 
+			left join yx_region yr on yr.id = ycr.region
+			where ycr.car = #{car_id}
+			group by ycr.region
+	  ) t
+	</select>
+	
+	<select id="findRegionDatas"  parameterType="map" resultMap="RegionAndRelationRM">
+		select  yr.id ,yr.name,yr.status,yr.createdate,yr.drawing,yr.radius,yrr.id as r_id,yrr.lon,yrr.lat
+		from yx_region yr
+		left join yx_region_car_org_relation yro on yro.region = yr.id 
+		left join yx_region_relation yrr on yrr.region_id = yr.id
+		left join yx_user yu on yu.org = yro.org
+		where yr.status = '1'
+		<if test="user_id != null">and yu.id = #{user_id}</if>
+	</select>
+</mapper>

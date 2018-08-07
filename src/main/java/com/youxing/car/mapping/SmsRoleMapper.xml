@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.SmsRoleDao">
+	<resultMap type="com.youxing.car.entity.SmsRole" id="SmsRoleRM">
+	      <id column="id" property="id" />
+	      <result column="name" property="name" />
+	      <result column="descr" property="descr" />
+	      <result column="sendtypes" property="sendtypes" />
+	      <result column="createby" property="createby" />
+	      <result column="createdate" property="createdate" />
+	      <result column="status" property="status" />
+	      <result column="org" property="org" />
+	</resultMap>
+	
+	<sql id="COLUMNS">
+     id,name,descr,sendtypes,createby,status,createdate,org
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.SmsRole">
+		insert into yx_sms_role (
+			<if test="name != null ">name,</if>
+			<if test="descr != null ">descr,</if>
+			<if test="sendtypes != null ">sendtypes,</if>
+			<if test="createby != null ">createby,</if>
+			<if test="status != null ">status,</if>
+			<if test="org != null ">org,</if>
+			createdate
+		)
+		values (
+			<if test="name != null ">#{name},</if>
+			<if test="descr != null ">#{descr},</if>
+			<if test="sendtypes != null ">#{sendtypes},</if>
+			<if test="createby != null ">#{createby},</if>
+			<if test="status != null ">#{status},</if>
+			<if test="org != null ">#{org},</if>
+			now()
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.youxing.car.entity.SmsRole">
+		update yx_sms_role
+		<set>
+			<if test="name != null ">name = #{name},</if>
+			<if test="descr != null ">descr = #{descr},</if>
+			<if test="sendtypes != null ">sendtypes = #{sendtypes},</if>
+			<if test="createby != null ">createby = #{createby},</if>
+			<if test="status != null ">status = #{status},</if>
+			<if test="org != null ">org = #{org},</if>
+			<if test="createdate != null ">createdate = #{createdate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+	<delete id="removeById" parameterType="long">
+		delete from yx_sms_role where id=#{id} 
+	</delete>
+	
+	<delete id="removeByIp" parameterType="com.youxing.car.entity.SmsRole">
+		delete from yx_sms_role where id=#{id} 
+	</delete>
+
+
+		<select id="listAll" resultMap="SmsRoleRM">
+		select <include refid="COLUMNS" /> from yx_sms_role
+	</select>
+	
+	<select id="listBy" parameterType="map" resultMap="SmsRoleRM">
+		select <include refid="COLUMNS" />,
+		id as value,name as text
+		
+		 from yx_sms_role
+		where status=1
+			<if test="name != null ">and name = #{name}</if>
+			<if test="descr != null ">and descr = #{descr},</if>
+			<if test="sendtypes != null ">and sendtypes = #{sendtypes}</if>
+			<if test="createby != null ">and createby = #{createby}</if>
+			<if test="status != null ">and status = #{status}</if>
+			<if test="org != null ">and org = #{org}</if>
+			<if test="createdate != null ">and createdate = #{createdate}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+	</select>
+	
+	<select id="findBy" parameterType="com.youxing.car.entity.SmsRole" resultMap="SmsRoleRM">
+		select <include refid="COLUMNS" /> from yx_sms_role
+		where 1=1
+			<if test="name != null ">and name = #{name}</if>
+			<if test="descr != null ">and descr = #{descr}</if>
+			<if test="sendtypes != null ">and sendtypes = #{sendtypes}</if>
+			<if test="createby != null ">and createby = #{createby}</if>
+			<if test="status != null ">and status = #{status}</if>
+			<if test="org != null ">and org = #{org}</if>
+			<if test="createdate != null ">and createdate = #{createdate}</if>
+	</select>
+	
+	<select id="findById" parameterType="long" resultMap="SmsRoleRM">
+		select <include refid="COLUMNS" /> from yx_sms_role where id = #{id}
+	</select>
+	
+		<select id="countAll" resultType="integer">
+		select count(id) from yx_sms_role
+	</select>
+	
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_sms_role
+		where status=1
+			<if test="name != null ">and name like CONCAT('%','${name}','%')</if>
+			<if test="descr != null ">and descr = #{descr}</if>
+			<if test="sendtypes != null ">and sendtypes = #{sendtypes}</if>
+			<if test="createby != null ">and createby = #{createby}</if>
+			<if test="status != null ">and status = #{status}</if>
+			<if test="org != null ">and org = #{org}</if>
+			<if test="createdate != null ">and createdate = #{createdate}</if>
+	</select>
+	
+	
+	<select id="pageBy" parameterType="map" resultMap="SmsRoleRM">
+		select <include refid="COLUMNS" /> from yx_sms_role
+	    where status=1
+			<if test="name != null ">and name like CONCAT('%','${name}','%')</if>
+			<if test="descr != null ">and descr = #{descr}</if>
+			<if test="sendtypes != null ">and sendtypes = #{sendtypes}</if>
+			<if test="createby != null ">and createby = #{createby}</if>
+			<if test="status != null ">and status = #{status}</if>
+			<if test="org != null ">and org = #{org}</if>
+			<if test="createdate != null ">and createdate = #{createdate}</if>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	
+</mapper>

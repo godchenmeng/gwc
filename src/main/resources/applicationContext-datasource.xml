@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx.xsd 
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    <bean id="translationControlAspect" class="com.youxing.car.aop.annotation.TranslationControlAspect"></bean>                    
+	
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 扫描service、dao -->
+	<context:component-scan base-package="com.youxing.car.service">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<context:component-scan base-package="com.youxing.car.aop"/>
+	<context:component-scan base-package="com.youxing.car.aop.annotation"/>
+
+    <context:component-scan base-package="com.youxing.car.export"/>
+    <context:component-scan base-package="com.youxing.car.config"/>
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	<bean id="queryUtils" class="com.youxing.car.util.QueryUtils"/>
+	<bean id="queryUtilsWeb" class="com.youxing.car.utils.other.QueryUtilsWeb"/>
+	<!-- 定时器 每日检查一次、为测试暂时设置为每5s检查一次-->
+	<context:annotation-config />
+	<context:component-scan base-package="com.youxing.car.utils.other"/>
+	<context:component-scan base-package="com.youxing.car.utils.redis"/>
+	<context:component-scan base-package="com.youxing.car.utils.push" />
+	<task:annotation-driven />
+	<task:scheduled-tasks>
+		<task:scheduled ref="EventUtils" method="checkEvent" cron="0 0 9 * * ?" />
+	</task:scheduled-tasks>
+	<task:executor id="taskExecutor" pool-size="50" />
+	<!-- 配置连接池 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<bean id="dataSource" class="com.youxing.car.utils.other.EncryptionJDBC" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.mysql.driver}" />
+		<property name="url" value="${jdbc.mysql.driverUrl}" />
+		<property name="username" value="${jdbc.mysql.username}" />
+		<property name="password" value="${jdbc.mysql.password}" />
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="100" />
+		<property name="minIdle" value="10" />
+		<property name="maxWait" value="60000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="1800" />
+		<property name="logAbandoned" value="true" />
+		<property name="filters" value="mergeStat" />
+	</bean>
+	
+
+	<!-- spring整合mybatis （mybatis-spring项目提供整合类） <bean id="sqlSessionFactory" 
+		class="org.mybatis.spring.SqlSessionFactoryBean"> <property name="dataSource" 
+		ref="dynamicDataSource"></property> <property name="configLocation" value="classpath:sqlMapConfig.xml"></property> 
+		</bean> -->
+	<!-- 配置sessionFactory加载sqlMapConfig.xml和映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:sqlMapConfig.xml" />
+		<property name="mapperLocations" value="classpath:com/youxing/car/mapping/*.xml" />
+	</bean>
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.youxing.car.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 加载应用属性实例，可通过  @Value("#{CONFIG_PROPERTIES['xxx.xxx']}") 方式引用 -->
+    <util:properties id="CONFIG_PROPERTIES" location="classpath:config.properties" local-override="true"/>
+	
+	
+	<!-- 事务管理 属性 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 定义所有get开头的方法都是只读的 -->
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="list*" read-only="true" />
+			<tx:method name="read*" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 配置切面 -->
+	<aop:config>
+		<aop:advisor advice-ref="transactionAdvice" order="2"
+			pointcut="execution(* com.youxing.car.service..*.*(..))" />
+	</aop:config>
+	
+	  <aop:config>
+        <!-- 
+            切入点表达式，确认目标类 
+            privilege.service.impl包中的所有类中的所有方法
+        -->
+        <aop:pointcut expression="execution(* car.controller.*.*(..))" id="perform"/>
+        <!-- ref指向的对象就是切面 -->
+        <aop:aspect ref="translationControlAspect">
+            <!-- 环绕通知 -->
+            <aop:around method="isAccessMethod" pointcut-ref="perform"/>
+        </aop:aspect>
+    </aop:config>
+
+	<!-- ehcache配置 -->
+	<import resource="classpath:application-redis.xml" />
+	<import resource="classpath:application-websoket.xml" />
+</beans>

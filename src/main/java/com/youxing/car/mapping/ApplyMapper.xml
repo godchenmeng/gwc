@@ -1,0 +1,1584 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.ApplyDao">
+	<resultMap type="com.youxing.car.entity.Apply" id="ApplyRM">
+		<id column="id" property="id" />
+		<result column="sq_id" property="sq_id" />
+		<result column="sq_org" property="sq_org" />
+		<result column="sq_mobile" property="sq_mobile" />
+		<result column="use_name" property="use_name" />
+		<result column="use_org" property="use_org" />
+		<result column="use_mobile" property="use_mobile" />
+		<result column="use_number" property="use_number" />
+		<result column="use_level" property="use_level" />
+		<result column="send" property="send" />
+		<result column="plan_car_num" property="plan_car_num" />
+		<result column="plan_time" property="plan_time" />
+		<result column="plan_return" property="plan_return" />
+		<result column="start_place" property="start_place" />
+		<result column="end_place" property="end_place" />
+		<result column="car" property="car" />
+		<result column="reason" property="reason" />
+		<result column="texts" property="texts" />
+		<result column="sp_status" property="sp_status" />
+		<result column="dd_status" property="dd_status" />
+		<result column="status" property="status" />
+		<result column="sp_time" property="sp_time" />
+		<result column="return_reason" property="return_reason" />
+		<result column="dd_time" property="dd_time" />
+		<result column="createdate" property="createdate" />
+		<result column="sp_reason" property="sp_reason" />
+		<result column="dd_reason" property="dd_reason" />
+		<result column="sp" property="sp" />
+		<result column="dd" property="dd" />
+		<result column="sp_name" property="sp_name"/>
+		<result column="sp_mobile" property="sp_mobile"/>
+		<result column="dd_name" property="dd_name"/>
+		<result column="dd_mobile" property="dd_mobile"/>
+		<result column="types" property="types"/>
+		<result column="repeal_reason" property="repeal_reason"/>
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,sq_id,sq_org,sq_mobile,use_name,use_org,use_mobile,use_number,use_level,send,plan_car_num,plan_time,plan_return,start_place,end_place,car,reason,texts,sp_status,dd_status,status,sp_time,return_reason,dd_time,createdate,
+		sp_reason,dd_reason,sp,dd,sp_name,sp_mobile,dd_name,dd_mobile,repeal_reason
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Apply">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_sq (
+			<if test="sq_id != null and sq_id!=''">sq_id ,</if>
+			<if test="sq_org != null and sq_org!=''">sq_org ,</if>
+			<if test="sq_mobile != null and sq_mobile!=''">sq_mobile ,</if>
+			<if test="use_name != null and use_name!=''">use_name ,</if>
+			<if test="use_org != null and use_org!=''">use_org ,</if>
+			<if test="use_mobile != null and use_mobile!=''">use_mobile ,</if>
+			<if test="use_number != null ">use_number ,</if>
+			<if test="use_level != null and use_level!=''">use_level ,</if>
+			<if test="plan_car_num != null ">plan_car_num ,</if>
+			<if test="plan_time != null ">plan_time ,</if>
+			<if test="plan_return != null">plan_return ,</if>
+			<if test="start_place != null and start_place!=''">start_place ,</if>
+			<if test="end_place != null and end_place!=''">end_place ,</if>
+			<if test="car != null and car!=''">car ,</if>
+			<if test="reason != null and reason!=''">reason ,</if>
+			<if test="texts != null and texts!=''">texts ,</if>
+			<if test="sp_status != null and sp_status!=''">sp_status ,</if>
+			<if test="dd_status != null and dd_status!=''">dd_status ,</if>
+			<if test="status != null and status!=''">status ,</if>
+			<if test="sp_time != null and sp_time !='' ">sp_time ,</if>
+			<if test="return_reason != null and return_reason!=''">return_reason ,</if>
+			<if test="dd_time != null and  dd_time !='' ">dd_time ,</if>
+			<if test="sp_reason != null and sp_reason!=''">sp_reason ,</if>
+			<if test="dd_reason != null and dd_reason!=''">dd_reason ,</if>
+			<if test="sp != null and sp!=''">sp ,</if>
+			<if test="dd != null and dd!=''">dd,</if>
+			<if test="type != null and type!=''">type,</if>
+			<if test="sp_name != null and sp_name!=''">sp_name,</if>
+			<if test="sp_mobile != null and sp_mobile!=''">sp_mobile,</if>
+			<if test="dd_name != null and dd_name!=''">dd_name,</if>
+			<if test="dd_mobile != null and dd_mobile!=''">dd_mobile,</if>
+			<if test="repeal_reason != null and repeal_reason !=''">repeal_reason,</if>
+			createdate
+		)
+		values (
+			<if test="sq_id != null and sq_id!=''"> #{sq_id},</if>
+			<if test="sq_org != null and sq_org!=''"> #{sq_org},</if>
+			<if test="sq_mobile != null and sq_mobile!=''"> #{sq_mobile},</if>
+			<if test="use_name != null and use_name!=''"> #{use_name},</if>
+			<if test="use_org != null and use_org!=''"> #{use_org},</if>
+			<if test="use_mobile != null and use_mobile!=''"> #{use_mobile},</if>
+			<if test="use_number != null "> #{use_number},</if>
+			<if test="use_level != null and use_level!=''"> #{use_level},</if>
+			<if test="plan_car_num != null"> #{plan_car_num},</if>
+			<if test="plan_time != null"> #{plan_time},</if>
+			<if test="plan_return != null "> #{plan_return},</if>
+			<if test="start_place != null and start_place!=''"> #{start_place},</if>
+			<if test="end_place != null and end_place!=''"> #{end_place},</if>
+			<if test="car != null and car!=''"> #{car},</if>
+			<if test="reason != null and reason!=''"> #{reason},</if>
+			<if test="texts != null and texts!=''"> #{texts},</if>
+			<if test="sp_status != null and sp_status!=''"> #{sp_status},</if>
+			<if test="dd_status != null and dd_status!=''"> #{dd_status},</if>
+			<if test="status != null and status!=''"> #{status},</if>
+			<if test="sp_time != null and  sp_time !=''"> #{sp_time},</if>
+			<if test="return_reason != null and return_reason!=''"> #{return_reason},</if>
+			<if test="dd_time != null  and  dd_time !=''"> #{dd_time},</if>
+			<if test="sp_reason != null and sp_reason!=''"> #{sp_reason},</if>
+			<if test="dd_reason != null and dd_reason!=''"> #{dd_reason},</if>
+			<if test="sp != null and sp!=''"> #{sp},</if>
+			<if test="dd != null and dd!=''"> #{dd},</if>
+			<if test="type != null and type!=''">#{type},</if>
+			<if test="sp_name != null and sp_name!=''">#{sp_name},</if>
+			<if test="sp_mobile != null and sp_mobile!=''">#{sp_mobile},</if>
+			<if test="dd_name != null and dd_name!=''">#{dd_name},</if>
+			<if test="dd_mobile != null and dd_mobile!=''">#{dd_mobile},</if>
+			<if test="repeal_reason != null and repeal_reason !=''">#{repeal_reason},</if>
+			#{createdate}
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Apply">
+		update yx_sq 
+		<set>
+			<if test="sq_id != null">sq_id = #{sq_id},</if>
+			<if test="sq_org != null and sq_org!=''">sq_org = #{sq_org},</if>
+			<if test="sq_mobile != null and sq_mobile!=''">sq_mobile = #{sq_mobile},</if>
+			<if test="use_name != null and use_name!=''">use_name = #{use_name},</if>
+			<if test="use_org != null and use_org!=''">use_org = #{use_org},</if>
+			<if test="use_mobile != null and use_mobile!=''">use_mobile = #{use_mobile},</if>
+			<if test="use_number != null and use_number!=''">use_number = #{use_number},</if>
+			<if test="use_level != null and use_level!=''">use_level = #{use_level},</if>
+			<if test="send != null and send!=''">send = #{send},</if>
+			<if test="plan_car_num != null and plan_car_num!=''">plan_car_num = #{plan_car_num},</if>
+			<if test="plan_time != null ">plan_time = #{plan_time},</if>
+			<if test="plan_return != null  ">plan_return = #{plan_return},</if>
+			<if test="start_place != null and start_place!=''">start_place = #{start_place},</if>
+			<if test="end_place != null and end_place!=''">end_place = #{end_place},</if>
+			<if test="car != null and car!=''">car = #{car},</if>
+			<if test="reason != null and reason!=''">reason = #{reason},</if>
+			<if test="texts != null and texts!=''">texts = #{texts},</if>
+			<if test="sp_status != null and sp_status!=''">sp_status = #{sp_status},</if>
+			<if test="dd_status != null and dd_status!=''">dd_status = #{dd_status},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="sp_time != null ">sp_time = #{sp_time},</if>
+			<if test="return_reason != null and return_reason!=''">return_reason = #{return_reason},</if>
+			<if test="dd_time != null ">dd_time = #{dd_time},</if>
+			<if test="createdate != null ">createdate = #{createdate},</if>
+			<if test="sp != null">sp = #{sp},</if>
+			<if test="dd != null">dd = #{dd},</if>			
+			<if test="sp_reason != null and sp_reason!=''">sp_reason = #{sp_reason},</if>
+			<if test="dd_reason != null and dd_reason!=''">dd_reason = #{dd_reason},</if>
+			<if test="sp_name != null and sp_name!=''">sp_name = #{sp_name},</if>
+			<if test="sp_mobile != null and sp_mobile!=''">sp_mobile = #{sp_mobile},</if>
+			<if test="dd_name != null and dd_name!=''">dd_name = #{dd_name},</if>
+			<if test="dd_mobile != null and dd_mobile!=''">dd_mobile = #{dd_mobile},</if>
+			<if test="repeal_reason != null and repeal_reason != ''">repeal_reason = #{repeal_reason}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_sq where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_sq where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="ApplyRM">
+		select <include refid="COLUMNS" /> from yx_sq
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="ApplyRM">
+		select <include refid="COLUMNS" /> from yx_sq
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="sq_id != null">and sq_id = #{sq_id}</if>
+			<if test="sq_org != null">and sq_org = #{sq_org}</if>
+			<if test="sq_mobile != null">and sq_mobile = #{sq_mobile}</if>
+			<if test="use_name != null">and use_name = #{use_name}</if>
+			<if test="use_org != null">and use_org = #{use_org}</if>
+			<if test="use_mobile != null">and use_mobile = #{use_mobile}</if>
+			<if test="use_number != null">and use_number = #{use_number}</if>
+			<if test="use_level != null">and use_level = #{use_level}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="plan_car_num != null">and plan_car_num = #{plan_car_num}</if>
+			<if test="plan_time != null">and plan_time = #{plan_time}</if>
+			<if test="plan_return != null">and plan_return = #{plan_return}</if>
+			<if test="start_place != null">and start_place = #{start_place}</if>
+			<if test="end_place != null">and end_place = #{end_place}</if>
+			<if test="car != null">and car = #{car}</if>
+			<if test="reason != null">and reason = #{reason}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="sp_status != null">and sp_status = #{sp_status}</if>
+			<if test="dd_status != null">and dd_status = #{dd_status}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="sp_time != null">and sp_time = #{sp_time}</if>
+			<if test="return_reason != null">and return_reason = #{return_reason}</if>
+			<if test="dd_time != null">and dd_time = #{dd_time}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="sp_reason != null">and sp_reason = #{sp_reason}</if>
+			<if test="dd_reason != null">and dd_reason = #{dd_reason}</if>
+			<if test="sp != null">and sp = #{sp}</if>
+			<if test="dd != null">and dd = #{dd}</if>
+			
+			<if test="sp_name != null and sp_name!=''">and sp_name = #{sp_name}</if>
+			<if test="sp_mobile != null and sp_mobile!=''">and sp_mobile = #{sp_mobile}</if>
+			<if test="dd_name != null and dd_name!=''">and dd_name = #{dd_name}</if>
+			<if test="dd_mobile != null and dd_mobile!=''">and dd_mobile = #{dd_mobile}</if>
+			<if test="repeal_reason != null and repeal_reason !=''">and repeal_reason = #{repeal_reason}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+		<select id="pageBy" parameterType="map" resultType="apply">
+		select ys.id,ys.sq_id,ys.sq_org,ys.use_name,ys.use_org,ys.use_mobile,ys.use_number,ys.dd_reason,
+		ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+		ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,ys.sp_name,ys.dd_name,
+		 yu.name as sq_name,yo.name as sq_org_name,yo1.name as user_org_name ,${types} as types,
+		 yca.feedback,yca.driver_id,
+		  m.mobile as sq_mobile, 
+          m1.mobile as sq_mobile,
+          m2.mobile as dd_mobile 
+		  from yx_sq ys 
+          left join yx_user yu on ys.sp = yu.id           
+          left join yx_org yo1 on yo1.id = ys.use_org          
+          left join yx_org yo on yo.id = ys.sq_org          
+          left join yx_member m on m.id = yu.mid 
+          left join yx_user u1 on ys.sq_id = u1.id 
+          left join yx_member m1 on m1.id = u1.mid 
+          left join yx_user u2 on ys.dd = u2.id 
+          left join yx_member m2 on m2.id = u2.mid 
+          left join  yx_control_apply yca on yca.apply_id = ys.id 
+          where 1=1 and ys.status = 1 
+		<if test="sq_id != null">and ys.sq_id = #{sq_id}</if>
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="sp_status != null and sp_status != ''">and ys.sp_status = #{sp_status}</if>
+		<if test="dd_status != null and dd_status != ''">and ys.dd_status = #{dd_status}</if>
+		<if test="status_dd != null">and ys.sp_status in (2,3)</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		and ys.sp_status != 4 and ys.dd_status != 4
+		order by ys.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="pageByWeb" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ys.sq_org,ys.use_name,ys.use_org,ys.use_mobile,ys.use_number,ys.dd_reason,
+			ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+			ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,
+			 yu.name as sq_name,yo.name as sq_org_name,yo1.name as user_org_name
+			 from  yx_sq ys  
+	        left join yx_user yu on ys.sq_id=yu.id        
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org yo1 on  ys.use_org = yo1.id
+		    where 1=1 and ys.status = 1 
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="apply_status != null">and ys.sp_status = #{apply_status}</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start != null">and ys.createdate &gt;= #{start}</if>
+		<if test="end != null">and ys.createdate &lt;= #{end}</if>
+		<if test="all != null">and ys.sp_status in(2,3)</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by ys.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	  <select id="pagebysubmited" parameterType="map" resultType="apply">
+		select ys.id,ys.sq_id,ys.sq_org,
+		ys.use_name,ys.use_org,ys.use_mobile,ys.use_number,
+		ys.dd_reason, ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,
+		ys.plan_return ,ys.start_place,ys.end_place,ys.car,ys.sp_reason, 
+		ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,
+		ys.return_reason,ys.dd_time,ys.createdate,ys.sp_name,
+		(case when ys.dd_status='1' and  ys.sp_status='1' then '已提交' 
+		      when ys.dd_status='2' then '已调度' 
+		      when ys.sp_status='2' and ys.dd_status='2' then '已审核' 
+		      when ys.dd_status='2' then '已驳回' 
+		      else '已审核' end) 'status_dec',
+		yo.name	as user_org_name,
+		m.mobile as sp_mobile,                                    
+		m1.mobile as sq_mobile,
+		m2.mobile as dd_mobile
+		from yx_sq ys
+		left join yx_org yo on yo.id = ys.use_org
+        left join yx_user u on ys.sp = u.id
+        left join yx_member  m on m.id = u.mid        
+        left join yx_user u1 on ys.sq_id = u1.id
+        left join yx_member  m1 on m1.id = u1.mid
+        left join yx_user u2 on ys.dd = u2.id
+        left join yx_member  m2 on m2.id = u2.mid
+		where 1 = 1 and ys.status = 1 
+		<if test="sq_id != null">and ys.sq_id = #{sq_id}</if>
+		<if test="status != null">and ys.status = #{status}</if>
+		and ys.sp_status not in ('3','4') 
+		and ys.dd_status not in ('3','4')
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by ys.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="pagebyreturn" parameterType="map" resultType="apply">
+		select ys.id,ys.sq_id,ys.sq_org,ys.use_name,ys.use_org,ys.use_mobile,ys.use_number,ys.dd_reason,
+		ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+		ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,ys.sp_name,ys.dd_name,
+		 yu.name as sq_name,yo.name as sq_org_name,yo1.name as user_org_name,${types} as types,
+		  m.mobile as sp_mobile, 
+          m1.mobile as sq_mobile,
+          m2.mobile as dd_mobile 
+		  from yx_sq ys
+          left join yx_user yu on ys.sp = yu.id           
+          left join yx_org yo1 on yo1.id = ys.use_org          
+          left join yx_org yo on yo.id = ys.sq_org          
+          left join yx_member m on m.id = yu.mid 
+          left join yx_user u1 on ys.sq_id = u1.id 
+          left join yx_member m1 on m1.id = u1.mid 
+          left join yx_user u2 on ys.dd = u2.id 
+          left join yx_member m2 on m2.id = u2.mid 
+		  where 1 = 1 and ys.status = 1 
+		<if test="sq_id != null">and ys.sq_id = #{sq_id}</if>
+		<if test="status != null">and ys.status = #{status}</if>
+	   and (ys.sp_status = '3'
+		or ys.dd_status = '3')
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by ys.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="ApplyRM">
+		select <include refid="COLUMNS" /> from yx_sq
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="sq_id != null">and sq_id = #{sq_id}</if>
+			<if test="sq_org != null">and sq_org = #{sq_org}</if>
+			<if test="sq_mobile != null">and sq_mobile = #{sq_mobile}</if>
+			<if test="use_name != null">and use_name = #{use_name}</if>
+			<if test="use_org != null">and use_org = #{use_org}</if>
+			<if test="use_mobile != null">and use_mobile = #{use_mobile}</if>
+			<if test="use_number != null">and use_number = #{use_number}</if>
+			<if test="use_level != null">and use_level = #{use_level}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="plan_car_num != null">and plan_car_num = #{plan_car_num}</if>
+			<if test="plan_time != null">and plan_time = #{plan_time}</if>
+			<if test="plan_return != null">and plan_return = #{plan_return}</if>
+			<if test="start_place != null">and start_place = #{start_place}</if>
+			<if test="end_place != null">and end_place = #{end_place}</if>
+			<if test="car != null">and car = #{car}</if>
+			<if test="reason != null">and reason = #{reason}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="sp_status != null">and sp_status = #{sp_status}</if>
+			<if test="dd_status != null">and dd_status = #{dd_status}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="sp_time != null">and sp_time = #{sp_time}</if>
+			<if test="return_reason != null">and return_reason = #{return_reason}</if>
+			<if test="dd_time != null">and dd_time = #{dd_time}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="sp_reason != null">and sp_reason = #{sp_reason}</if>
+			<if test="dd_reason != null">and dd_reason = #{dd_reason}</if>
+			<if test="sp != null">and sp = #{sp}</if>
+			<if test="dd != null">and dd = #{dd}</if>
+			
+			<if test="sp_name != null and sp_name!=''">and sp_name = #{sp_name} </if>
+			<if test="sp_mobile != null and sp_mobile!=''">and sp_mobile = #{sp_mobile}</if>
+			<if test="dd_name != null and dd_name!=''">and dd_name = #{dd_name} </if>
+			<if test="dd_mobile != null and dd_mobile!=''">and dd_mobile = #{dd_mobile}</if>
+			<if test="repeal_reason != null and repeal_reason !=''">and repeal_reason = #{repeal_reason}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Apply" resultMap="ApplyRM">
+		select <include refid="COLUMNS" /> from yx_sq
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="sq_id != null">and sq_id = #{sq_id}</if>
+			<if test="sq_org != null">and sq_org = #{sq_org}</if>
+			<if test="sq_mobile != null">and sq_mobile = #{sq_mobile}</if>
+			<if test="use_name != null">and use_name = #{use_name}</if>
+			<if test="use_org != null">and use_org = #{use_org}</if>
+			<if test="use_mobile != null">and use_mobile = #{use_mobile}</if>
+			<if test="use_number != null">and use_number = #{use_number}</if>
+			<if test="use_level != null">and use_level = #{use_level}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="plan_car_num != null">and plan_car_num = #{plan_car_num}</if>
+			<if test="plan_time != null">and plan_time = #{plan_time}</if>
+			<if test="plan_return != null">and plan_return = #{plan_return}</if>
+			<if test="start_place != null">and start_place = #{start_place}</if>
+			<if test="end_place != null">and end_place = #{end_place}</if>
+			<if test="car != null">and car = #{car}</if>
+			<if test="reason != null">and reason = #{reason}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="sp_status != null">and sp_status = #{sp_status}</if>
+			<if test="dd_status != null">and dd_status = #{dd_status}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="sp_time != null">and sp_time = #{sp_time}</if>
+			<if test="return_reason != null">and return_reason = #{return_reason}</if>
+			<if test="dd_time != null">and dd_time = #{dd_time}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="sp_reason != null">and sp_reason = #{sp_reason}</if>
+			<if test="dd_reason != null">and dd_reason = #{dd_reason}</if>
+			<if test="sp != null">and sp = #{sp}</if>
+			<if test="dd != null">and dd = #{dd}</if>
+			
+			<if test="sp_name != null and sp_name!=''">and sp_name = #{sp_name}</if>
+			<if test="sp_mobile != null and sp_mobile!=''">and sp_mobile = #{sp_mobile}</if>
+			<if test="dd_name != null and dd_name!=''">and dd_name = #{dd_name}</if>
+			<if test="dd_mobile != null and dd_mobile!=''">and dd_mobile = #{dd_mobile}</if>
+			<if test="repeal_reason != null and repeal_reason!=''">and repeal_reason = #{repeal_reason}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="ApplyRM">
+		select <include refid="COLUMNS" /> from yx_sq where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_sq
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_sq
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="sq_id != null">and sq_id = #{sq_id}</if>
+			<if test="sq_org != null">and sq_org = #{sq_org}</if>
+			<if test="sq_mobile != null">and sq_mobile = #{sq_mobile}</if>
+			<if test="use_name != null">and use_name = #{use_name}</if>
+			<if test="use_org != null">and use_org = #{use_org}</if>
+			<if test="use_mobile != null">and use_mobile = #{use_mobile}</if>
+			<if test="use_number != null">and use_number = #{use_number}</if>
+			<if test="use_level != null">and use_level = #{use_level}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="plan_car_num != null">and plan_car_num = #{plan_car_num}</if>
+			<if test="plan_time != null">and plan_time = #{plan_time}</if>
+			<if test="plan_return != null">and plan_return = #{plan_return}</if>
+			<if test="start_place != null">and start_place = #{start_place}</if>
+			<if test="end_place != null">and end_place = #{end_place}</if>
+			<if test="car != null">and car = #{car}</if>
+			<if test="reason != null">and reason = #{reason}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="sp_status != null">and sp_status = #{sp_status}</if>
+			<if test="dd_status != null">and dd_status = #{dd_status}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="sp_time != null">and sp_time = #{sp_time}</if>
+			<if test="return_reason != null">and return_reason = #{return_reason}</if>
+			<if test="dd_time != null">and dd_time = #{dd_time}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="sp_reason != null">and sp_reason = #{sp_reason}</if>
+			<if test="dd_reason != null">and dd_reason = #{dd_reason}</if>
+			<if test="sp != null">and sp = #{sp}</if>
+			<if test="dd != null">and dd = #{dd}</if>
+			
+			
+			<if test="sp_name != null and sp_name!=''">and sp_name = #{sp_name}</if>
+			<if test="sp_mobile != null and sp_mobile!=''">and sp_mobile = #{sp_mobile}</if>
+			<if test="dd_name != null and dd_name!=''">and dd_name = #{dd_name}</if>
+			<if test="dd_mobile != null and dd_mobile!=''">and dd_mobile = #{dd_mobile}</if>
+		</where>
+	</select>
+	
+	<select id="countByWeb" parameterType="map" resultType="integer">
+		select count(ys.id) from yx_sq ys
+			left join yx_member ym on ys.sq_id=ym.id
+			left join yx_org yo on ys.sq_org = yo.id
+			left join yx_org yo1 on ys.use_org = yo1.id
+			where ys.status= 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="apply_status != null">and ys.sp_status = #{apply_status}</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start != null">and ys.createdate &gt;= #{start}</if>
+		<if test="end != null">and ys.createdate &lt;= #{end}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		<if test="all != null">and ys.sp_status in(2,3)</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	
+		<!-- 获取用车申请列表(二期) -->
+	<select id="getApplyPage" parameterType="map" resultType="apply">	
+		select 
+			ys.id,
+			ys.sq_id,
+			ym.name as sq_name,
+			ym.mobile as sq_mobile,
+			ys.sq_org,
+			yo.name as sq_org_name,
+	        ys.use_name,
+	        ys.use_org,
+	        yo1.name as user_org_name,
+	        ys.use_mobile,
+	        ys.use_number,
+	        ys.dd_reason,
+			ys.use_level,
+			ys.send,
+			ys.plan_car_num,
+			ys.plan_time,
+			ys.plan_return,
+			ys.start_place,
+			ys.end_place,
+			ys.car,
+			ys.sp_reason,
+			ys.reason,
+			ys.texts,
+			ys.sp_status,
+			ys.dd_status,
+			ys.status,
+			ys.sp_time,
+			ys.return_reason,
+			ys.dd_time,
+			ys.createdate,
+			ys.repeal_reason,
+			ydi.text as type_name,
+		   (case
+              when ys.sp_status='1' and  ys.dd_status='1' then '1'               
+              when ys.sp_status='2' and  ys.dd_status='1' then '2'                  
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='1'  then '3'                
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status in (2,3,5) then '4'   
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '6' then '5'     
+		      when ys.sp_status='3' and  ys.dd_status='1' then '6'         
+              when ys.sp_status='2' and  ys.dd_status='3' then '6' 
+              when ys.sp_status='4' and  ys.dd_status='1' then '7'    
+              when ys.sp_status='2' and  ys.dd_status='4' then '7' 
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='8'  then '7'              
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='7'  then '8' 
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='9'  then '9' end) 'apply_status',
+              yca.status as pq_status,yca.id as pq_id
+	        from  yx_sq ys  
+	        left join  yx_user yu on ys.sq_id=yu.id 
+            left join  yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id 
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id
+            left join  yx_dictionary  ydi on ydi.value = ys.car and ydi.parent_id = '1'
+            where 1=1 and ys.status = 1 
+			<if test="status != null">and ys.status = #{status}</if>
+			<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+			<if test="use_org != null">and yo1.id = #{use_org}</if>
+			<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+			<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+			<if test="dd_status_2 != null">and ((ys.dd_status = '1' and sp_status = '3') or 
+			(ys.dd_status = '3' and sp_status = '2'))</if>
+			<if test="yca_status != null">and yca.status = #{yca_status}</if>
+			<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+			<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+			<if test="list != null">and ys.sq_org in 
+					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+		            </foreach>            
+			</if>
+			<if test="org_list != null">and ys.use_org in 
+					<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+					#{items}
+		            </foreach>            
+			</if>
+			<if test="org != null">and ys.sq_org = #{org}</if>
+		order by ys.plan_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="getApplyCount" parameterType="map" resultType="integer">
+		select count(ys.id) from yx_sq ys
+            left join  yx_user yu on ys.sq_id=yu.id    
+            left join  yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id 
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id
+            where 1=1 and ys.status = 1 
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="dd_status_2 != null">and ((ys.dd_status = '1' and sp_status = '3') or 
+		(ys.dd_status = '3' and sp_status = '2'))</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+	</select>
+	
+	
+		<!-- 获取用车申请列表(二期)   暂时未用
+	<select id="getApplyPageByReject" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,yo.name as sq_org_name,
+       ys.use_name,ys.use_org,yo1.name as user_org_name,ys.use_mobile,ys.use_number,ys.dd_reason,
+			ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+			ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,yr.isread,
+		    (case
+              when ys.sp_status='1' and  ys.dd_status='1' then '1' 
+		      when ys.sp_status='3' and  ys.dd_status='1' then '5'      
+              when ys.sp_status='2' and  ys.dd_status='1' then '2'              
+              when ys.sp_status='2' and  ys.dd_status='3' then '5'              
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '2' then '3'              
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '6' then '4' end) 'apply_status'
+	        from  yx_sq ys  
+	        left join yx_user yu on ys.sq_id=yu.id    
+            inner join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id        
+            left join yx_read yr on yr.apply_id = ys.id  and yr.mid = ys.sq_id       
+		where (ys.sp_status='3' and  ys.dd_status='1') or (ys.sp_status='2' and  ys.dd_status='3') 
+		and ym.status= 1 and yu.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="yca_status_list != null">and yca.status in 
+				<foreach collection="yca_status_list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by yr.isread desc,ys.plan_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	
+	<select id="getApplyCountReject" parameterType="map" resultType="integer">
+		select count(ys.id) from yx_sq ys
+            left join yx_user yu on ys.sq_id=yu.id    
+            inner join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id
+			where (ys.sp_status='3' and  ys.dd_status='1') or (ys.sp_status='2' and  ys.dd_status='3')
+			and ym.status= 1 and yu.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+	</select>
+	 -->
+	
+	<select id="getAllNum" parameterType="map"  resultType="java.util.HashMap">
+		select 
+			sum(case when  ys.sp_status = '1' and ys.dd_status = '1'  then 1 else 0 end) as 'apply_status_1',
+			sum(case when  ys.sp_status = '2' and ys.dd_status = '1'  then 1 else 0 end) as 'apply_status_2',
+			sum(case when  ys.sp_status = '2' and ys.dd_status = '2'  and yca.status = '1' then 1 else 0 end) as 'apply_status_3',
+			sum(case when  (ys.sp_status = '3' and ys.dd_status = '1') or  (ys.sp_status = '2' and ys.dd_status = '3') then 1 else 0 end) as 'apply_status_6'
+	        from yx_sq ys
+	        left join yx_control_apply yca on yca.apply_id = ys.id    
+	        where 1=1 and ys.status = 1
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+	</select> 
+	
+	<!-- 数据导出 -->
+	<select id="exportApplyEXcel" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,yo.name as sq_org_name,
+       ys.use_name,ys.use_org,yo1.name as user_org_name,ys.use_mobile,ys.use_number,ys.dd_reason,
+			ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+			ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,
+		   (case
+              when ys.sp_status='1' and  ys.dd_status='1' then '1'               
+              when ys.sp_status='2' and  ys.dd_status='1' then '2'                  
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='1'  then '3'                
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status in (2,3,5) then '4'   
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '6' then '5'     
+		      when ys.sp_status='3' and  ys.dd_status='1' then '6'         
+              when ys.sp_status='2' and  ys.dd_status='3' then '6' 
+              when ys.sp_status='4' and  ys.dd_status='1' then '7'    
+              when ys.sp_status='2' and  ys.dd_status='4' then '7' 
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='8'  then '7'              
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='7'  then '8' 
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='9'  then '9' end) 'apply_status',
+              yca.status as pq_status,yca.id as pq_id
+	        from  yx_sq ys  
+	        left join  yx_user yu on ys.sq_id=yu.id    
+            left join  yx_member ym on yu.mid = ym.id      
+	        left join  yx_org yo on ys.sq_org = yo.id 
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id
+            where 1=1 and ys.status = 1 
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="dd_status_2 != null">and ((ys.dd_status = '1' and sp_status = '3') or 
+		(ys.dd_status = '3' and sp_status = '2'))</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by ys.plan_time desc
+	</select>
+
+<!--  
+<select id="exportApplyByReject" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,yo.name as sq_org_name,
+       ys.use_name,ys.use_org,yo1.name as user_org_name,ys.use_mobile,ys.use_number,ys.dd_reason,
+			ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+			ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,
+		    (case
+              when ys.sp_status='1' and  ys.dd_status='1' then '1' 
+		      when ys.sp_status='3' and  ys.dd_status='1' then '5'      
+              when ys.sp_status='2' and  ys.dd_status='1' then '2'              
+              when ys.sp_status='2' and  ys.dd_status='3' then '5'              
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '2' then '3'              
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '6' then '4' end) 'apply_status'
+	        from  yx_sq ys  
+	        left join yx_user yu on ys.sq_id=yu.id    
+            inner join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id            
+		where (ys.sp_status='3' and  ys.dd_status='1') or (ys.sp_status='2' and  ys.dd_status='3')
+		and ym.status= 1 and yu.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by ys.plan_time desc
+	</select>
+	-->	
+	
+	<!-- 获取当前登录用户机构或下属机构用车申请最新记录 -->
+		<select id="getApplyNewFirst" parameterType="map" resultType="apply">	
+		select 
+			ys.id,
+			ys.sq_id,
+			ym.name as sq_name,
+			ym.mobile as sq_mobile,
+			ys.sq_org,
+			yo.name as sq_org_name,
+	        ys.use_name,
+	        ys.use_org,
+	        yo1.name as user_org_name,
+	        ys.use_mobile,
+	        ys.use_number,
+	        ys.dd_reason,
+			ys.use_level,
+			ys.send,
+			ys.plan_car_num,
+			ys.plan_time,
+			ys.plan_return,
+			ys.start_place,
+			ys.end_place,
+			ys.car,
+			ys.sp_reason,
+			ys.reason,
+			ys.texts,
+			ys.sp_status,
+			ys.dd_status,
+			ys.status,
+			ys.sp_time,
+			ys.return_reason,
+			ys.dd_time,
+			ys.createdate,
+			ydi.text as type_name,
+		   (case
+              when ys.sp_status='1' and  ys.dd_status='1' then '1'               
+              when ys.sp_status='2' and  ys.dd_status='1' then '2'                  
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='1'  then '3'                
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status in (2,3,5) then '4'   
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '6' then '5'     
+		      when ys.sp_status='3' and  ys.dd_status='1' then '6'         
+              when ys.sp_status='2' and  ys.dd_status='3' then '6' 
+              when ys.sp_status='4' and  ys.dd_status='1' then '7'    
+              when ys.sp_status='2' and  ys.dd_status='4' then '7' 
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='8'  then '7'              
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='7'  then '8' 
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status ='9'  then '9' 
+          	end) 'apply_status',
+            yca.status as pq_status,
+            yca.id as pq_id
+	        from  yx_sq ys  
+	        left join  yx_user yu on ys.sq_id=yu.id    
+            left join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id
+           	left join  yx_dictionary  ydi on ydi.value = ys.car and ydi.parent_id = '1'
+            where 1=1 and ys.status = 1 
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by ys.createdate desc
+		limit 0,1
+	</select>
+	
+	<!-- 获取审批列表(二期) -->
+	<select id="getApplySpPage" parameterType="map" resultType="apply">	
+		select
+		 ys.id,
+		 ys.sq_id,
+		 ym.name as sq_name,
+		 ym.mobile as sq_mobile,
+		 ys.sq_org,
+		 yo.name as sq_org_name,
+      	 ys.use_name,
+      	 ys.use_org,
+      	 yo1.name as user_org_name,
+      	 ys.use_mobile,
+      	 ys.use_number,
+      	 ys.dd_reason,
+		 ys.use_level,
+		 ys.send,
+		 ys.plan_car_num,
+		 ys.plan_time,
+		 ys.plan_return,
+		 ys.start_place,
+		 ys.end_place,
+		 ys.car,
+		 ys.sp_reason,
+		 ys.reason,
+		 ys.texts,
+		 ys.sp_status,
+		 ys.dd_status,
+		 ys.status,
+		 ys.sp_time,
+		 ys.return_reason,
+		 ys.dd_time,
+		 ys.createdate,
+		 yca.status as  pq_status,
+         yca.id as pq_id,
+       	 ydi.text as type_name,
+       	 ys.repeal_reason,
+	    (case
+          when ys.sp_status='1' and  ys.dd_status='1' then '1' 
+	      when ys.sp_status='2' and  ys.dd_status='1' then '2'  
+	      when ys.sp_status='2' and  ys.dd_status='2' then '2'  
+	      when ys.sp_status='2' and  ys.dd_status='3' then '3'    
+          when ys.sp_status='3' and  ys.dd_status='1' then '3' 
+          when ys.sp_status='2' and  ys.dd_status='4' then '4'             
+          when ys.sp_status='4' and  ys.dd_status='1' then '4' end) 'apply_status' 
+          from  yx_sq ys  
+	        left join yx_user yu on ys.sq_id=yu.id    
+            left join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org  yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id   
+            left join  yx_dictionary  ydi on ydi.value = ys.car and ydi.parent_id = '1'        
+            where 1=1 and ys.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="ddlist != null">and ys.dd_status in 
+				<foreach collection="ddlist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by apply_status asc, plan_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	
+		<!-- 获取审批列表数(二期) -->
+	<select id="getSpCount" parameterType="map" resultType="integer">	
+	select count(*) from (
+		select
+		 ys.id,
+		 ys.sq_id,
+		 ym.name as sq_name,
+		 ym.mobile as sq_mobile,
+		 ys.sq_org,
+		 yo.name as sq_org_name,
+      	 ys.use_name,
+      	 ys.use_org,
+      	 yo1.name as user_org_name,
+      	 ys.use_mobile,
+      	 ys.use_number,
+      	 ys.dd_reason,
+		 ys.use_level,
+		 ys.send,
+		 ys.plan_car_num,
+		 ys.plan_time,
+		 ys.plan_return,
+		 ys.start_place,
+		 ys.end_place,
+		 ys.car,
+		 ys.sp_reason,
+		 ys.reason,
+		 ys.texts,
+		 ys.sp_status,
+		 ys.dd_status,
+		 ys.status,
+		 ys.sp_time,
+		 ys.return_reason,
+		 ys.dd_time,
+		 ys.createdate,
+		 yca.status as  pq_status,
+         yca.id as pq_id,
+       	 ydi.text as type_name,
+       	 ys.repeal_reason,
+	    (case
+          when ys.sp_status='1' and  ys.dd_status='1' then '1' 
+	      when ys.sp_status='2' and  ys.dd_status='1' then '2'  
+	      when ys.sp_status='2' and  ys.dd_status='2' then '2'  
+	      when ys.sp_status='2' and  ys.dd_status='3' then '3'    
+          when ys.sp_status='3' and  ys.dd_status='1' then '3' 
+          when ys.sp_status='2' and  ys.dd_status='4' then '4'             
+          when ys.sp_status='4' and  ys.dd_status='1' then '4' end) 'apply_status' 
+          from  yx_sq ys  
+	        left join yx_user yu on ys.sq_id=yu.id    
+            left join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org  yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id   
+            left join  yx_dictionary  ydi on ydi.value = ys.car and ydi.parent_id = '1'        
+            where 1=1 and ys.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="ddlist != null">and ys.dd_status in 
+				<foreach collection="ddlist" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by apply_status asc, plan_time desc) tt
+		
+	</select>
+	
+	
+	<select id="exportSp" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,yo.name as sq_org_name,
+      		ys.use_name,ys.use_org,yo1.name as user_org_name,ys.use_mobile,ys.use_number,ys.dd_reason,
+			ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+			ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,
+			yca.status as  pq_status,
+            yca.id as pq_id,
+		    (case
+              when ys.sp_status='1' and  ys.dd_status='1' then '1' 
+		      when ys.sp_status='2' and  ys.dd_status='1' then '2'      
+              when ys.sp_status='3' and  ys.dd_status='1' then '3'              
+              when ys.sp_status='4' and  ys.dd_status='1' then '4' end) 'apply_status' 
+              from  yx_sq ys  
+	        left join  yx_user yu on ys.sq_id=yu.id    
+            left join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org  yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id            
+            where ys.dd_status='1' and ys.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="sp_status != null">and ys.sp_status = #{sp_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by apply_status asc, plan_time desc
+	</select>
+	
+	
+	<!-- 获取调度列表(二期) -->
+	<select id="getDdPage" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ys.repeal_reason,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,yo.name as sq_org_name,
+      		ys.use_name,ys.use_org,yo1.name as user_org_name,ys.use_mobile,ys.use_number,ys.dd_reason,
+			ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+			ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,
+            ym1.mobile as driver_mobile,ym1.name as driver_name,yc.car_no,yca.status as  pq_status,
+            yca.id as pq_id,yca.feedback,yca.car_id,yca.driver_id,
+             ydi.text as type_name,
+		    (case
+              when ys.sp_status='2' and  ys.dd_status='1' then '1'               
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '9' then '1.5' 
+		      when ys.sp_status='2' and  ys.dd_status='2' then '2'      
+              when ys.sp_status='2' and  ys.dd_status='3' then '3'              
+              when ys.sp_status='2' and  ys.dd_status='4' then '4'  end) 'apply_status' 
+              from   yx_sq  ys  
+	        left join yx_user yu on ys.sq_id=yu.id    
+            left join yx_member ym on yu.mid = ym.id      
+	        left join yx_org yo on ys.sq_org = yo.id 
+		    left join yx_org yo1 on  ys.use_org = yo1.id     
+            left join  yx_control_apply yca on yca.apply_id = ys.id            
+            left join yx_driver yd on yd.id = yca.driver_id             
+            left join yx_member ym1 on ym1.id = yd.uid              
+            left join yx_car yc on yc.id = yca.car_id 
+            left join  yx_dictionary  ydi on ydi.value = ys.car and ydi.parent_id = '1'  
+		    where (ys.sp_status = '2' or (ys.sp_status = '2' and yca.status = '9')) and ys.status = 1 
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by apply_status asc, plan_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- 获取调度列表导出(二期) -->
+	<select id="getDdNum" parameterType="map" resultType="Integer">	
+		select count(*)
+              from  yx_sq  ys  
+	        left join yx_user yu on ys.sq_id=yu.id    
+            left join yx_member ym on yu.mid = ym.id     
+	        left join yx_org yo on ys.sq_org = yo.id 
+		    left join yx_org yo1 on  ys.use_org = yo1.id    
+            left join yx_control_apply yca on yca.apply_id = ys.id            
+            left join yx_driver yd on yd.id = yca.driver_id           
+            left join yx_member ym1 on ym1.id = yd.uid             
+            left join yx_car yc on yc.id = yca.car_id 
+		    where (ys.sp_status = '2' or (ys.sp_status = '2' and yca.status = '9'))  and ys.status = 1  
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+	</select>
+	
+	<!-- 获取调度列表导出(二期) -->
+	<select id="exportDd" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,yo.name as sq_org_name,
+      		ys.use_name,ys.use_org,yo1.name as user_org_name,ys.use_mobile,ys.use_number,ys.dd_reason,
+			ys.use_level,ys.send,ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,ys.end_place,ys.car,ys.sp_reason,
+			ys.reason,ys.texts,ys.sp_status,ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,ys.createdate,
+            ym1.mobile as driver_mobile,ym1.name as driver_name,yc.car_no,yca.status as  pq_status,
+            yca.id as pq_id,
+		    (case
+              when ys.sp_status='2' and  ys.dd_status='1' then '1'               
+              when ys.sp_status='2' and  ys.dd_status='2' and yca.status = '9' then '1.5' 
+		      when ys.sp_status='2' and  ys.dd_status='2' then '2'      
+              when ys.sp_status='2' and  ys.dd_status='3' then '3'              
+              when ys.sp_status='2' and  ys.dd_status='4' then '4'  end) 'apply_status' 
+              from  yx_sq  ys  
+	        left join yx_user yu on ys.sq_id=yu.id    
+            left join yx_member ym on yu.mid = ym.id     
+	        left join  yx_org yo on ys.sq_org = yo.id
+		    left join  yx_org yo1 on  ys.use_org = yo1.id    
+            left join  yx_control_apply yca on yca.apply_id = ys.id            
+            left join  yx_driver yd on yd.id = yca.driver_id            
+            left join yx_member ym1 on ym1.id = yd.uid             
+            left join yx_car yc on yc.id = yca.car_id
+		    where ys.sp_status = '2' or (ys.sp_status = '2' and yca.status = '9') and ys.status = 1    
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by apply_status asc, plan_time desc
+	</select>
+	
+	
+		<!-- 获取派遣列表(二期) -->
+	<select id="getPqPage" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,
+			yo.name as sq_org_name, ys.use_name,ys.use_org,yo1.name as user_org_name,
+			ys.use_mobile,ys.use_number,ys.dd_reason, ys.use_level,ys.send,
+			ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,
+			ys.end_place,ys.car,ys.sp_reason, ys.reason,ys.texts,ys.sp_status,
+			ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,
+			ys.createdate, yc.car_no as car_no,yca.car_id,yca.driver_id,yca.status as pq_status,
+            yca.id as pq_id,ym1.name as driver_name,ym1.mobile as driver_mobile,
+            ydi.text as type_name,
+				(case 
+             when yca.status='1' then '1'
+			 when yca.status='9'  then '2' 
+			 when yca.status in (2,3,5)  then '3' 
+			 when yca.status='8'  then '4' 
+			 when yca.status='6'  then '5' 
+			 when yca.status='7'  then '6'
+			 end) 'apply_status',
+			ys.repeal_reason
+			from yx_sq ys 
+			left join yx_user yu on ys.sq_id=yu.id 
+			left join yx_member ym on yu.mid = ym.id 
+			left join yx_org yo on ys.sq_org = yo.id 
+			left join yx_org yo1 on ys.use_org = yo1.id 
+			right join yx_control_apply yca on yca.apply_id = ys.id  
+			left join yx_car yc on yc.id = yca.car_id
+			left join yx_driver yd on yd.id = yca.driver_id
+			left join yx_member ym1 on ym1.id = yd.uid 
+			left join  yx_dictionary  ydi on ydi.value = ys.car and ydi.parent_id = '1'
+			where 1=1 and ys.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="statusList != null">and yca.status in 
+				<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by apply_status asc, plan_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+		<!-- 获取派遣列表数(二期) -->
+	<select id="getPqCount" parameterType="map" resultType="integer">	
+				select count(*)
+					from yx_sq ys 
+					left join yx_user yu on ys.sq_id=yu.id 
+					left join yx_member ym on yu.mid = ym.id 
+					left join yx_org yo on ys.sq_org = yo.id 
+					left join yx_org yo1 on ys.use_org = yo1.id 
+					right join yx_control_apply yca on yca.apply_id = ys.id  
+					left join yx_car yc on yc.id = yca.car_id
+					left join yx_driver yd on yd.id = yca.driver_id
+					left join yx_member ym1 on ym1.id = yd.uid  
+					where 1=1 and ys.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="statusList != null">and yca.status in 
+				<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+	</select>
+	
+	
+		<!-- 派遣列表数据导出(二期) -->
+	<select id="exportpq" parameterType="map" resultType="apply">	
+		select ys.id,ys.sq_id,ym.name as sq_name,ym.mobile as sq_mobile,ys.sq_org,
+			yo.name as sq_org_name, ys.use_name,ys.use_org,yo1.name as user_org_name,
+			ys.use_mobile,ys.use_number,ys.dd_reason, ys.use_level,ys.send,
+			ys.plan_car_num,ys.plan_time,ys.plan_return,ys.start_place,
+			ys.end_place,ys.car,ys.sp_reason, ys.reason,ys.texts,ys.sp_status,
+			ys.dd_status,ys.status,ys.sp_time,ys.return_reason,ys.dd_time,
+			ys.createdate, yc.car_no as car_no,yca.car_id,yca.driver_id,yca.status as pq_status,
+            yca.id as pq_id,ym1.name as driver_name,ym1.mobile as driver_mobile,
+				(case 
+             when yca.status='1' then '1'
+			 when yca.status='9'  then '2' 
+			 when yca.status in (2,3,5)  then '3' 
+			 when yca.status='8'  then '4' 
+			 when yca.status='6'  then '5' 
+			 when yca.status='7'  then '6'
+			 end) 'apply_status' 
+			from yx_sq ys 
+			left join yx_user yu on ys.sq_id=yu.id 
+			left join yx_member ym on yu.mid = ym.id 
+			left join yx_org yo on ys.sq_org = yo.id 
+			left join yx_org yo1 on ys.use_org = yo1.id 
+			right join yx_control_apply yca on yca.apply_id = ys.id  
+			left join yx_car yc on yc.id = yca.car_id
+			left join yx_driver yd on yd.id = yca.driver_id
+			left join yx_member ym1 on ym1.id = yd.uid 
+			where 1=1 and ys.status = 1
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="statusList != null">and yca.status in 
+				<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by apply_status asc, plan_time desc
+	</select>
+	
+	<!-- 查询最新的用车申请单 -->
+	<select id="getNewApply"  resultType="apply">	
+		select id,sq_id,sq_org from yx_sq where 1=1 order by createdate desc limit 0,1
+	</select>
+	
+	
+	<!-- 调度数据列表 -->
+	<select id="getDdData" parameterType="map" resultType="apply">	
+        select 
+       		ys.id,
+			ys.dd_status,
+			ys.sq_id,
+			ym. NAME AS sq_name,
+			ym.mobile AS sq_mobile,
+			ys.sq_org,
+			yo. NAME AS sq_org_name,
+			ys.use_name,
+			ys.use_org,
+			yo1. NAME AS user_org_name,
+			ys.use_mobile,
+			ys.use_number,
+			ys.dd_reason,
+			ys.use_level,
+			ys.send,
+			ys.plan_car_num,
+			ys.plan_time,
+			ys.plan_return,
+			ys.start_place,
+			ys.end_place,
+			ys.car,
+			ys.sp_reason,
+			ys.reason,
+			ys.texts,
+			ys.sp_status,
+			ys.dd_status,
+			ys. STATUS,
+			ys.sp_time,
+			ys.return_reason,
+			ys.dd_time,
+			ys.createdate,
+			ys.repeal_reason,
+			ydi.text AS type_name
+		FROM
+			yx_sq ys
+			left join yx_user yu on ys.sq_id=yu.id 
+			left join yx_member ym on yu.mid = ym.id 
+			left join yx_org yo on ys.sq_org = yo.id 
+			left join yx_org yo1 on ys.use_org = yo1.id 
+			left join  yx_dictionary  ydi on ydi.value = ys.car and ydi.parent_id = '1'
+		where 
+		ys.status= 1 and 
+		ys.dd_status in (2,3,4) 
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="statusList != null">and yca.status in 
+				<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+		order by plan_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- 调度数据条数 -->
+	<select id="getDdDataCount" parameterType="map" resultType="Integer">	
+		select count(ys.id)
+			from yx_sq ys 
+			left join yx_user yu on ys.sq_id=yu.id 
+			left join yx_member ym on yu.mid = ym.id 
+			left join yx_org yo on ys.sq_org = yo.id 
+			left join yx_org yo1 on ys.use_org = yo1.id 
+			where 
+			ys.status= 1 and 
+			ys.dd_status in (2,3,4)
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="statusList != null">and yca.status in 
+				<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+	</select>
+	
+	
+	<!-- 调度数据导出-->
+	<select id="exportDdData" parameterType="map" resultType="apply">	
+		select 
+		 ys.dd_status,
+		 ys.id,
+		 ys.sq_id,
+		 ym. NAME AS sq_name,
+		 ym.mobile AS sq_mobile,
+		 ys.sq_org,
+		 yo. NAME AS sq_org_name,
+		 ys.use_name,
+		 ys.use_org,
+		 yo1. NAME AS user_org_name,
+		 ys.use_mobile,
+		 ys.use_number,
+		 ys.dd_reason,
+		 ys.use_level,
+		 ys.send,
+		 ys.plan_car_num,
+		 ys.plan_time,
+		 ys.plan_return,
+		 ys.start_place,
+		 ys.end_place,
+		 ys.car,
+		 ys.sp_reason,
+		 ys.reason,
+		 ys.texts,
+		 ys.sp_status,
+		 ys.dd_status,
+		 ys. STATUS,
+		 ys.sp_time,
+		 ys.return_reason,
+		 ys.dd_time,
+		 ys.createdate
+		from yx_sq ys 
+			left join yx_user yu on ys.sq_id=yu.id 
+			left join yx_member ym on yu.mid = ym.id 
+			left join yx_org yo on ys.sq_org = yo.id 
+			left join yx_org yo1 on ys.use_org = yo1.id 
+		where 
+			ys.status= 1 and 
+			ys.dd_status in (2,3,4)
+		<if test="status != null">and ys.status = #{status}</if>
+		<if test="yca_status != null">and yca.status = #{yca_status}</if>
+		<if test="use_name != null">and ys.use_name like CONCAT('%','${use_name}','%')</if>
+		<if test="use_org != null">and yo1.id = #{use_org}</if>
+		<if test="dd_status != null">and ys.dd_status = #{dd_status}</if>
+		<if test="start_time != null">and ys.plan_time &gt;= #{start_time} and ys.plan_return &gt;= #{start_time}</if>
+		<if test="end_time != null">and ys.plan_time &lt;= #{end_time} and ys.plan_return &lt;= #{end_time}</if>
+		<if test="list != null">and ys.sq_org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="statusList != null">and yca.status in 
+				<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org_list != null">and ys.use_org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		<if test="org != null">and ys.sq_org = #{org}</if>
+	</select>
+	
+	
+</mapper>

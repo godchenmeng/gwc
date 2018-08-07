@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.IndexMonitorDao">
+    <resultMap type="com.youxing.car.entity.IndexMonitorCar" id="IndexMonitorCarRM">
+        <id column="id" property="id" />
+        <result column="car_id" property="car_id" />
+        <result column="device" property="device"/>
+        <result column="car_no" property="car_no" />
+        <result column="user_id" property="user_id" />
+        <result column="acc" property="acc" />
+        <result column="sp_status" property="sp_status" />
+        <result column="dd_status" property="dd_status" />
+    </resultMap>
+
+    <select id="getIndexMonitorCarByUid" parameterType="long" resultMap="IndexMonitorCarRM">
+        select imc.id,imc.car_id,c.car_no,d.device from yx_index_monitor_car imc
+        left join yx_car c on imc.car_id = c.id
+        left join yx_device d on d.car_id = c.id
+        where user_id = #{id}
+    </select>
+
+<!--     <select id="getIndexMonitorCarCount" parameterType="map" resultMap="IndexMonitorCarRM">
+        select c.id,IFNULL(g.acc,0) as acc
+        from yx_car c
+        left join yx_device d on d.car_id = c.id
+        left join yx_gps_current g on g.device = d.device
+        where c.status = 1 and c.obd = 1 and c.car_status = 1
+        <if test="org != null">and c.org = #{org}</if>
+        <if test="list != null">and c.org in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select> -->
+    <select id="getIndexMonitorCarCount" parameterType="map" resultType="java.util.HashMap">
+	  select acc,count(acc) number from 
+	   ( select c.id car_id,
+	    (case 
+				when (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &gt;5) then '0'
+				when ygc.acc = '0' then '0'
+				when ygc.acc = '1' and (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &lt;=5) and car_speed =0 then '2'
+				when ygc.acc = '1' and (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &lt;=5) and car_speed &gt;0 then '1'
+				 end) 'acc'
+		from yx_gps_current ygc
+		left join yx_device d on d.device = ygc.device
+		left join yx_car c on c.id = d.car_id
+		left join yx_org o on o.id = c.org
+		where 
+		c.status = '1' and o.status = '1' and d.status = '1' and c.obd = '1' and c.car_status = '1' 
+        <if test="org != null">and c.org = #{org}</if>
+        <if test="list != null">and c.org in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if> GROUP BY ygc.device) t group by t.acc
+    </select>
+
+    <select id="getIndexMonitorTaskCount" parameterType="map" resultMap="IndexMonitorCarRM">
+ 		select * from yx_sq
+        where status = 1 and sp_status != 4 and dd_status != 4 and id not in (select apply_id from yx_control_apply where status = 8) 
+        <if test="org != null">and sq_org = #{org}</if>
+        <if test="list != null">and sq_org in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="addMonitorCar" parameterType="com.youxing.car.entity.IndexMonitorCar">
+        insert into yx_index_monitor_car (car_id,user_id,createdate)
+        values (#{car_id},#{user_id},now())
+    </insert>
+
+    <delete id="removeMonitorCarById" parameterType="com.youxing.car.entity.IndexMonitorCar">
+        delete from yx_index_monitor_car where car_id=#{car_id} and user_id=#{user_id}
+    </delete>
+</mapper>

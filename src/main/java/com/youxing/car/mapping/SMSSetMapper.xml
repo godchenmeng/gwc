@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.SmsSetDao">
+	<resultMap type="com.youxing.car.entity.SMSSet" id="SetRM">
+	      <id column="id" property="id" />
+	      <result column="types" property="types" />
+	      <result column="sendtarget" property="sendtarget" />
+	      <result column="sendname" property="sendname" />
+	      <result column="sendphones" property="sendphones" />
+	</resultMap>
+	<!-- 全部字段-->
+	<sql id="COLUMNS">
+     id,types,sendtarget,sendname,sendphones
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.SMSSet">
+		insert into yx_sms_set (
+			<if test="types != null ">,</if>
+			<if test="sendtarget != null ">sendtarget,</if>
+			<if test="sendname != null ">sendname,</if>
+			<if test="sendphones != null ">sendphones,</if>
+		)
+		values (
+			<if test="types != null ">#{types} ,</if>
+			<if test="sendtarget != null ">#{sendtarget},</if>
+			<if test="sendname != null ">#{sendname},</if>
+			<if test="sendphones != null ">#{sendphones}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.SMSSet">
+		update yx_sms_set
+		<set>
+			<if test="types != null ">types = #{types} ,</if>
+			<if test="sendtarget != null ">sendtarget = #{sendtarget},</if>
+			<if test="sendname != null ">sendname = #{sendname},</if>
+			<if test="sendphones != null ">sendphones = #{sendphones}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="listAll" resultMap="SetRM">
+		select <include refid="COLUMNS" /> from yx_sms_set
+	</select>
+
+</mapper>

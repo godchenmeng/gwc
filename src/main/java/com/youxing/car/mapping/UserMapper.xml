@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.UserDao">
+	<resultMap type="com.youxing.car.entity.User" id="UserRM">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="org" property="org" />
+		<result column="web" property="web" />
+		<result column="app" property="app" />
+		<result column="status" property="status" />
+		<result column="role" property="role" />
+		<result column="leader" property="leader" />
+		<result column="password" property="password" />
+		<result column="salt" property="salt" />
+		<result column="createby" property="createby" />
+		<result column="createdate" property="createdate" />
+		<result column="login" property="login" />
+		<result column="locked" property="locked" />
+		<result column="platform" property="platform" />
+		<result column="version" property="version" />
+		<result column="alias" property="alias" />
+		<result column="user_name" property="user_name" />
+		<result column="tel" property="tel" />
+		<result column="mid" property="mid" />
+		<result column="fullPath" property="fullPath" />
+		<result column="relativePath" property="relativePath" />
+		<result column="oname" property="oname" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,name,tel,org,web,app,status,role,leader,password,salt,createby,createdate,login,mid,version,platform,alias,fullPath,relativePath
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.User">
+		insert into yx_user (id,name,org,web,app,status,role,leader,password,salt,createby,createdate,login,mid,alias,fullPath,relativePath)
+		values (#{id},#{name},#{org},#{web},#{app},#{status},#{role},#{leader},#{password},#{salt},#{createby},#{createdate},#{login},#{mid},#{alias},#{fullPath},#{relativePath})
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.User">
+		update yx_user 
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="org != null">org = #{org},</if>
+			<if test="web != null">web = #{web},</if>
+			<if test="app != null">app = #{app},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="role != null">role = #{role},</if>
+			<if test="leader != null">leader = #{leader},</if>
+			<if test="password != null and password!=''">password = #{password},</if>
+			<if test="salt != null">salt = #{salt},</if>
+			<if test="createby != null">createby = #{createby},</if>
+			<if test="createdate != null">createdate = #{createdate},</if>
+			<if test="platform != null">platform = #{platform},</if>
+			<if test="version != null">version = #{version},</if>
+			<if test="alias!= null and alias!=''">alias = #{alias},</if>
+			<if test="login != null">login = #{login},</if>
+			<if test="fullPath != null">fullPath = #{fullPath},</if>
+			<if test="relativePath != null">relativePath = #{relativePath}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="java.lang.Long">
+		delete from yx_user where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_user where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="UserRM">
+		select <include refid="COLUMNS" /> from yx_user
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="UserRM">
+		select <include refid="COLUMNS" /> from yx_user
+		where status ='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="web != null">and web = #{web}</if>
+			<if test="app != null">and app = #{app}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="role != null">and role = #{role}</if>
+			<if test="leader != null">and leader = #{leader}</if>
+			<if test="password != null">and password = #{password}</if>
+			<if test="salt != null">and salt = #{salt}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="login != null">and login = #{login}</if>
+			<if test="mid != null">and mid = #{mid}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="UserRM">
+	  select yu.id,yu.name,yu.org,yu.app,yu.web,yu.status ,ym.name as leader
+		 from yx_user yu
+		 left join yx_member ym  on ym.id = yu.mid
+		 where  yu.status='1' and ym.status='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and yx.name = #{name}</if>
+		    <if test="lo_name != null">and yu.name = #{name}</if>			
+			<if test="org != null">and yu.org = #{org}</if>
+			<if test="status != null">and yu.status = #{status}</if>
+			<if test="leader != null">and ym.name = #{leader}</if>
+			<if test="salt != null">and salt = #{salt}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="login != null">and login = #{login}</if>
+			<if test="uid != null">and yu.id != #{uid}</if>
+			<if test="list != null">and yu.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by ym.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="pageByWeb" parameterType="map" resultMap="UserRM">
+		select yu.id,yu.name,yo.name as oname,yo.id as org,yu.app,yu.web,yu.status,
+			yu.role ,ym.name as user_name, leader
+			from yx_user yu
+			left join yx_member ym on yu.mid=ym.id 
+			left join  yx_org yo  on yu.org=yo.id
+			where  yu.status='1' and ym.status='1' and yo.status='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and ym.name like CONCAT('%','${name}','%')</if>
+		    <if test="lo_name != null">and yu.name like CONCAT('%','${lo_name}','%')</if>			
+			<if test="org != null">and find_in_set(yu.org, getChildLst(#{org}))</if>
+			<if test="status != null">and yu.status = #{status}</if>
+			<if test="salt != null">and salt = #{salt}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="login != null">and login = #{login}</if>
+			<if test="uid != null">and yu.id != #{uid}</if>
+			<if test="list != null">and yu.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by yu.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="UserRM">
+		select <include refid="COLUMNS" /> from yx_user
+		where status='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="web != null">and web = #{web}</if>
+			<if test="app != null">and app = #{app}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="role != null">and role = #{role}</if>
+			<if test="leader != null">and leader = #{leader}</if>
+			<if test="password != null">and password = #{password}</if>
+			<if test="salt != null">and salt = #{salt}</if>
+			<if test="mid != null">and mid = #{mid}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="login != null">and login = #{login}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.User" resultMap="UserRM">
+		select <include refid="COLUMNS" /> from yx_user
+		where status='1'
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="web != null">and web = #{web}</if>
+			<if test="app != null">and app = #{app}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="role != null">and role = #{role}</if>
+			<if test="leader != null">and leader = #{leader}</if>
+			<if test="mid != null">and mid = #{mid}</if>
+			<if test="password != null">and password = #{password}</if>
+			<if test="salt != null">and salt = #{salt}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="login != null">and login = #{login}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="java.lang.Long" resultMap="UserRM">
+		select <include refid="COLUMNS" /> from yx_user where id = #{id} and  status='1'
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_user where status='1'
+	</select>
+	
+	<select id="countIds" parameterType="map" resultMap="UserRM">
+		select id from yx_user where status='1'
+		<if test="list3 != null">and org in 
+				<foreach collection="list3" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(yu.id) 
+			from yx_user yu
+			left join yx_member ym on yu.mid=ym.id 
+			LEFT JOIN yx_org yo ON yu.org = yo.id
+			where yu.status='1' and ym.status='1' AND yo. STATUS = '1'
+			<if test="lo_name != null">and yu.name = #{name}</if>			
+			<if test="org != null">and yu.org = #{org}</if>
+			<if test="status != null">and yu.status = #{status}</if>
+			<if test="uid != null">and yu.id != #{uid}</if>
+			<if test="list != null">and yu.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	
+	<select id="listMid" parameterType="map" resultType="string">
+		select ym.id from yx_user yu
+		left join yx_member ym on yu.mid = ym.id
+		where yu.status='1' and ym.status='1'
+		<if test="list != null">and yu.id in 
+		   <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+		   #{item}
+           </foreach>            
+	</if>
+	</select>
+	
+	<select id="findStatusByName" parameterType="String" resultType="string">
+		select status from yx_role where id=
+			(select role from yx_user where NAME =#{name})	
+	</select>
+	
+	<!-- 查询账号名称，用于新增账号时判定不能新增同名的 -->
+	<select id="findUserNames"  resultMap="UserRM">
+		select name from yx_user where name != '' and status='1'
+	</select>
+	
+	<select id="findUserRole"  resultType="String">
+		select role from yx_user where name = #{name} and status='1'
+	</select>
+	
+	<update id="updateRole" parameterType="String">
+		update yx_user  set role=32
+		where name = #{name}
+	</update>
+	
+	<select id="getColumn" parameterType="String" resultType="selects">
+		select COLUMN_COMMENT as text,COLUMN_NAME as value from information_schema.COLUMNS where
+		 table_name = #{table_name} and table_schema = 'office_cars'
+		 ORDER BY CONVERT(COLUMN_COMMENT USING gbk)
+	</select>	
+</mapper>

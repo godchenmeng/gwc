@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.DeviceDao">
+	<resultMap type="com.youxing.car.entity.Device" id="DeviceRM">
+		<id column="id" property="id" />
+		<result column="car_no" property="car_no" />
+		<result column="device" property="device" />
+		<result column="sim" property="sim" />
+		<result column="version" property="version" />
+		<result column="status" property="status" />
+		<result column="createdby" property="createdby" />
+		<result column="createdate" property="createdate" />
+		<result column="updatedate" property="updatedate" />
+		<result column="car_id" property="car_id" />
+		<result column="connectway" property="connectway" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,car_no,device,sim,version,status,createdby,createdate,updatedate,car_id,connectway
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Device">
+		insert into yx_device (
+			<if test="car_no != null and car_no!=''">car_no ,</if>
+			<if test="sim != null and sim!=''">sim ,</if>
+			<if test="version != null and version!=''">version ,</if>
+			<if test="status != null and status!=''">status ,</if>
+			<if test="createdby != null and createdby!=''">createdby ,</if>
+			<if test="createdate != null ">createdate ,</if>
+			<if test="updatedate != null ">updatedate ,</if>
+			<if test="car_id != null and car_id!=''">car_id,</if>
+			<if test="connectway != null">connectway,</if>
+			<if test="device != null and device!=''">device</if>
+		)
+		values (
+			<if test="car_no != null and car_no!=''"> #{car_no},</if>
+			<if test="sim != null and sim!=''"> #{sim},</if>
+			<if test="version != null and version!=''"> #{version},</if>
+			<if test="status != null and status!=''"> #{status},</if>
+			<if test="createdby != null and createdby!=''"> #{createdby},</if>
+			<if test="createdate != null "> #{createdate},</if>
+			<if test="updatedate != null "> #{updatedate},</if>
+			<if test="car_id != null and car_id!=''"> #{car_id},</if>
+			<if test="connectway != null"> #{connectway},</if>
+			<if test="device != null and device!=''"> #{device}</if>
+			
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Device">
+		update yx_device 
+		<set>
+			<if test="car_no != null and car_no!=''">car_no = #{car_no},</if>
+			<if test="device != null and device!=''">device = #{device},</if>
+			<if test="sim != null and sim!=''">sim = #{sim},</if>
+			<if test="version != null and version!=''">version = #{version},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="createdate != null ">createdate = #{createdate},</if>
+			<if test="updatedate != null ">updatedate = #{updatedate},</if>
+			<if test="driver_name != null ">driver_name = #{driver_name},</if>
+			<if test="car_id != null and car_id!=''">car_id = #{car_id}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+
+			<!-- web 司机姓名保存更新至yx_device表-->
+	<update id="updateDriverByDevice" parameterType="map">
+		update yx_device 
+		<set>
+			<if test="car_no != null and car_no!=''">car_no = #{car_no},</if>
+			<if test="device != null and device!=''">device = #{device},</if>
+			<if test="sim != null and sim!=''">sim = #{sim},</if>
+			<if test="version != null and version!=''">version = #{version},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="createdate != null ">createdate = #{createdate},</if>
+			<if test="updatedate != null ">updatedate = #{updatedate},</if>
+			<if test="driver_name != null ">driver_name = #{driver_name},</if>
+			<if test="car_id != null and car_id!=''">car_id = #{car_id}</if>
+		</set>
+		where device = #{device}
+	</update>
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_device where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_device where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="DeviceRM">
+		select <include refid="COLUMNS" /> from yx_device
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="DeviceRM">
+		select <include refid="COLUMNS" /> from yx_device
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="sim != null">and sim = #{sim}</if>
+			<if test="version != null">and version = #{version}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="updatedate != null">and updatedate = #{updatedate}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="DeviceRM">
+		select <include refid="COLUMNS" /> from yx_device
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="sim != null">and sim = #{sim}</if>
+			<if test="version != null">and version = #{version}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="updatedate != null">and updatedate = #{updatedate}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+		</where>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- web 设备分页接口 -->
+	<select id="pageByWeb" parameterType="map" resultMap="DeviceRM">
+		select yd.id,yc.car_no as car_no ,yo.name as org,yd.device, yd.sim,yd.status,yd.createdate,yd.updatedate,yd.connectway from yx_device yd 
+			left join yx_car yc on yd.car_id = yc.id 
+			left join yx_org yo on yc.org = yo.id 
+			where 1=1 and yd.status = 1 and yc.status = 1 and yo.status = 1
+		<if test="car_no != null">and yc.car_no like CONCAT('%','${car_no}','%')</if>
+		<if test="device != null">and yd.device like CONCAT('%','${device}','%')</if>
+		<if test="org != null">and yo.id = #{org}</if>
+		<if test="car_status != null">and yc.car_status = #{car_status}</if>
+		<if test="obd != null">and yc.obd = #{obd}</if>
+		<if test="list != null">and yo.id in 
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+            </foreach>            
+		</if>
+		<if test="org_list != null">and yc.org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+		order by yd.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="DeviceRM">
+		select <include refid="COLUMNS" /> from yx_device
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="sim != null">and sim = #{sim}</if>
+			<if test="version != null">and version = #{version}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="updatedate != null">and updatedate = #{updatedate}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Device" resultMap="DeviceRM">
+		select <include refid="COLUMNS" /> from yx_device
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="sim != null">and sim = #{sim}</if>
+			<if test="version != null">and version = #{version}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="updatedate != null">and updatedate = #{updatedate}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="DeviceRM">
+		select <include refid="COLUMNS" /> from yx_device where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_device
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_device
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="sim != null">and sim = #{sim}</if>
+			<if test="version != null">and version = #{version}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="updatedate != null">and updatedate = #{updatedate}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+		</where>
+	</select>
+	
+	<select id="countByWeb" parameterType="map" resultType="integer">
+		select count(yd.id) from 
+		yx_device yd
+		left join yx_car yc on yd.car_id = yc.id 
+		left join yx_org yo on yc.org = yo.id 
+		where
+		yd.status='1' and yc.status='1' and yo.status = 1
+		<if test="car_no != null">and yc.car_no like CONCAT('%','${car_no}','%')</if>
+		<if test="device != null">and yd.device like CONCAT('%','${device}','%')</if>
+		<if test="org != null">and yo.id = #{org}</if>
+		<if test="car_status != null">and yc.car_status = #{car_status}</if>
+		<if test="obd != null">and yc.obd = #{obd}</if>
+		<if test="list != null">and yo.id in 
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+            </foreach>            
+		</if>
+		<if test="org_list != null">and yc.org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>            
+		</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	<select id="listOrgDevice" parameterType="map" resultType="string">
+		select yd.device from yx_device yd
+		left  join yx_car yc on  yd.car_id = yc.id
+		left join yx_org yo on yc.org = yo.id
+		where 
+		yc.status=1 and yc.obd=1 and yd.status=1
+		<if test="list != null">and yo.id in 
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+            </foreach>            
+	    </if>
+	    <if test="org != null">and yo.id =  #{org}          
+	    </if>
+	</select>
+	
+	<select id="listDevice" parameterType="map" resultType="string">
+		select device from yx_device
+		where status=1
+			<if test="list != null">and car_id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		    </if>
+	</select>
+	
+	<!--暂时没发现用到此sql的功能 -->
+	<select id="listOrgAndCar" parameterType="map" resultType="CarMessage">
+		select yc.car_no as car_no,yo.name as car_org 
+		from 
+		yx_device yd
+		left  join yx_car yc on  yd.car_id = yc.id
+		left join yx_org yo on yc.org = yo.id
+		where  
+		yc.status=1 and yc.obd=1 and yd.status=1
+		<if test="device != null">and yd.device = #{device}</if>
+	</select>
+	
+	<!-- 根据车牌号码查找设备-->
+	<select id="listDeviceByCar" parameterType="map" resultType="string">
+		select yd.device as device 
+		from yx_device yd
+        left join yx_car yc on yc.id = yd.car_id 
+		 where 
+		 yd.status =1 and yc.status ='1'
+		<if test="list != null">and yc.car_no in
+		   <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+		      #{item}
+           </foreach>            
+		</if>
+		and yc.car_status= 1 and yc.obd = 1 and yc.status= 1
+	</select>
+	
+	<!-- 上线率接口部门功能    根据机构id数组获取设备号集合-->
+	
+	<select id="listDevicesByOrg" parameterType="map" resultMap="DeviceRM">
+		select yd.device from yx_car yc
+			left join yx_org yo on yo.id  = yc.org
+			left join yx_device yd  on yd.car_id = yc.id
+		where yo.status = '1'
+		<if test="list != null">and yc.org in
+		   <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+		      #{item}
+           </foreach>            
+		</if>
+	</select>
+	
+	
+	<select id="findListByMap" parameterType="map" resultMap="DeviceRM">
+		select <include refid="COLUMNS" /> from yx_device
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="sim != null">and sim = #{sim}</if>
+			<if test="version != null">and version = #{version}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="updatedate != null">and updatedate = #{updatedate}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="list != null">and car_id in 
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+            </foreach>            
+		</if>
+		</where>
+	</select>
+	<select id="sysDeviceInfo" resultMap="DeviceRM">
+		select yd.device,ygc.senddate as updatedate,ygc.createdate,ygc.acc as status from yx_car yc
+		left join yx_device yd on yd.car_id = yc.id
+		left join yx_gps_current ygc on ygc.device = yd.device
+		where yd.status = 1 and yc.status = 1
+	</select>
+
+	<select id="unknowDeviceInfo" resultMap="DeviceRM">
+		select device from yx_unknow_device
+		where device not in (select device from yx_device)
+		and to_days(now()) - TO_DAYS(createdate) &lt;= 1
+		order by createdate
+	</select>
+</mapper>

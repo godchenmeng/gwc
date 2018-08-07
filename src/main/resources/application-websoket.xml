@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/websocket
+        http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+
+    <websocket:handlers allowed-origins="*">
+        <websocket:mapping path="/ws/gpsHandler/sockjs" handler="gpsHandler"/>
+        <websocket:handshake-interceptors>
+            <bean class="com.youxing.car.utils.push.WebSocketInterceptor" />
+        </websocket:handshake-interceptors>
+        <websocket:sockjs/>
+    </websocket:handlers>
+    <websocket:handlers allowed-origins="*">
+        <websocket:mapping path="/ws/gpsHandler" handler="gpsHandler"/>
+        <websocket:handshake-interceptors>
+            <bean class="com.youxing.car.utils.push.WebSocketInterceptor" />
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
+
+    <bean id="gpsHandler" class="com.youxing.car.utils.push.GpsHandler"/>
+
+</beans>

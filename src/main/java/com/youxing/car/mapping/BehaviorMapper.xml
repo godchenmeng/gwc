@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.BehaviorDao">
+	<resultMap type="com.youxing.car.entity.Behavior" id="BehaviorRM">
+		<id column="id" property="id" />
+		<result column="device" property="device" />
+		<result column="serial" property="serial" />
+		<result column="start" property="start" />
+		<result column="end" property="end" />
+		<result column="trip_mark" property="trip_mark" />
+		<result column="trip_distance_type" property="trip_distance_type" />
+		<result column="trip_distance" property="trip_distance" />
+		<result column="trip_fuel" property="trip_fuel" />
+		<result column="trip_duration" property="trip_duration" />
+		<result column="trip_overspeed" property="trip_overspeed" />
+		<result column="trip_overspeed_times" property="trip_overspeed_times" />
+		<result column="trip_speed_avage" property="trip_speed_avage" />
+		<result column="trip_speed" property="trip_speed" />
+		<result column="trip_idle" property="trip_idle" />
+		<result column="trip_mask" property="trip_mask" />
+		<result column="trip_number" property="trip_number" />
+		<result column="trip_accelerate" property="trip_accelerate" />
+		<result column="trip_decelerate" property="trip_decelerate" />
+		<result column="trip_sharp" property="trip_sharp" />
+		<result column="trip_speed_20" property="trip_speed_20" />
+		<result column="trip_speed_24" property="trip_speed_24" />
+		<result column="trip_speed_46" property="trip_speed_46" />
+		<result column="trip_speed_68" property="trip_speed_68" />
+		<result column="trip_speed_81" property="trip_speed_81" />
+		<result column="trip_speed_11" property="trip_speed_11" />
+		<result column="trip_speed_12" property="trip_speed_12" />
+		<result column="accelerate" property="accelerate" />
+		<result column="decelerate" property="decelerate" />
+		<result column="overspeed" property="overspeed" />
+		<result column="sharp_turn" property="sharp_turn" />
+		<result column="idlespeed" property="idlespeed" />
+		<result column="createdate" property="createdate" />
+		<result column="lastdate" property="lastdate" />
+	</resultMap>
+	<resultMap type="com.youxing.car.entity.CountEntity" id="CountEntityRM">
+		<result column="day" property="day" />
+		<result column="mil" property="mil" />
+		<result column="fuel" property="fuel" />
+		<result column="acce" property="acce" />
+		<result column="dece" property="dece" />
+		<result column="sharp" property="sharp" />
+		<result column="org" property="org" />	
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,device,serial,start,end,trip_mark,trip_distance_type,trip_distance,trip_fuel,trip_duration,trip_overspeed,trip_overspeed_times,trip_speed_avage,trip_speed,trip_idle,trip_mask,trip_number,trip_accelerate,trip_decelerate,trip_sharp,trip_speed_20,trip_speed_24,trip_speed_46,trip_speed_68,trip_speed_81,trip_speed_11,trip_speed_12,accelerate,decelerate,overspeed,sharp_turn,idlespeed,createdate
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Behavior">
+	 	<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_behavior (
+			<if test="device != null ">device ,</if>
+			<if test="serial != null ">serial ,</if>
+			<if test="start != null ">start ,</if>
+			<if test="end != null ">end ,</if>
+			<if test="trip_mark != null ">trip_mark ,</if>
+			<if test="trip_distance_type != null ">trip_distance_type ,</if>
+			<if test="trip_distance != null ">trip_distance ,</if>
+			<if test="trip_fuel != null ">trip_fuel ,</if>
+			<if test="trip_duration != null ">trip_duration ,</if>
+			<if test="trip_overspeed != null ">trip_overspeed ,</if>
+			<if test="trip_overspeed_times != null ">trip_overspeed_times ,</if>
+			<if test="trip_speed_avage != null ">trip_speed_avage ,</if>
+			<if test="trip_speed != null ">trip_speed ,</if>
+			<if test="trip_idle != null ">trip_idle ,</if>
+			<if test="trip_mask != null ">trip_mask ,</if>
+			<if test="trip_number != null ">trip_number ,</if>
+			<if test="trip_accelerate != null ">trip_accelerate ,</if>
+			<if test="trip_decelerate != null ">trip_decelerate ,</if>
+			<if test="trip_sharp != null ">trip_sharp ,</if>
+			<if test="trip_speed_20 != null ">trip_speed_20 ,</if>
+			<if test="trip_speed_24 != null ">trip_speed_24 ,</if>
+			<if test="trip_speed_46 != null ">trip_speed_46 ,</if>
+			<if test="trip_speed_68 != null ">trip_speed_68 ,</if>
+			<if test="trip_speed_81 != null ">trip_speed_81 ,</if>
+			<if test="trip_speed_11 != null ">trip_speed_11 ,</if>
+			<if test="trip_speed_12 != null ">trip_speed_12 ,</if>
+			<if test="accelerate != null ">accelerate ,</if>
+			<if test="decelerate != null ">decelerate ,</if>
+			<if test="overspeed != null ">overspeed ,</if>
+			<if test="sharp_turn != null ">sharp_turn ,</if>
+			<if test="idlespeed != null ">idlespeed ,</if>
+			<if test="createdate != null ">createdate </if>
+		)
+		values (
+			<if test="device != null"> #{device},</if>
+			<if test="serial != null"> #{serial},</if>
+			<if test="start != null"> #{start},</if>
+			<if test="end != null"> #{end},</if>
+			<if test="trip_mark != null"> #{trip_mark},</if>
+			<if test="trip_distance_type != null"> #{trip_distance_type},</if>
+			<if test="trip_distance != null"> #{trip_distance},</if>
+			<if test="trip_fuel != null"> #{trip_fuel},</if>
+			<if test="trip_duration != null"> #{trip_duration},</if>
+			<if test="trip_overspeed != null"> #{trip_overspeed},</if>
+			<if test="trip_overspeed_times != null"> #{trip_overspeed_times},</if>
+			<if test="trip_speed_avage != null"> #{trip_speed_avage},</if>
+			<if test="trip_speed != null"> #{trip_speed},</if>
+			<if test="trip_idle != null"> #{trip_idle},</if>
+			<if test="trip_mask != null"> #{trip_mask},</if>
+			<if test="trip_number != null"> #{trip_number},</if>
+			<if test="trip_accelerate != null"> #{trip_accelerate},</if>
+			<if test="trip_decelerate != null"> #{trip_decelerate},</if>
+			<if test="trip_sharp != null"> #{trip_sharp},</if>
+			<if test="trip_speed_20 != null"> #{trip_speed_20},</if>
+			<if test="trip_speed_24 != null"> #{trip_speed_24},</if>
+			<if test="trip_speed_46 != null"> #{trip_speed_46},</if>
+			<if test="trip_speed_68 != null"> #{trip_speed_68},</if>
+			<if test="trip_speed_81 != null"> #{trip_speed_81},</if>
+			<if test="trip_speed_11 != null"> #{trip_speed_11},</if>
+			<if test="trip_speed_12 != null"> #{trip_speed_12},</if>
+			<if test="accelerate != null"> #{accelerate},</if>
+			<if test="decelerate != null"> #{decelerate},</if>
+			<if test="overspeed != null"> #{overspeed},</if>
+			<if test="sharp_turn != null"> #{sharp_turn},</if>
+			<if test="idlespeed != null"> #{idlespeed},</if>
+			<if test="createdate != null"> #{createdate}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Behavior">
+		update yx_behavior 
+		<set>
+			<if test="device != null">device = #{device},</if>
+			<if test="serial != null">serial = #{serial},</if>
+			<if test="start != null">start = #{start},</if>
+			<if test="end != null">end = #{end},</if>
+			<if test="trip_mark != null">trip_mark = #{trip_mark},</if>
+			<if test="trip_distance_type != null">trip_distance_type = #{trip_distance_type},</if>
+			<if test="trip_distance != null">trip_distance = #{trip_distance},</if>
+			<if test="trip_fuel != null">trip_fuel = #{trip_fuel},</if>
+			<if test="trip_duration != null">trip_duration = #{trip_duration},</if>
+			<if test="trip_overspeed != null">trip_overspeed = #{trip_overspeed},</if>
+			<if test="trip_overspeed_times != null">trip_overspeed_times = #{trip_overspeed_times},</if>
+			<if test="trip_speed_avage != null">trip_speed_avage = #{trip_speed_avage},</if>
+			<if test="trip_speed != null">trip_speed = #{trip_speed},</if>
+			<if test="trip_idle != null">trip_idle = #{trip_idle},</if>
+			<if test="trip_mask != null">trip_mask = #{trip_mask},</if>
+			<if test="trip_number != null">trip_number = #{trip_number},</if>
+			<if test="trip_accelerate != null">trip_accelerate = #{trip_accelerate},</if>
+			<if test="trip_decelerate != null">trip_decelerate = #{trip_decelerate},</if>
+			<if test="trip_sharp != null">trip_sharp = #{trip_sharp},</if>
+			<if test="trip_speed_20 != null">trip_speed_20 = #{trip_speed_20},</if>
+			<if test="trip_speed_24 != null">trip_speed_24 = #{trip_speed_24},</if>
+			<if test="trip_speed_46 != null">trip_speed_46 = #{trip_speed_46},</if>
+			<if test="trip_speed_68 != null">trip_speed_68 = #{trip_speed_68},</if>
+			<if test="trip_speed_81 != null">trip_speed_81 = #{trip_speed_81},</if>
+			<if test="trip_speed_11 != null">trip_speed_11 = #{trip_speed_11},</if>
+			<if test="trip_speed_12 != null">trip_speed_12 = #{trip_speed_12},</if>
+			<if test="accelerate != null">accelerate = #{accelerate},</if>
+			<if test="decelerate != null">decelerate = #{decelerate},</if>
+			<if test="overspeed != null">overspeed = #{overspeed},</if>
+			<if test="sharp_turn != null">sharp_turn = #{sharp_turn},</if>
+			<if test="idlespeed != null">idlespeed = #{idlespeed},</if>
+			<if test="createdate != null">createdate = #{createdate}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_behavior where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_behavior where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="BehaviorRM">
+		select <include refid="COLUMNS" /> from yx_behavior
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="BehaviorRM">
+		select <include refid="COLUMNS" /> from yx_behavior
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="trip_mark != null">and trip_mark = #{trip_mark}</if>
+			<if test="trip_distance_type != null">and trip_distance_type = #{trip_distance_type}</if>
+			<if test="trip_distance != null">and trip_distance = #{trip_distance}</if>
+			<if test="trip_fuel != null">and trip_fuel = #{trip_fuel}</if>
+			<if test="trip_duration != null">and trip_duration = #{trip_duration}</if>
+			<if test="trip_overspeed != null">and trip_overspeed = #{trip_overspeed}</if>
+			<if test="trip_overspeed_times != null">and trip_overspeed_times = #{trip_overspeed_times}</if>
+			<if test="trip_speed_avage != null">and trip_speed_avage = #{trip_speed_avage}</if>
+			<if test="trip_speed != null">and trip_speed = #{trip_speed}</if>
+			<if test="trip_idle != null">and trip_idle = #{trip_idle}</if>
+			<if test="trip_mask != null">and trip_mask = #{trip_mask}</if>
+			<if test="trip_number != null">and trip_number = #{trip_number}</if>
+			<if test="trip_accelerate != null">and trip_accelerate = #{trip_accelerate}</if>
+			<if test="trip_decelerate != null">and trip_decelerate = #{trip_decelerate}</if>
+			<if test="trip_sharp != null">and trip_sharp = #{trip_sharp}</if>
+			<if test="trip_speed_20 != null">and trip_speed_20 = #{trip_speed_20}</if>
+			<if test="trip_speed_24 != null">and trip_speed_24 = #{trip_speed_24}</if>
+			<if test="trip_speed_46 != null">and trip_speed_46 = #{trip_speed_46}</if>
+			<if test="trip_speed_68 != null">and trip_speed_68 = #{trip_speed_68}</if>
+			<if test="trip_speed_81 != null">and trip_speed_81 = #{trip_speed_81}</if>
+			<if test="trip_speed_11 != null">and trip_speed_11 = #{trip_speed_11}</if>
+			<if test="trip_speed_12 != null">and trip_speed_12 = #{trip_speed_12}</if>
+			<if test="accelerate != null">and accelerate = #{accelerate}</if>
+			<if test="decelerate != null">and decelerate = #{decelerate}</if>
+			<if test="overspeed != null">and overspeed = #{overspeed}</if>
+			<if test="sharp_turn != null">and sharp_turn = #{sharp_turn}</if>
+			<if test="idlespeed != null">and idlespeed = #{idlespeed}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="BehaviorRM">
+		select <include refid="COLUMNS" /> from yx_behavior
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="trip_mark != null">and trip_mark = #{trip_mark}</if>
+			<if test="trip_distance_type != null">and trip_distance_type = #{trip_distance_type}</if>
+			<if test="trip_distance != null">and trip_distance = #{trip_distance}</if>
+			<if test="trip_fuel != null">and trip_fuel = #{trip_fuel}</if>
+			<if test="trip_duration != null">and trip_duration = #{trip_duration}</if>
+			<if test="trip_overspeed != null">and trip_overspeed = #{trip_overspeed}</if>
+			<if test="trip_overspeed_times != null">and trip_overspeed_times = #{trip_overspeed_times}</if>
+			<if test="trip_speed_avage != null">and trip_speed_avage = #{trip_speed_avage}</if>
+			<if test="trip_speed != null">and trip_speed = #{trip_speed}</if>
+			<if test="trip_idle != null">and trip_idle = #{trip_idle}</if>
+			<if test="trip_mask != null">and trip_mask = #{trip_mask}</if>
+			<if test="trip_number != null">and trip_number = #{trip_number}</if>
+			<if test="trip_accelerate != null">and trip_accelerate = #{trip_accelerate}</if>
+			<if test="trip_decelerate != null">and trip_decelerate = #{trip_decelerate}</if>
+			<if test="trip_sharp != null">and trip_sharp = #{trip_sharp}</if>
+			<if test="trip_speed_20 != null">and trip_speed_20 = #{trip_speed_20}</if>
+			<if test="trip_speed_24 != null">and trip_speed_24 = #{trip_speed_24}</if>
+			<if test="trip_speed_46 != null">and trip_speed_46 = #{trip_speed_46}</if>
+			<if test="trip_speed_68 != null">and trip_speed_68 = #{trip_speed_68}</if>
+			<if test="trip_speed_81 != null">and trip_speed_81 = #{trip_speed_81}</if>
+			<if test="trip_speed_11 != null">and trip_speed_11 = #{trip_speed_11}</if>
+			<if test="trip_speed_12 != null">and trip_speed_12 = #{trip_speed_12}</if>
+			<if test="accelerate != null">and accelerate = #{accelerate}</if>
+			<if test="decelerate != null">and decelerate = #{decelerate}</if>
+			<if test="overspeed != null">and overspeed = #{overspeed}</if>
+			<if test="sharp_turn != null">and sharp_turn = #{sharp_turn}</if>
+			<if test="idlespeed != null">and idlespeed = #{idlespeed}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+		order by createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="BehaviorRM">
+		select <include refid="COLUMNS" /> from yx_behavior
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="trip_mark != null">and trip_mark = #{trip_mark}</if>
+			<if test="trip_distance_type != null">and trip_distance_type = #{trip_distance_type}</if>
+			<if test="trip_distance != null">and trip_distance = #{trip_distance}</if>
+			<if test="trip_fuel != null">and trip_fuel = #{trip_fuel}</if>
+			<if test="trip_duration != null">and trip_duration = #{trip_duration}</if>
+			<if test="trip_overspeed != null">and trip_overspeed = #{trip_overspeed}</if>
+			<if test="trip_overspeed_times != null">and trip_overspeed_times = #{trip_overspeed_times}</if>
+			<if test="trip_speed_avage != null">and trip_speed_avage = #{trip_speed_avage}</if>
+			<if test="trip_speed != null">and trip_speed = #{trip_speed}</if>
+			<if test="trip_idle != null">and trip_idle = #{trip_idle}</if>
+			<if test="trip_mask != null">and trip_mask = #{trip_mask}</if>
+			<if test="trip_number != null">and trip_number = #{trip_number}</if>
+			<if test="trip_accelerate != null">and trip_accelerate = #{trip_accelerate}</if>
+			<if test="trip_decelerate != null">and trip_decelerate = #{trip_decelerate}</if>
+			<if test="trip_sharp != null">and trip_sharp = #{trip_sharp}</if>
+			<if test="trip_speed_20 != null">and trip_speed_20 = #{trip_speed_20}</if>
+			<if test="trip_speed_24 != null">and trip_speed_24 = #{trip_speed_24}</if>
+			<if test="trip_speed_46 != null">and trip_speed_46 = #{trip_speed_46}</if>
+			<if test="trip_speed_68 != null">and trip_speed_68 = #{trip_speed_68}</if>
+			<if test="trip_speed_81 != null">and trip_speed_81 = #{trip_speed_81}</if>
+			<if test="trip_speed_11 != null">and trip_speed_11 = #{trip_speed_11}</if>
+			<if test="trip_speed_12 != null">and trip_speed_12 = #{trip_speed_12}</if>
+			<if test="accelerate != null">and accelerate = #{accelerate}</if>
+			<if test="decelerate != null">and decelerate = #{decelerate}</if>
+			<if test="overspeed != null">and overspeed = #{overspeed}</if>
+			<if test="sharp_turn != null">and sharp_turn = #{sharp_turn}</if>
+			<if test="idlespeed != null">and idlespeed = #{idlespeed}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Behavior" resultMap="BehaviorRM">
+		select <include refid="COLUMNS" /> from yx_behavior
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="trip_mark != null">and trip_mark = #{trip_mark}</if>
+			<if test="trip_distance_type != null">and trip_distance_type = #{trip_distance_type}</if>
+			<if test="trip_distance != null">and trip_distance = #{trip_distance}</if>
+			<if test="trip_fuel != null">and trip_fuel = #{trip_fuel}</if>
+			<if test="trip_duration != null">and trip_duration = #{trip_duration}</if>
+			<if test="trip_overspeed != null">and trip_overspeed = #{trip_overspeed}</if>
+			<if test="trip_overspeed_times != null">and trip_overspeed_times = #{trip_overspeed_times}</if>
+			<if test="trip_speed_avage != null">and trip_speed_avage = #{trip_speed_avage}</if>
+			<if test="trip_speed != null">and trip_speed = #{trip_speed}</if>
+			<if test="trip_idle != null">and trip_idle = #{trip_idle}</if>
+			<if test="trip_mask != null">and trip_mask = #{trip_mask}</if>
+			<if test="trip_number != null">and trip_number = #{trip_number}</if>
+			<if test="trip_accelerate != null">and trip_accelerate = #{trip_accelerate}</if>
+			<if test="trip_decelerate != null">and trip_decelerate = #{trip_decelerate}</if>
+			<if test="trip_sharp != null">and trip_sharp = #{trip_sharp}</if>
+			<if test="trip_speed_20 != null">and trip_speed_20 = #{trip_speed_20}</if>
+			<if test="trip_speed_24 != null">and trip_speed_24 = #{trip_speed_24}</if>
+			<if test="trip_speed_46 != null">and trip_speed_46 = #{trip_speed_46}</if>
+			<if test="trip_speed_68 != null">and trip_speed_68 = #{trip_speed_68}</if>
+			<if test="trip_speed_81 != null">and trip_speed_81 = #{trip_speed_81}</if>
+			<if test="trip_speed_11 != null">and trip_speed_11 = #{trip_speed_11}</if>
+			<if test="trip_speed_12 != null">and trip_speed_12 = #{trip_speed_12}</if>
+			<if test="accelerate != null">and accelerate = #{accelerate}</if>
+			<if test="decelerate != null">and decelerate = #{decelerate}</if>
+			<if test="overspeed != null">and overspeed = #{overspeed}</if>
+			<if test="sharp_turn != null">and sharp_turn = #{sharp_turn}</if>
+			<if test="idlespeed != null">and idlespeed = #{idlespeed}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="BehaviorRM">
+		select <include refid="COLUMNS" /> from yx_behavior where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_behavior
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_behavior
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="trip_mark != null">and trip_mark = #{trip_mark}</if>
+			<if test="trip_distance_type != null">and trip_distance_type = #{trip_distance_type}</if>
+			<if test="trip_distance != null">and trip_distance = #{trip_distance}</if>
+			<if test="trip_fuel != null">and trip_fuel = #{trip_fuel}</if>
+			<if test="trip_duration != null">and trip_duration = #{trip_duration}</if>
+			<if test="trip_overspeed != null">and trip_overspeed = #{trip_overspeed}</if>
+			<if test="trip_overspeed_times != null">and trip_overspeed_times = #{trip_overspeed_times}</if>
+			<if test="trip_speed_avage != null">and trip_speed_avage = #{trip_speed_avage}</if>
+			<if test="trip_speed != null">and trip_speed = #{trip_speed}</if>
+			<if test="trip_idle != null">and trip_idle = #{trip_idle}</if>
+			<if test="trip_mask != null">and trip_mask = #{trip_mask}</if>
+			<if test="trip_number != null">and trip_number = #{trip_number}</if>
+			<if test="trip_accelerate != null">and trip_accelerate = #{trip_accelerate}</if>
+			<if test="trip_decelerate != null">and trip_decelerate = #{trip_decelerate}</if>
+			<if test="trip_sharp != null">and trip_sharp = #{trip_sharp}</if>
+			<if test="trip_speed_20 != null">and trip_speed_20 = #{trip_speed_20}</if>
+			<if test="trip_speed_24 != null">and trip_speed_24 = #{trip_speed_24}</if>
+			<if test="trip_speed_46 != null">and trip_speed_46 = #{trip_speed_46}</if>
+			<if test="trip_speed_68 != null">and trip_speed_68 = #{trip_speed_68}</if>
+			<if test="trip_speed_81 != null">and trip_speed_81 = #{trip_speed_81}</if>
+			<if test="trip_speed_11 != null">and trip_speed_11 = #{trip_speed_11}</if>
+			<if test="trip_speed_12 != null">and trip_speed_12 = #{trip_speed_12}</if>
+			<if test="accelerate != null">and accelerate = #{accelerate}</if>
+			<if test="decelerate != null">and decelerate = #{decelerate}</if>
+			<if test="overspeed != null">and overspeed = #{overspeed}</if>
+			<if test="sharp_turn != null">and sharp_turn = #{sharp_turn}</if>
+			<if test="idlespeed != null">and idlespeed = #{idlespeed}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	<!-- lps gy -->
+	<select id="findListByDeviceDay" parameterType="map" resultMap="BehaviorRM">
+	    select *,
+		(select max(end) last_end from yx_behavior yb where yb.device = b.device and yb.end &lt;= b.start) lastdate
+	    from yx_behavior b
+	    where 1=1
+	    <if test="device != null">and device = #{device}</if>
+	    <if test="startTime != null">and `start` &gt;= #{startTime}</if>
+	    <if test="endTime != null">and `end` &lt;= #{endTime}</if>
+	    GROUP BY `start` order by `start` asc
+	    <if test="limit != null">limit #{startIdx},#{limit}</if>	
+	</select>
+	
+	<!-- lps gy -->
+	<select id="findListForCarMilAndFuel" parameterType="map" resultType="mileageAndFuel">
+	    select DATE_FORMAT(createdate,'%d') as `day`,
+               ROUND(SUM(trip_distance)/1000,2) as dayMil,
+               ROUND(SUM(trip_fuel)/1000,2) as dayfuel
+        from yx_behavior
+        where 1=1
+        <if test="device != null">and device=#{device}</if>
+        <if test="start != null">and `start` &gt;= #{start}</if>
+        <if test="end != null">and `start` &lt;= #{end}</if> 
+        <if test="start != null">and `end` &gt;= #{start}</if>
+        <if test="end != null">and `end` &lt;= #{end}</if>
+        group by `day`
+        order by `day`	
+	</select>
+	<select id="findListForReduceDay"  parameterType="map" resultMap="CountEntityRM">
+	    select DATE_FORMAT(createdate,'%Y-%m-%d') as `day`,
+               ROUND(SUM(trip_distance)/1000 ,2) as mil,
+               ROUND(SUM(trip_fuel)/1000,2)  as fuel,
+               SUM(trip_accelerate) as acce,
+               SUM(trip_decelerate) as dece,
+               SUM(trip_sharp) as sharp 
+       from yx_behavior
+       where 1=1
+       <if test="devices != null"> and device in
+           <foreach collection="devices" item="item" index="index" open="(" separator="," close=")">
+               #{item}
+           </foreach>
+       </if>
+       <if test="start != null">and `start` &gt;= #{start}</if>
+       <if test="end != null">and `start` &lt;= #{end}</if> 
+       <if test="start != null">and `end` &gt;= #{start}</if>
+       <if test="end != null">and `end` &lt;= #{end}</if>
+       group by `day`	
+	</select>
+	
+	<!-- lpsgy -->
+	<select id="findListForReduceMonth"  parameterType="map" resultType="orgCount">
+	    select DATE_FORMAT(createdate,'%Y-%m') as `day`,
+              ROUND(SUM(trip_distance)/1000,2) as mil,
+               ROUND(SUM(trip_fuel)/1000,2)  as fuel,
+               SUM(trip_accelerate) as acce,
+               SUM(trip_decelerate) as dece,
+               SUM(trip_sharp) as sharp 
+       from yx_behavior
+       where 1=1
+       <if test="devices != null"> and device in
+           <foreach collection="devices" item="item" index="index" open="(" separator="," close=")">
+               #{item}
+           </foreach>
+       </if>
+       <if test="start != null">and `start` &gt;= #{start}</if>
+       <if test="end != null">and `start` &lt;= #{end}</if> 
+       <if test="start != null">and `end` &gt;= #{start}</if>
+       <if test="end != null">and `end` &lt;= #{end}</if>
+       group by `day`	
+	</select>
+	
+	<!-- lpsgy -->
+	<select id="findListForReduceDevice"  parameterType="map" resultType="orgCount">
+	    select device as `day`,
+               ROUND(SUM(trip_distance)/1000,2) as mil,
+               ROUND(SUM(trip_fuel)/1000,2) as fuel,
+               SUM(trip_accelerate) as acce,
+               SUM(trip_decelerate) as dece,
+               SUM(trip_sharp) as sharp,
+               SUM(trip_duration)/3600 as sec 
+       from yx_behavior
+       where 1=1
+       <if test="devices != null"> and device in
+           <foreach collection="devices" item="item" index="index" open="(" separator="," close=")">
+               #{item}
+           </foreach>
+       </if>
+       <if test="start != null">and `start` &gt;= #{start}</if>
+       <if test="end != null">and `start` &lt;= #{end}</if> 
+       <if test="start != null">and `end` &gt;= #{start}</if>
+       <if test="end != null">and `end` &lt;= #{end}</if>
+       group by device	
+	</select>	
+	
+	<!-- =======================================web -->	
+	
+	<select id="findListByDeviceDayWeb" parameterType="map" resultMap="BehaviorRM">
+	    select *
+	    from yx_behavior
+	    where 1=1
+	    <if test="device != null">and device = #{device}</if>
+	    <if test="startTime != null">and `start` &gt;= #{startTime}</if>
+	    <if test="endTime != null">and `start` &lt;= #{endTime}</if>
+	    <if test="startTime != null">and `end` &gt;= #{startTime}</if>
+	    <if test="endTime != null">and `end` &lt;= #{endTime}</if>
+	    order by `start` asc	
+	</select>
+	
+	<!-- lps gy -->
+	<select id="findListForCarMilAndFuelWeb" parameterType="map" resultMap="CountEntityRM">
+	    select DATE_FORMAT(createdate,'%Y-%m-%d') as `day`,
+               SUM(trip_distance) as mil,
+               SUM(trip_fuel) as fuel
+        from yx_behavior
+        where 1=1
+        <if test="device != null">and device=#{device}</if>
+        <if test="start != null">and `start` &gt;= #{start}</if>
+        <if test="end != null">and `start` &lt;= #{end}</if> 
+        <if test="start != null">and `end` &gt;= #{start}</if>
+        <if test="end != null">and `end` &lt;= #{end}</if>
+        group by `day`
+        order by `day`	
+	</select>
+	<select id="findListForReduceDayWeb"  parameterType="map" resultMap="CountEntityRM">
+	    select DATE_FORMAT(createdate,'%Y-%m-%d') as `day`,
+               SUM(trip_distance) as mil,
+               SUM(trip_fuel) as fuel,
+               SUM(trip_accelerate) as acce,
+               SUM(trip_decelerate) as dece,
+               SUM(trip_sharp) as sharp 
+       from yx_behavior
+       where 1=1
+       <if test="devices != null"> and device in
+           <foreach collection="devices" item="item" index="index" open="(" separator="," close=")">
+               #{item}
+           </foreach>
+       </if>
+       <if test="start != null">and `start` &gt;= #{start}</if>
+       <if test="end != null">and `start` &lt;= #{end}</if> 
+       <if test="start != null">and `end` &gt;= #{start}</if>
+       <if test="end != null">and `end` &lt;= #{end}</if>
+       group by `day`	
+	</select>
+	<select id="findListForReduceMonthWeb"  parameterType="map" resultMap="CountEntityRM">
+	    select DATE_FORMAT(createdate,'%Y-%m') as `day`,
+               SUM(trip_distance) as mil,
+               SUM(trip_fuel) as fuel,
+               SUM(trip_accelerate) as acce,
+               SUM(trip_decelerate) as dece,
+               SUM(trip_sharp) as sharp 
+       from yx_behavior
+       where 1=1
+       <if test="devices != null"> and device in
+           <foreach collection="devices" item="item" index="index" open="(" separator="," close=")">
+               #{item}
+           </foreach>
+       </if>
+       <if test="start != null">and `start` &gt;= #{start}</if>
+       <if test="end != null">and `start` &lt;= #{end}</if> 
+       <if test="start != null">and `end` &gt;= #{start}</if>
+       <if test="end != null">and `end` &lt;= #{end}</if>
+       group by `day`	
+	</select>
+	<select id="findListForReduceDeviceWeb"  parameterType="map" resultMap="CountEntityRM">
+	    select device as `day`,
+               SUM(trip_distance) as mil,
+               SUM(trip_fuel) as fuel,
+               SUM(trip_accelerate) as acce,
+               SUM(trip_decelerate) as dece,
+               SUM(trip_sharp) as sharp 
+       from yx_behavior
+       where 1=1
+       <if test="devices != null"> and device in
+           <foreach collection="devices" item="item" index="index" open="(" separator="," close=")">
+               #{item}
+           </foreach>
+       </if>
+       <if test="start != null">and `start` &gt;= #{start}</if>
+       <if test="end != null">and `start` &lt;= #{end}</if> 
+       <if test="start != null">and `end` &gt;= #{start}</if>
+       <if test="end != null">and `end` &lt;= #{end}</if>
+       group by device	
+       <if test="limit != null">
+       		order by device
+       		<choose>
+       			<when test="startIdx == null">
+       				limit 0,#{limit}
+       			</when>
+       			<when test="startIdx != null">
+       				limit #{startIdx},#{limit}
+       			</when>
+       		</choose>
+       </if>	
+	</select>		
+	
+	<!-- 上线率统计 -->
+	<select id="lineRate" parameterType="map" resultMap="BehaviorRM">
+	   select (DATE_FORMAT(yb.createdate,'%Y-%m-%d') ) as date,sum(TIMESTAMPDIFF(MINUTE,start,end)) as minutesum,
+	   count(yb.device),yo.name as org_name,yo.id as org,
+	         round(
+            (
+            (
+            sum(TIMESTAMPDIFF(MINUTE,start,end))/(count(yb.device)*60*8)
+            )*100
+            ),2)
+	        as online
+		    from yx_behavior yb        
+	     	left join yx_device yd on yd.device = yb.device
+		    left join  yx_car yc on yc.id = yd.car_id
+		    left join yx_org yo on yo.id = yc.org
+		    where ((DATE_FORMAT(yb.createdate,'%H') BETWEEN  8 and 11) 
+				or (DATE_FORMAT(yb.createdate,'%H') BETWEEN  14 and 17)) 
+		<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+		</if>
+		<if test="list != null">and yo.id in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+		</if>
+	    <if test="startDate != null">and yb.createdate &gt;= #{startDate}</if>
+	    <if test="endDate != null">and  yb.createdate &lt;= #{endDate}</if>
+	   		 and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+	    group by yo.id,date 
+	    order by yo.id 
+	</select>
+	
+	<!-- 上线率统计 -->
+	<select id="lineRateCount" parameterType="map" resultType="Integer">
+	   select count(DISTINCT yo.id) 
+			 from yx_behavior yb        
+	     	left join yx_device yd on yd.device = yb.device
+		    left join  yx_car yc on yc.id = yd.car_id
+		    left join yx_org yo on yo.id = yc.org
+		    where 1=1
+		    and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+		<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+		</if>
+	    <if test="startDate != null">and yb.createdate &gt;= #{startDate}</if>
+	    <if test="endDate != null">and  yb.createdate &lt;= #{endDate}</if>
+	</select>
+	
+	
+	
+	
+	<!-- 六盘水轨迹，分段数据 -->
+	<select id="findDr" parameterType="map" resultMap="BehaviorRM">
+	    select *,
+		(select max(end) last_end from yx_behavior yb where yb.device = b.device and yb.end >= b.start) lastdate
+	    from yx_behavior b
+	    where  ( b.trip_distance >= 50 or b.trip_duration >= (2*60000) )
+	    <if test="device != null">and device = #{device}</if>
+	    <if test="startTime != null">and `start` &gt;= #{startTime}</if>
+	    <if test="endTime != null">and `start` &lt;= #{endTime}</if>
+	    <if test="startTime != null">and `end` &gt;= #{startTime}</if>
+	    <if test="endTime != null">and `end` &lt;= #{endTime}</if>
+	    order by `start` asc
+	    <if test="limit != null">limit #{startIdx},#{limit}</if>	
+	</select>
+	
+	<select id="findTableInfo" parameterType="map" resultType="java.util.HashMap" statementType="STATEMENT">
+		select 
+		 <if test="col != null and col != ''">${col}</if>
+		 from ${table_name} tb
+		 left join yx_device yd on tb.device = yd.device
+		 left join yx_car yc on yd.car_id = yc.id 
+		 left join yx_dictionary ydi on yc.type = ydi.value and ydi.parent_id = 1
+		 where 1=1
+		 <if test="start != null">and tb.start &gt;= ${start} and tb.end &gt;= ${start}</if>
+		 <if test="end != null">  and tb.start &lt;= ${end}   and tb.end &lt;= ${end}</if>
+		 <if test="startTime != null"> and tb.senddate &gt;= ${startTime}</if>
+		 <if test="endTime != null"> and tb.senddate &lt;= ${endTime}</if>
+		 <if test="device != null"> and tb.device = ${device}</if>
+		order by tb.createdate desc
+		limit ${startIdx},${limit}
+	</select>
+	
+	<select id="findTableInfoNum" parameterType="map" resultType="Integer" statementType="STATEMENT">
+		select 
+		 count(*)
+		 from ${table_name}
+		 where 1=1
+		 <if test="start != null">and start &gt;= ${start} and end &gt;= ${start}</if>
+		 <if test="end != null">  and start &lt;= ${end}   and end &lt;= ${end}</if>
+		 <if test="startTime != null"> and senddate &gt;= ${startTime}</if>
+		 <if test="endTime != null"> and senddate &lt;= ${endTime}</if>
+		 <if test="device != null"> and device = ${device}</if>
+	</select>		
+	
+</mapper>

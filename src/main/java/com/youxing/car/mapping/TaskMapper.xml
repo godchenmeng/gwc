@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.TaskDao">
+	<resultMap type="com.youxing.car.entity.Task" id="TaskRM">
+		<id column="id" property="id" />
+		<result column="start" property="start" />
+		<result column="end" property="end" />
+		<result column="start_mileage" property="start_mileage" />
+		<result column="end_mileage" property="end_mileage" />
+		<result column="mileage" property="mileage" />
+		<result column="obd_mileage" property="obd_mileage" />
+		<result column="cost" property="cost" />
+		<result column="createdby" property="createdby" />
+		<result column="createdate" property="createdate" />
+		<result column="conid" property="conid" />
+		<result column="driver" property="driver" />
+		<result column="status" property="status" />
+		<result column="result" property="result"/>
+		<result column="eva" property="eva"/>
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,start,end,start_mileage,end_mileage,mileage,obd_mileage,cost,createdby,createdate,driver,conid
+	</sql>
+	<sql id="YXCOLUMNS">
+		yt.id,yt.start,yt.end,yt.start_mileage,yt.end_mileage,yt.mileage,yt.obd_mileage,yt.cost,yt.createdby,yt.createdate,yt.driver,yt.conid,yc.status
+	</sql>
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Task">
+		insert into yx_task (
+			<if test="start != null ">start ,</if>
+			<if test="end != null ">end ,</if>
+			<if test="start_mileage != null and start_mileage!=''">start_mileage ,</if>
+			<if test="end_mileage != null and end_mileage!=''">end_mileage ,</if>
+			<if test="mileage != null and mileage!=''">mileage ,</if>
+			<if test="obd_mileage != null and obd_mileage!=''">obd_mileage ,</if>
+			<if test="cost != null and cost!=''">cost ,</if>
+			<if test="createdby != null and createdby!=''">createdby ,</if>
+			conid,driver,
+			createdate
+		)
+		values (
+			<if test="start != null "> #{start},</if>
+			<if test="end != null "> #{end},</if>
+			<if test="start_mileage != null and start_mileage!=''"> #{start_mileage},</if>
+			<if test="end_mileage != null and end_mileage!=''"> #{end_mileage},</if>
+			<if test="mileage != null and mileage!=''"> #{mileage},</if>
+			<if test="obd_mileage != null and obd_mileage!=''"> #{obd_mileage},</if>
+			<if test="cost != null and cost!=''"> #{cost},</if>
+			<if test="createdby != null and createdby!=''"> #{createdby},</if>
+			#{conid},#{driver},
+			#{createdate}
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Task">
+		update yx_task 
+		<set>
+			<if test="start != null ">start = #{start},</if>
+			<if test="end != null ">end = #{end},</if>
+			<if test="start_mileage != null and start_mileage!=''">start_mileage = #{start_mileage},</if>
+			<if test="end_mileage != null and end_mileage!=''">end_mileage = #{end_mileage},</if>
+			<if test="mileage != null and mileage!=''">mileage = #{mileage},</if>
+			<if test="obd_mileage != null and obd_mileage!=''">obd_mileage = #{obd_mileage},</if>
+			<if test="cost != null and cost!=''">cost = #{cost},</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="createdate != null ">createdate = #{createdate},</if>
+			<if test="result != null ">result = #{result},</if>
+			<if test="eva != null ">eva = #{eva}</if>
+		</set>
+		where 
+		<if test="conid != null">conid = #{conid}</if>
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_task where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_task where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="TaskRM">
+		select <include refid="COLUMNS" /> from yx_task
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="TaskRM">
+		select <include refid="COLUMNS" /> from yx_task
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="start_mileage != null">and start_mileage = #{start_mileage}</if>
+			<if test="end_mileage != null">and end_mileage = #{end_mileage}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="obd_mileage != null">and obd_mileage = #{obd_mileage}</if>
+			<if test="cost != null">and cost = #{cost}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="TaskRM">
+		select <include refid="YXCOLUMNS" /> from yx_task yt,yx_control_apply yc
+		<where>
+		    yt.conid = yc.id
+			<if test="id != null">and yt.id = #{id}</if>
+			<if test="start != null">and yt.start = #{start}</if>
+			<if test="end != null">and yt.end = #{end}</if>
+			<if test="start_mileage != null">and yt.start_mileage = #{start_mileage}</if>
+			<if test="end_mileage != null">and yt.end_mileage = #{end_mileage}</if>
+			<if test="mileage != null">and yt.mileage = #{mileage}</if>
+			<if test="obd_mileage != null">and yt.obd_mileage = #{obd_mileage}</if>
+			<if test="cost != null">and yt.cost = #{cost}</if>
+			<if test="createdby != null">and yt.createdby = #{createdby}</if>
+			<if test="createdate != null">and yt.createdate = #{createdate}</if>
+			<if test="status != null">and yc.status = #{status}</if>
+		</where>
+		order by yt.id desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="TaskRM">
+		select <include refid="COLUMNS" /> from yx_task
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="start_mileage != null">and start_mileage = #{start_mileage}</if>
+			<if test="end_mileage != null">and end_mileage = #{end_mileage}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="obd_mileage != null">and obd_mileage = #{obd_mileage}</if>
+			<if test="cost != null">and cost = #{cost}</if>
+			<if test="conid != null">and conid = #{conid}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Task" resultMap="TaskRM">
+		select <include refid="COLUMNS" /> from yx_task
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="start_mileage != null">and start_mileage = #{start_mileage}</if>
+			<if test="end_mileage != null">and end_mileage = #{end_mileage}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="obd_mileage != null">and obd_mileage = #{obd_mileage}</if>
+			<if test="cost != null">and cost = #{cost}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="TaskRM">
+		select <include refid="COLUMNS" /> from yx_task where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_task
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_task
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="start != null">and start = #{start}</if>
+			<if test="end != null">and end = #{end}</if>
+			<if test="start_mileage != null">and start_mileage = #{start_mileage}</if>
+			<if test="end_mileage != null">and end_mileage = #{end_mileage}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="obd_mileage != null">and obd_mileage = #{obd_mileage}</if>
+			<if test="cost != null">and cost = #{cost}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+</mapper>

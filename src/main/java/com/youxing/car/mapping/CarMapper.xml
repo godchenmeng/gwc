@@ -1,0 +1,830 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.CarDao">
+	<resultMap type="com.youxing.car.entity.Car" id="CarRM">
+		<id column="id" property="id" />
+		<result column="brand" property="brand" />
+		<result column="ov" property="ov" />
+		<result column="ov_type" property="ov_type" />
+		<result column="intime" property="intime" />
+		<result column="type" property="type" />
+		<result column="engine_no" property="engine_no" />
+		<result column="vin" property="vin" />
+		<result column="mileage" property="mileage" />
+		<result column="org" property="org" />
+		<result column="driver_no" property="driver_no" />
+		<result column="createtime" property="createtime" />
+		<result column="texts" property="texts" />
+		<result column="car_image" property="car_image" />
+		<result column="driver_image_1" property="driver_image_1" />
+		<result column="driver_image_2" property="driver_image_2" />
+		<result column="car_no" property="car_no" />
+		<result column="status" property="status" />
+		<result column="createdby" property="createdby" />
+		<result column="car_status" property="car_status" />
+		<result column="obd" property="obd" />
+		<result column="plan" property="plan" />
+		<result column="insurance_time" property="insurance_time" />
+		<result column="inspection_time" property="inspection_time" />
+		<result column="mt_mileage" property="mt_mileage" />
+		<result column="current_mileage" property="current_mileage" />
+		<result column="task_status" property="task_status" />
+		<result column="shipping_image_1  " property="shipping_image_1  " />
+		<result column="shipping_image_2  " property="shipping_image_2  " />
+		<result column="reason" property="reason" />
+	</resultMap>
+	
+	<resultMap type="com.youxing.car.entity.Car" id="CarAndDeviceRM">
+		<id column="id" property="id" />
+		<result column="car_no" property="car_no" />
+		<result column="org" property="org" />
+		<result column="acc" property="acc"/>
+		<association property="device" javaType="com.youxing.car.entity.Device">
+            <id property="id" column="d_id"/>
+            <result column="device" property="device" />
+        </association>
+	</resultMap>
+	
+	
+	
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,brand,ov,ov_type,intime,type,engine_no,vin,mileage,org,driver_no,createtime,texts,car_image,driver_image_1,driver_image_2,
+		car_no,status,createdby,car_status,obd,plan,insurance_time,inspection_time,mt_mileage,current_mileage,task_status,shipping_image_1,shipping_image_2  
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Car">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_car (
+			<if test="brand != null and brand!=''">brand ,</if>
+			<if test="ov != null and ov!=''">ov ,</if>
+			<if test="ov_type != null and ov_type!=''">ov_type ,</if>
+			<if test="intime != null and intime!=''">intime ,</if>
+			<if test="type != null and type!=''">type ,</if>
+			<if test="engine_no != null and engine_no!=''">engine_no ,</if>
+			<if test="vin != null and vin!=''">vin ,</if>
+			<if test="mileage != null and mileage!=''">mileage ,</if>
+			<if test="org != null and org!=''">org ,</if>
+			<if test="driver_no != null and driver_no!=''">driver_no ,</if>
+			<if test="createtime != null and createtime!=''">createtime ,</if>
+			<if test="texts != null and texts!=''">texts ,</if>
+			<if test="car_image != null and car_image!=''">car_image ,</if>
+			<if test="driver_image_1 != null and driver_image_1!=''">driver_image_1 ,</if>
+			<if test="driver_image_2 != null and driver_image_2!=''">driver_image_2 ,</if>
+			<if test="car_no != null and car_no!=''">car_no ,</if>
+			<if test="status != null and status!=''">status ,</if>
+			<if test="obd != null and obd!=''">obd ,</if>
+			<if test="plan != null and plan!=''">plan,</if>
+			<if test="shipping_image_1  != null">shipping_image_1  ,</if>
+			<if test="shipping_image_2  != null ">shipping_image_2 ,</if>
+			<if test="car_status != null and car_status!=''">car_status,</if>
+			<if test="reason != null ">reason,</if>
+			<if test="self_num != null ">self_num,</if>
+			<if test="fule_type != null ">fule_type,</if>
+			<if test="insurance_time != null and insurance_time!=''">insurance_time ,</if>
+			<if test="inspection_time != null and inspection_time!=''">inspection_time ,</if>
+			<if test="mt_mileage != null and mt_mileage!=''">mt_mileage ,</if>
+			<if test="current_mileage != null and current_mileage !=''">current_mileage,</if>
+			createdby
+		)
+		values (
+			<if test="brand != null and brand!=''"> #{brand},</if>
+			<if test="ov != null and ov!=''"> #{ov},</if>
+			<if test="ov_type != null and ov_type!=''"> #{ov_type},</if>
+			<if test="intime != null and intime!=''"> #{intime},</if>
+			<if test="type != null and type!=''"> #{type},</if>
+			<if test="engine_no != null and engine_no!=''"> #{engine_no},</if>
+			<if test="vin != null and vin!=''"> #{vin},</if>
+			<if test="mileage != null and mileage!=''"> #{mileage},</if>
+			<if test="org != null and org!=''"> #{org},</if>
+			<if test="driver_no != null and driver_no!=''"> #{driver_no},</if>
+			<if test="createtime != null and createtime!=''"> #{createtime},</if>
+			<if test="texts != null and texts!=''"> #{texts},</if>
+			<if test="car_image != null and car_image!=''"> #{car_image},</if>
+			<if test="driver_image_1 != null and driver_image_1!=''"> #{driver_image_1},</if>
+			<if test="driver_image_2 != null and driver_image_2!=''"> #{driver_image_2},</if>
+			<if test="car_no != null and car_no!=''"> #{car_no},</if>
+			<if test="status != null and status!=''"> #{status},</if>
+			<if test="obd != null and obd !=''"> #{obd},</if>
+			<if test="plan != null and plan!=''"> #{plan},</if>
+			<if test="shipping_image_1  != null">#{shipping_image_1},</if>
+			<if test="shipping_image_2  != null ">#{shipping_image_2},</if>
+			<if test="car_status != null and car_status!=''"> #{car_status},</if>
+			<if test="reason != null"> #{reason},</if>
+			<if test="self_num != null"> #{self_num},</if>
+			<if test="fule_type != null"> #{fule_type},</if>
+			<if test="insurance_time != null and insurance_time!=''">#{insurance_time} ,</if>
+			<if test="inspection_time != null and inspection_time!=''">#{inspection_time} ,</if>
+			<if test="mt_mileage != null and mt_mileage!=''">#{mt_mileage} ,</if>
+			<if test="current_mileage != null and current_mileage !=''">#{current_mileage} ,</if>
+			#{createdby}
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Car">
+		update yx_car 
+		<set>
+			<if test="brand != null and brand!=''">brand = #{brand},</if>
+			<if test="ov != null and ov!=''">ov = #{ov},</if>
+			<if test="ov_type != null and ov_type!=''">ov_type = #{ov_type},</if>
+			<if test="intime != null and intime!=''">intime = #{intime},</if>
+			<if test="type != null and type!=''">type = #{type},</if>
+			<if test="engine_no != null and engine_no!=''">engine_no = #{engine_no},</if>
+			<if test="vin != null and vin!=''">vin = #{vin},</if>
+			<if test="mileage != null and mileage!=''">mileage = #{mileage},</if>
+			<if test="org != null and org!=''">org = #{org},</if>
+			<if test="driver_no != null and driver_no!=''">driver_no = #{driver_no},</if>
+			<if test="createtime != null and createtime!=''">createtime = #{createtime},</if>
+			<if test="texts != null and texts!=''">texts = #{texts},</if>
+			<if test="car_image != null and car_image!=''">car_image = #{car_image},</if>
+			<if test="driver_image_1 != null and driver_image_1!=''">driver_image_1 = #{driver_image_1},</if>
+			<if test="driver_image_2 != null and driver_image_2!=''">driver_image_2 = #{driver_image_2},</if>
+			<if test="car_no != null and car_no!=''">car_no = #{car_no},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="shipping_image_1  != null">shipping_image_1  = #{shipping_image_1 },</if>
+			<if test="shipping_image_2  != null">shipping_image_2  = #{shipping_image_2 },</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="car_status != null and car_status!=''">car_status = #{car_status},</if>
+			<if test="reason != null">reason =  #{reason},</if>
+			<if test="self_num != null">self_num=#{self_num} ,</if>
+			<if test="fule_type != null">fule_type=#{fule_type}, </if>
+			<if test="obd != null and obd!=''">obd = #{obd},</if>
+			<if test="plan != null and plan!=''">plan = #{plan},</if>
+			<if test="car_status != null and car_status!=''">car_status = #{car_status},</if>
+			<if test="insurance_time != null and insurance_time!=''">insurance_time=#{insurance_time} ,</if>
+			<if test="inspection_time != null and inspection_time!=''">inspection_time=#{inspection_time} ,</if>
+			<if test="mt_mileage != null and mt_mileage!=''">mt_mileage=#{mt_mileage} ,</if>
+			<if test="task_status != null ">task_status = #{task_status},</if>
+			<if test="current_mileage != null and current_mileage !=''">current_mileage=#{current_mileage} </if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_car where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_car where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="CarRM">
+		select <include refid="COLUMNS" /> from yx_car
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="CarRM">
+		select <include refid="COLUMNS" /> from yx_car
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="vin_list != null">and vin in 
+				<foreach collection="vin_list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>			
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="driver_no_list != null">and driver_no in 
+				<foreach collection="driver_no_list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and  car_no =#{car_no}</if>
+			<if test="car_no_list != null">and car_no in 
+				<foreach collection="car_no_list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<!-- <if test="car_status != null">and car_status = #{car_status}</if> -->
+			and status = '1'
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+			<if test="car_no_like != null">and car_no like CONCAT('%','${car_no_like}','%')</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	<select id="listByName" parameterType="map" resultMap="CarRM">
+		select <include refid="COLUMNS" /> from yx_car c
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<!-- <if test="org != null">and org = #{org}</if> -->
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="car_status != null">and car_status = #{car_status}</if>
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+			<if test="car_no_like != null">and car_no like CONCAT('%','${car_no_like}','%')</if>
+			<if test="list != null">and org  in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<!-- <if test="oid != null">and org = #{oid}</if> -->
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="CarRM">
+		select <include refid="COLUMNS" /> from yx_car
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="car_status != null">and car_status = #{car_status}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		</where>
+		order by createtime desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="pageByWeb" parameterType="map" resultType="car">
+		select yc.id,yc.plan,yc.driver_no,yc.texts,yc.car_image,yc.driver_image_1,
+			yc.car_status,yc.driver_image_2,yc.brand,yc.ov_type,yc.intime,yc.engine_no,
+			yc.mileage,yc.vin,yc.ov,yc.car_no ,yc.org,yc.intime as intime,yc.type,
+			yc.car_status,yc.status,yo.name as oname,yu.name as cname,yc.insurance_time,
+			yc.inspection_time,yc.mt_mileage,yc.current_mileage,yc.self_num,
+			ydi.text as type_name,yd.text fule_type_text,yc.fule_type
+			from  yx_car yc
+			left join  yx_org yo on yc.org = yo.id
+			left join  yx_user yu on yc.createdby = yu.id and yu.status = 1
+			left join yx_dictionary ydi on ydi.value = yc.type and ydi.parent_id = '1'
+			left join yx_dictionary yd on yd.value = yc.fule_type and yd.parent_id = '30'
+			where 1=1 and yc.status = 1 and yo.status = 1 
+			<if test="type != null">and yc.type = #{type}</if>
+			<if test="org != null">and yc.org = #{org}</if>
+			<if test="orgname != null">and yo.name like CONCAT('%','${orgname}','%')</if>
+			<!-- <if test="car_no != null">and yc.car_no = #{car_no}</if> -->
+			<if test="car_no != null">and yc.car_no like CONCAT('%','${car_no}','%')</if>
+			<if test="status != null">and yc.status = #{status}</if>
+			<if test="obd != null and obd!=''">and yc.obd = #{obd}</if>
+			<if test="car_status != null">and yc.car_status = #{car_status}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="list != null">and yc.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and yc.id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by yc. createtime desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="CarRM">
+	select yc.id,yc.brand,yc.ov,yc.ov_type,yc.intime,yc.engine_no,yc.vin,mileage,yc.org,driver_no,
+		yc.createtime,yc.texts,yc.car_image,yc.driver_image_1,yc.driver_image_2,
+		yc.car_no,yc.status,yc.createdby,yc.car_status,yc.obd,yc.plan,yc.insurance_time,yc.inspection_time,
+		yc.mt_mileage,yc.current_mileage,yc.task_status,yu.name as cname,
+		ydi.text as type
+		from yx_car yc 
+		left join (select * from yx_user where status = '1') yu on yu.id = yc.createdby
+		left join yx_dictionary ydi on ydi.value = yc.type and ydi.parent_id = '1'
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and car_no  like CONCAT('%','${car_no}','%') </if>
+			<if test="status != null">and yc.status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="car_status != null">and car_status = #{car_status}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Car" resultMap="CarRM">
+		select <include refid="COLUMNS" /> from yx_car
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="car_status != null">and car_status = #{car_status}</if>
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="CarRM">
+		select <include refid="COLUMNS" /> from yx_car where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_car
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_car
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="car_status != null">and car_status = #{car_status}</if>
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="plan != null">and plan = #{plan}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="lists != null">and  org in
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		</where>
+	</select>
+	
+	<select id="listByDriverNoOrVin" parameterType="map" resultMap="CarRM">
+		select vin, driver_no from yx_car
+		where 
+		car_status in (1,2) and status = '1'
+		<if test="id != null">and id != #{id}</if>
+		<choose>
+			<when test="vin != null and driver_no != null">
+				and (vin = #{vin} or driver_no = #{driver_no})
+			</when>
+			<when test="vin != null and driver_no == null">
+				and vin = #{vin}
+			</when>
+			<when test="vin == null and driver_no != null">
+				and driver_no = #{driver_no}
+			</when>
+		</choose>
+	</select>
+	
+	<select id="countByWeb" parameterType="map" resultType="integer">
+		select count(yc.id) from yx_car yc
+			left join  yx_org yo on yc.org = yo.id
+			left join  yx_user yu on yc.createdby = yu.id 
+			where  yc.status='1' AND yo.`status`='1'
+			<if test="type != null">and yc.type = #{type}</if>
+			<if test="org != null">and yc.org = #{org}</if>
+			<if test="orgname != null">and yo.name like CONCAT('%','${orgname}','%')</if>
+			<!-- <if test="car_no != null">and yc.car_no = #{car_no}</if> -->
+			<if test="car_no != null">and yc.car_no like CONCAT('%','${car_no}','%')</if>
+			<if test="status != null">and yc.status = #{status}</if>
+			<if test="car_status != null">and yc.car_status = #{car_status}</if>
+			<if test="obd != null and obd!=''">and yc.obd = #{obd}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+<!-- 			<if test="task_status != null">and yc.task_status = #{task_status}</if> -->
+			<if test="list != null">and yc.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and yc.id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	<select id="pageCar" parameterType="map" resultType="car">
+		select yc.id,yc.plan,yc.driver_no,yc.texts,yc.car_status,yc.brand,yc.type,yc.intime,yc.engine_no,yc.mileage,yc.vin,yc.ov,yc.car_no ,yc.car_status,yc.status,yo.name as oname,yu.name as cname from yx_car yc,yx_org yo,yx_user yu
+		where yc.org = yo.id and yc.createdby = yu.id		
+			<if test="type != null">and yc.type = #{type}</if>
+			<if test="org != null">and yc.org = #{org}</if>
+			<if test="orgname != null">and yc.name like CONCAT('%','${orgname}','%')</if>
+			<if test="car_no != null">and yc.car_no = #{car_no}</if>
+			<if test="status != null">and yc.status = #{status}</if>
+			<if test="obd != null and obd!=''">and yc.obd = #{obd}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="car_status != null">and yc.car_status = #{car_status}</if>
+			<if test="task_status != null">and yc.task_status = #{task_status}</if>
+			<if test="list != null">and yc.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="lists != null">and yc.id not in 
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		order by yc.createtime desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- 查询车辆总数，执行任务中的车辆数，可用车辆数 -->
+	<select id="countCar" parameterType="map"  resultType="java.util.HashMap">
+		select count(*) allCount,
+		sum((case when task_status = 2 then 1 else 0 end)) useCount
+			from yx_car c
+			where 1=1 and c.status = '1' and obd = '1' and c.car_status = 1
+			<if test="lists != null">and  c.org in
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+<!-- 	<select id="countCar" parameterType="map"  resultType="java.util.HashMap">
+		select acc,count(acc) number,(select count(*) FROM yx_control_apply where  status='3') useCount from 
+	   ( select c.id car_id,
+	    (case 
+				when (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &gt;5) then '0'
+				when ygc.acc = '0' then '0'
+				when ygc.acc = '1' and (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &lt;=5) and car_speed =0 then '2'
+				when ygc.acc = '1' and (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &lt;=5) and car_speed &gt;0 then '1'
+				 end) 'acc'
+		from yx_gps_current ygc
+		left join yx_device d on d.device = ygc.device
+		left join yx_car c on c.id = d.car_id
+		left join yx_org o on o.id = c.org
+			where 1=1 and c.status = '1'  and car_status = '1'  and obd = '1' and o.status = 1 and d.status = 1
+			<if test="lists != null">and  c.org in
+				<foreach collection="lists" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>) t group by t.acc
+	</select> -->
+	
+	
+	<select id="listByOrg" parameterType="map" resultType="selects">
+		select id as value,car_no as text from yx_car
+		<where>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="org != null and org != '' and org != 1">and org = #{org}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="car_status != null">and car_status = #{car_status}</if>
+			<if test="list != null">and id in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>  
+			</if>
+			<if test="org_list != null">and org in 
+				<foreach collection="org_list" item="items" index="index" open="(" separator="," close=")">
+				#{items}
+	            </foreach>  
+			</if>
+		</where>
+		<if test="limit!=null"> order by  id  
+		limit #{startIdx},#{limit}</if>
+	</select>
+	
+	<select id="listOrg" parameterType="map" resultType="selects">
+		select id as value,car_no as text from yx_car
+		<where>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="ov != null">and ov = #{ov}</if>
+			<if test="ov_type != null">and ov_type = #{ov_type}</if>
+			<if test="intime != null">and intime = #{intime}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="engine_no != null">and engine_no = #{engine_no}</if>
+			<if test="vin != null">and vin = #{vin}</if>
+			<if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+			<if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="org != null and org != '' and org != 1">and org = #{org}</if>
+			<if test="driver_no != null">and driver_no = #{driver_no}</if>
+			<if test="createtime != null">and createtime = #{createtime}</if>
+			<if test="texts != null">and texts = #{texts}</if>
+			<if test="car_image != null">and car_image = #{car_image}</if>
+			<if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+			<if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="obd != null">and obd = #{obd}</if>
+			<if test="car_status != null">and car_status = #{car_status}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>  
+			</if>
+		</where>
+		<if test="limit!=null"> order by  id  
+		limit #{startIdx},#{limit}</if>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+<!-- 	<select id="listCarAndDeviceBy" parameterType="map" resultMap="CarAndDeviceRM">
+		select c.id,c.car_no,c.org,c.type,d.id as d_id,d.device,g.acc
+		from (select *
+		      from yx_car c
+		      <where>
+		          <if test="id != null">and id = #{id}</if>
+		          <if test="brand != null">and brand = #{brand}</if>
+		          <if test="ov != null">and ov = #{ov}</if>
+		          <if test="ov_type != null">and ov_type = #{ov_type}</if>
+		          <if test="intime != null">and intime = #{intime}</if>
+		          <if test="type != null">and type = #{type}</if>
+		          <if test="engine_no != null">and engine_no = #{engine_no}</if>
+		          <if test="vin != null">and vin = #{vin}</if>
+		          <if test="mileage != null">and mileage = #{mileage}</if>
+		          <if test="org != null">and org = #{org}</if>
+		          <if test="shipping_image_1 != null">and shipping_image_1 = #{shipping_image_1}</if>
+				  <if test="shipping_image_2 != null">and shipping_image_2 = #{shipping_image_2}</if>
+		          <if test="driver_no != null">and driver_no = #{driver_no}</if>
+		          <if test="createtime != null">and createtime = #{createtime}</if>
+		          <if test="texts != null">and texts = #{texts}</if>
+		          <if test="car_image != null">and car_image = #{car_image}</if>
+		          <if test="driver_image_1 != null">and driver_image_1 = #{driver_image_1}</if>
+		          <if test="driver_image_2 != null">and driver_image_2 = #{driver_image_2}</if>
+		          <if test="car_no != null">and car_no = #{car_no}</if>
+		          <if test="status != null">and status = #{status}</if>
+		          <if test="createdby != null">and createdby = #{createdby}</if>
+		          <if test="car_status != null">and car_status = #{car_status}</if>
+		          <if test="obd != null and obd!=''">and obd = #{obd} </if>
+		          <if test="car_name != null and car_name!=''">and car_no like CONCAT('%','${car_name}','%') </if>
+		          <if test="list != null">and org in 
+		              <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				          #{item}
+				      </foreach> 
+				 </if>
+		    </where>) as c
+		join yx_device d on c.id = d.car_id
+		join yx_gps_current g on g.device = d.device
+	</select> -->
+		<select id="listCarAndDeviceBy" parameterType="map" resultMap="CarAndDeviceRM">
+		select c.id,c.car_no,c.org,c.type,d.id as d_id,d.device,
+			 (case 
+				when (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &gt;5) then '0'
+				when ygc.acc = '0' then '0'
+				when ygc.acc = '1' and (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &lt;=5) and car_speed =0 then '2'
+				when ygc.acc = '1' and (TIMESTAMPDIFF(MINUTE, ygc.senddate,now()) &lt;=5) and car_speed &gt;0 then '1'
+				 end) 'acc'
+		from yx_gps_current ygc
+		left join yx_device d on d.device = ygc.device
+		left join yx_car c on c.id = d.car_id	
+		left join yx_org o on o.id = c.org
+		<where>
+		c.status = '1' and o.status = '1' and d.status = '1'
+		<if test="status != null">and c.status = #{status}</if>
+		    <if test="car_status != null">and c.car_status = #{car_status}</if>
+		    <if test="obd != null and obd!=''">and c.obd = #{obd} </if>
+		    <if test="list != null">and c.org in 
+		        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				    #{item}
+				</foreach> 
+			</if>
+		</where>
+	</select>
+	
+	<select id="listCarAndDriverByStatus" parameterType="String" resultType="java.util.HashMap">
+	   select yca.car_id,yc.brand as car_brand,yco.`name` as car_org,ym.`name` as driver_name,ym.mobile as driver_mobile,yo.`name` as org_name
+       from  (select A.* 
+              from (select * 
+                    from yx_control_apply 
+                    where status = #{status}) A
+              join (select car_id,MAX(createdate) as maxcreatedate
+                    from yx_control_apply
+                    where status = #{status}
+                    group by car_id) B
+              on A.car_id = B.car_id and A.createdate = B.maxcreatedate) yca
+       left join yx_car yc on yc.id = yca.car_id
+       left join yx_org yco on yco.id = yc.org
+       left join yx_driver yd on yd.id = yca.driver_id
+       left join yx_member ym on ym.id = yd.uid
+       left join yx_org yo on yo.id = ym.org
+       where ym.status =1 and yc.status =1
+       order by car_id
+	</select>
+	<!--  ===========================web==========-->
+	<insert id="insertBatch" parameterType="ArrayList">
+	   insert into yx_car
+	    (car_no,brand,intime,driver_no,vin,createdby,createtime,status,car_status,obd)
+	   values
+	    <foreach collection="list" item="obj" index="index" separator=",">
+	        (#{obj.car_no},#{obj.brand},#{obj.intime},#{obj.driver_no},#{obj.vin},#{obj.createdby},#{obj.createtime},#{obj.status},#{obj.car_status},#{obj.obd})
+	    </foreach>
+	</insert>
+	
+	
+	<select id="getCarNum" parameterType="map" resultType="Integer">
+		select count(*) as carNum from  yx_car yc 
+     		 left join (select * from yx_org where status = '1') yo on yo.id  = yc.org 
+     		 where yc.status = '1' and yc.car_status='4' and yc.obd='1'   
+     		<if test="org != null">and yo.id = #{org}</if> 
+			<if test="list != null">and yc.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	
+
+	<select id="getInsuranceOut" resultMap="CarRM">
+		select * from yx_car where DATEDIFF(insurance_time, NOW()) = 90;
+	</select>
+
+	<select id="getInspectionOut" resultMap="CarRM">
+		select * from yx_car where DATEDIFF(inspection_time, NOW()) = 30;
+	</select>
+	
+	<select id="getCarIds" parameterType="map" resultType="car">
+		select id from  yx_car
+     		 where car_status='1' and obd='1'      
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+	
+	<select id="getCarListByOrg" parameterType="map" resultType="car">
+		select yc.id,yc.car_no,yc.brand,yc.intime,yc.type,yc.engine_no,yc.vin,yd.text from  yx_car yc 
+     		 left join (select * from yx_org where status = '1') yo on yo.id  = yc.org         
+             left join yx_dictionary yd on yd.value = yc.type  and yd.parent_id = '1'
+     		 where yc.car_status='4' and yc.obd='1'      
+     		<if test="org != null">and yo.id = #{org}</if> 
+     		<if test="car_no_like != null">and yc.car_no like CONCAT('%','${car_no_like}','%')</if>
+			<if test="list != null">and yc.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="startIdx != null">limit #{startIdx},#{limit}</if> 
+	</select>
+	
+	<select id="getCDCode" parameterType="map" resultType="java.util.HashMap">
+		select 
+			yc.car_no,
+			yd.device,
+			ydc.code as type_code 
+			from (select * from yx_car where status = '1') yc 
+			left join (select * from yx_device where status = '1')  yd on yd.car_id = yc.id
+			left join yx_dictionary ydc on ydc.value = yc.type and ydc.parent_id = '1'    
+			<if test="list != null">and yc.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+	</select>
+
+	<select id="findCarByDevice" parameterType="map" resultType="java.util.HashMap">
+		select c.type as car_type,c.id as car_id,c.car_no,o.id org_id,o.name org,d.video_device,c.tank_vol,d.device,c.tank_height from yx_car c
+		left join yx_device d on d.car_id = c.id
+		left join yx_org o on o.id = c.org
+		where c.status = 1 and d.status = 1 and c.car_status = 1 and c.obd = 1
+		<if test="orgs != null"> and c.org in
+			<foreach collection="orgs" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+</mapper>
+

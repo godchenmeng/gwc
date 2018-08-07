@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.EvaluateDao">
+	<resultMap type="com.youxing.car.entity.Evaluate" id="EvaluateRM">
+		<id column="id" property="id" />
+		<result column="eva" property="eva" />
+		<result column="createdby" property="createdby" />
+		<result column="createdate" property="createdate" />
+		<result column="task_id" property="task_id" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,eva,createdby,createdate,task_id
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Evaluate">
+		insert into yx_evaluate (
+			<if test="eva != null and eva!=''">eva ,</if>
+			<if test="createdby != null and createdby!=''">createdby ,</if>
+			<if test="createdate != null and createdate!=''">createdate,</if>
+			<if test="task_id != null and task_id !=''">task_id</if>
+			
+		)
+		values (
+			<if test="eva != null and eva!=''"> #{eva},</if>
+			<if test="createdby != null and createdby!=''"> #{createdby},</if>
+			<if test="createdate != null and createdate!=''"> #{createdate},</if>
+		    <if test="task_id != null and task_id != ''">#{task_id}</if>
+			
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Evaluate">
+		update yx_evaluate 
+		<set>
+			<if test="eva != null and eva!=''">eva = #{eva},</if>
+			<if test="createdby != null and createdby!=''">createdby = #{createdby},</if>
+			<if test="createdate != null and createdate!=''">createdate = #{createdate},</if>
+			<if test="task_id != null and task_id!=''">task_id = #{task_id}</if>
+			
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_evaluate where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_evaluate where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="EvaluateRM">
+		select <include refid="COLUMNS" /> from yx_evaluate
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="EvaluateRM">
+		select <include refid="COLUMNS" /> from yx_evaluate
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="eva != null">and eva = #{eva}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="task_id != null and task_id != ''">and task_id = #{task_id}</if>
+			
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="EvaluateRM">
+		select <include refid="COLUMNS" /> from yx_evaluate
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="eva != null">and eva = #{eva}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			
+			<if test="task_id != null and task_id != ''">and task_id = #{task_id}</if>
+			
+		</where>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="EvaluateRM">
+		select <include refid="COLUMNS" /> from yx_evaluate
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="eva != null">and eva = #{eva}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="task_id != null and task_id != ''">and task_id = #{task_id}</if>
+			
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Evaluate" resultMap="EvaluateRM">
+		select <include refid="COLUMNS" /> from yx_evaluate
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="eva != null">and eva = #{eva}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="task_id != null and task_id != ''">and task_id = #{task_id}</if>
+			
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="EvaluateRM">
+		select <include refid="COLUMNS" /> from yx_evaluate where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_evaluate
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_evaluate
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="eva != null">and eva = #{eva}</if>
+			<if test="createdby != null">and createdby = #{createdby}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="task_id != null and task_id != ''">and task_id = #{task_id}</if>
+			
+		</where>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+</mapper>

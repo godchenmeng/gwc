@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.ControlDao">
+	<resultMap type="com.youxing.car.entity.Control" id="ControlRM">
+		<id column="id" property="id" />
+		<result column="apply_id" property="apply_id" />
+		<result column="car_id" property="car_id" />
+		<result column="driver_id" property="driver_id" />
+		<result column="status" property="status" />
+		<result column="createby" property="createby" />
+		<result column="createdate" property="createdate" />
+		<result column="feedback" property="feedback" />
+	</resultMap>
+	<sql id="baseResult">
+	   yc.id,
+	   ycar.car_no,
+	   yc.car_id,ya.id as apply_id,
+	   ya.use_name,
+	   ya.start_place,
+	   ya.end_place,
+	   ya.plan_time,
+	   ya.plan_return,
+	   yc.driver_id,
+	   yc.status,
+	   yc.createby,
+	   yc.createdate,
+	   ya.use_mobile
+	</sql>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,apply_id,car_id,driver_id,status,createby,createdate,feedback
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Control">
+		insert into yx_control_apply (
+			<if test="apply_id != null and apply_id!=''">apply_id ,</if>
+			<if test="car_id != null and car_id!=''">car_id ,</if>
+			<if test="driver_id != null and driver_id!=''">driver_id ,</if>
+			<if test="status != null and status!=''">status ,</if>
+			<if test="createby != null and createby!=''">createby ,</if>
+			<if test="feedback != null and feedback!=''">feedback ,</if>
+			<if test="createdate != null ">createdate</if>
+		)
+		values (
+			<if test="apply_id != null and apply_id!=''"> #{apply_id},</if>
+			<if test="car_id != null and car_id!=''"> #{car_id},</if>
+			<if test="driver_id != null and driver_id!=''"> #{driver_id},</if>
+			<if test="status != null and status!=''"> #{status},</if>
+			<if test="createby != null and createby!=''"> #{createby},</if>
+			<if test="feedback != null and feedback!=''"> #{feedback},</if>
+			<if test="createdate != null "> #{createdate}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Control">
+		update yx_control_apply 
+		<set>
+			<if test="apply_id != null and apply_id!=''">apply_id = #{apply_id},</if>
+			<if test="car_id != null and car_id!=''">car_id = #{car_id},</if>
+			<if test="driver_id != null and driver_id!=''">driver_id = #{driver_id},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="createby != null and createby!=''">createby = #{createby},</if>
+			<if test="feedback != null and feedback!=''"> feedback = #{feedback},</if>
+			<if test="createdate != null ">createdate = #{createdate}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_control_apply where id=#{id} 
+	</delete>
+	
+	<delete id="removeApply" parameterType="map">
+		delete from yx_control_apply where apply_id=#{apply_id}  and car_id = #{car_id} and driver_id = #{driver_id}
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_control_apply where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="ControlRM">
+		select <include refid="COLUMNS" /> from yx_control_apply
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="ControlRM">
+		select <include refid="COLUMNS" /> from yx_control_apply
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="apply_id != null">and apply_id = #{apply_id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="driver_id != null">and driver_id = #{driver_id}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="feedback != null">and  feedback = #{feedback}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+		</where>
+	</select>
+	
+	<!-- web 派遣列表接口 -->
+	<select id="listByWeb" parameterType="map" resultMap="ControlRM">
+		select  yca.id ,yca.status,yca.createdate,yc.car_no as car_no,ym.name as driver_name ,  yc.id as car_id,
+		yca.apply_id as apply_id,yca.driver_id,yc.type,yd.driver_type,yo.name as driver_org_name,yo1.name as car_org_name
+		from 
+        yx_control_apply yca 
+        left join yx_car yc on  yca.car_id = yc.id        
+        left join  yx_driver yd on  yca.driver_id=yd.id        
+        left join yx_member ym on yd.uid = ym.id        
+        left join yx_org yo on yo.id = ym.org        
+        left join yx_org yo1 on yo1.id=yc.org
+        left join yx_sq ys on yca.apply_id = ys.id
+
+        where yc.status =1 and ym.status=1 and yo.status = 1 and yo1.`status` = 1
+		<if test="apply != null">and yca.apply_id = #{apply}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultType="control">
+		select m.name driver_name, m.mobile,
+		<include refid="baseResult"></include>
+		from yx_control_apply yc 
+		left join yx_driver d on d.id = yc.driver_id
+		left join yx_member m on d.uid  = m.id 
+		left join yx_sq ya on ya.id = yc.apply_id
+		left join yx_car ycar on ycar.id = yc.car_id
+		where ycar.status =1 and m.status=1
+		<if test="status != null">and yc.status = #{status}</if>
+		<if test="driver_id != null">and yc.driver_id = #{driver_id}</if>
+		<if test="apply_id != null">and yc.apply_id =  #{apply_id}</if>
+		order by yc.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="pageByundo" parameterType="map" resultType="control">
+		select <include refid="baseResult"></include>  
+		from
+		 yx_control_apply yc 
+         left join  yx_sq  ya on  yc.apply_id = ya.id 
+         left join  yx_car ycar  on ycar.id = yc.car_id
+         where  yc.status in ('2','3','5') 
+		<if test="driver_id != null">and yc.driver_id = #{driver_id}</if>
+		
+		order by yc.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="ControlRM">
+		select <include refid="COLUMNS" /> from yx_control_apply
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="apply_id != null">and apply_id = #{apply_id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="driver_id != null">and driver_id = #{driver_id}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="feedback != null ">and feedback = #{feedback}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="state != null">and status in 
+			  <foreach collection="state" item="item" index="index" open="(" separator="," close=")">
+			  #{item}
+               </foreach>            
+		</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Control" resultMap="ControlRM">
+		select <include refid="COLUMNS" /> from yx_control_apply
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="apply_id != null">and apply_id = #{apply_id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="driver_id != null">and driver_id = #{driver_id}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="feedback != null">and feedback = #{feedback}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="ControlRM">
+		select <include refid="COLUMNS" /> from yx_control_apply where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_control_apply
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_control_apply
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="apply_id != null">and apply_id = #{apply_id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="driver_id != null">and driver_id = #{driver_id}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="feedback != null ">and  feedback = #{feedback}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="list != null">and status in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		</where>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+<!-- 	<select id="listByControl" parameterType="map" resultType="string">
+		select
+		<if test="car_id != null">DISTINCT car_id </if>
+		<if test="driver_id != null">DISTINCT driver_id </if>
+		 from yx_control_apply yc,yx_sq ys  where yc.apply_id = ys.id and yc.status not in (6,7,8)
+	    <if test="end != null and start != null ">and ((ys.plan_time &gt;= #{start} and  ys.plan_time &lt;= #{end}) 
+	    or (ys.plan_return &gt;= #{start} and  ys.plan_return &lt;= #{end}))</if>
+		<if test="driver_id != null">
+         union
+        select yd.id as driver_id
+        from yx_driver yd
+        where yd.d_status in ('2','3','4')
+          and ((yd.`start` &gt;= #{start} and yd.`start` &lt;= #{end})
+          or (yd.`end` &gt;= #{start} and yd.`end` &lt;= #{end})
+          or (yd.`start` &lt;= #{start} and yd.`end` &gt;= #{end}))
+	    </if>
+	</select> -->
+		<select id="listByControl" parameterType="map" resultType="string">
+		<if test="car_id != null">
+			SELECT DISTINCT
+				yc.id
+			FROM
+				yx_car yc
+			LEFT JOIN yx_control_apply yca ON yc.id = yca.car_id
+			left join yx_sq ys on yca.apply_id = ys.id
+			WHERE
+				yc. STATUS = 2
+			OR yc.task_status = 2
+			or (yca.`status`  IN (1,2,3,5) and ys.`status` = 1)
+			ORDER BY
+				yc.id
+				</if>
+		<if test="driver_id != null">
+			SELECT
+				DISTINCT yd.id
+			FROM
+				yx_driver yd
+			LEFT JOIN yx_control_apply yca ON yd.id = yca.driver_id
+			left join yx_sq ys on yca.apply_id = ys.id
+			WHERE
+				d_status IN ('2', '3', '4')
+			OR yd. STATUS = 2
+			OR yd.task_status = 2
+			or (yca.`status`  IN (1,2,3,5) and ys.`status` = 1)
+			 ORDER BY yd.id
+	    </if>
+	</select>
+	
+	<select id="listApply" parameterType="map" resultType="control">
+		select yca.id ,yca.status,yc.car_no as car_no,ym.name as driver_name ,
+		ym.mobile as mobile,yca.createdate 
+		from yx_control_apply yca
+		left join yx_car yc on yc.id =yca.car_id
+		left join yx_driver yd on yd.id =yca.driver_id
+		inner join yx_member ym on yd.uid = ym.id
+		where ym.status =1
+		<if test="apply != null">and yca.apply_id = #{apply}</if>
+	</select>
+	
+	<select id="pageAllControl" parameterType="map" resultType="control">
+		select yca.id ,ym.name as driver_name,ys.use_name,ys.plan_time,ys.plan_return,yt.start,yt.end,
+		yc.car_no,yca.status,ys.start_place,ys.end_place
+         from 	yx_control_apply yca         
+			left  join yx_car yc on  yca.car_id = yc.id
+			left join yx_driver yd on  yca.driver_id=yd.id
+			inner join yx_member ym on yd.uid = ym.id
+			left join yx_task yt on yca.id = yt.conid
+			left join yx_sq ys on yca.apply_id =ys.id
+			 where yca.status!=7 and ym.status =1
+		<if test="list != null">and yc.org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+		</if>
+		<if test="org != null">and yc.org = #{org}</if>
+		order by yca.createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- web============================================ -->
+	
+	<select id="listByDriver" parameterType="map" resultType="string">
+		select ym.id
+		from yx_control_apply ya
+		left join yx_driver yd on yd.id = ya.driver_id
+		left join yx_member ym on ym.id = yd.uid
+		left join yx_sq ys on ys.id = ya.apply_id
+		where ya.status in(1,2,3,5) and ym.status =1
+<!-- 		and ys.plan_return > NOW() -->
+		<if test="list != null">and ym.id in 
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+            </foreach>            
+		</if>
+	</select>
+
+	<select id="getDriverByDevice" parameterType="map" resultType="java.util.HashMap">
+		select DISTINCT d.device,m.name,getParentName(c.org) as org,c.type,ydi.text as type_name from yx_device d
+		left join yx_car c on c.id = d.car_id
+		left join yx_control_apply ca on d.car_id = ca.car_id
+		left join yx_dictionary ydi on ydi.value = c.type and ydi.parent_id = '1'
+		left join yx_sq s on ca.apply_id = s.id
+		<if test="startTime != null"> and s.plan_time &gt;= #{startTime} </if>
+		<if test="endTime != null"> and s.plan_return &lt;= #{endTime} </if>		
+		left join yx_gps yg on d.device = yg.device
+		left join yx_driver dr on dr.id = ca.driver_id
+		left join yx_member m on dr.uid = m.id
+		where 1=1
+		<if test="device != null">and yg.device = #{device}</if>
+		<if test="devices != null">and yg.device in
+			<foreach collection="devices" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="startTime != null">and yg.senddate &gt;= #{startTime}</if>
+	    <if test="endTime != null">and yg.senddate &lt;= #{endTime}</if>		
+	</select>
+	
+	<select id="findOneByMap" parameterType="map" resultMap="ControlRM">
+		select <include refid="COLUMNS" /> from yx_control_apply
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="apply_id != null">and apply_id = #{apply_id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="driver_id != null">and driver_id = #{driver_id}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="feedback != null ">and feedback = #{feedback}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="state != null">and status in 
+			  <foreach collection="state" item="item" index="index" open="(" separator="," close=")">
+			  #{item}
+               </foreach>            
+		</if>
+		</where>
+		order by createdate desc limit 0,1
+	</select>	
+	
+</mapper>

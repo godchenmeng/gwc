@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.OverstepDao">
+    <resultMap type="com.youxing.car.entity.Overstep" id="OverstepRM">
+        <id column="id" property="id" />
+        <result column="orgId" property="orgId" />
+        <result column="carId" property="carId" />
+        <result column="time" property="time" />
+        <result column="address" property="address" />
+        <result column="createdate" property="createdate" />
+        <result column="happen_date" property="happen_date" />
+         <result column="fence_type" property="fence_type" />
+    </resultMap>
+
+    <!-- _____________________________________________________________________________ 全部字段 -->
+    <sql id="COLUMNS">
+        id,orgId,carId,time,address,createdate,happen_date,fence_type
+    </sql>
+
+
+    <!-- _____________________________________________________________________________ 1.add -->
+
+    <insert id="add" parameterType="com.youxing.car.entity.Overstep">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into yx_overstep (
+        <if test="orgId != null and orgId !=''">orgId ,</if>
+        <if test="carId != null and carId !=''">carId ,</if>
+        <if test="time != null and time !=''">time ,</if>
+        <if test="address != null and address !=''">address ,</if>
+        <if test="happen_date != null and happen_date !=''">happen_date ,</if>
+        <if test="fence_type != null and fence_type !=''">fence_type ,</if>
+        createdate
+        )
+        values (
+        <if test="orgId != null and orgId !=''"> #{orgId},</if>
+        <if test="carId != null and carId !=''"> #{carId},</if>
+        <if test="time != null and time !=''">#{time} ,</if>
+        <if test="address != null and address !=''">#{address} ,</if>
+        <if test="happen_date != null and happen_date !=''">#{happen_date} ,</if>
+        <if test="fence_type != null and fence_type !=''">#{fence_type} ,</if>
+        now()
+        )
+    </insert>
+
+
+    <!-- ______________________________________________________________________________ 2.modify -->
+
+    <update id="modify" parameterType="com.youxing.car.entity.Overstep">
+        update yx_overstep
+        <set>
+        <trim suffixOverrides=",">
+            <if test="orgId != null and orgId !=''">orgId = #{orgId},</if>
+            <if test="carId != null and carId !=''">carId = #{carId},</if>
+            <if test="time != null and time !=''">time = #{time},</if>
+            <if test="address != null and address !=''">address = #{address},</if>
+            <if test="happen_date != null and happen_date !=''">address = #{happen_date},</if>
+            <if test="fence_type != null and fence_type !=''">address = #{fence_type},</if>
+            </trim>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- _____________________________________________________________________________ 3.removeById -->
+
+    <delete id="removeById" parameterType="long">
+        delete from yx_overstep where id=#{id}
+    </delete>
+
+
+    <!-- _____________________________________________________________________________ 7.pageBy -->
+
+    <select id="pageBy" parameterType="map" resultMap="OverstepRM">
+        select <include refid="COLUMNS" /> from yx_overstep
+        <where>
+            <if test="orgId != null">and orgId = #{orgId}</if>
+            <if test="carId != null">and carId = #{carId}</if>
+            <if test="address != null">and address = #{address}</if>
+            <if test="time != null">and time = #{time}</if>
+            <if test="happen_date != null">and happen_date = #{happen_date}</if>
+            <if test="fence_type != null">and fence_type = #{fence_type}</if>
+        </where>
+        order by createdate desc
+        limit #{startIdx},#{limit}
+    </select>
+
+    <!-- _____________________________________________________________________________ 11.countBy -->
+
+    <select id="countBy" parameterType="map" resultType="integer">
+        select count(id) from yx_overstep
+        <where>
+            <if test="orgId != null">and orgId = #{orgId}</if>
+            <if test="carId != null">and carId = #{carId}</if>
+            <if test="address != null">and address = #{address}</if>
+            <if test="time != null">and time = #{time}</if>
+            <if test="happen_date != null">and happen_date = #{happen_date}</if>      
+            <if test="fence_type != null">and fence_type = #{fence_type}</if>       
+        </where>
+    </select>
+    
+    <select id="pageByWeb" parameterType="map" resultMap="OverstepRM">
+		select yop.id,org_id,car_id,DATE_FORMAT(yop.createdate,'%Y-%m-%d') createdate,DATE_FORMAT(yop.happen_date,'%Y-%m-%d') happen_date,yop.address,
+		        yc.car_no car_no,yo.name org_name,count(1) fence_num,yd.text car_type_name,
+		        (case 
+		        when yop.fence_type = 1 then '驶入'
+		        when yop.fence_type = 2 then '驶出'
+		        when yop.fence_type = 3 then '驶入驶出'
+		        end) fence_type
+		        from yx_overstep yop
+		        left join yx_car yc on yop.car_id = yc.id and yc.car_status = 1
+		        left join yx_org yo on yop.org_id = yo.id and yo.status = 1
+		        left join yx_dictionary yd on yc.type = yd.value and parent_id = 1
+        <where>
+            <if test="org_id != null">and yop.org_id = #{org_id}</if>
+            <if test="car_id != null">and yop.car_id = #{car_id}</if>
+            <if test="car_no != null">and yc.car_no like concat('%','${car_no}','%')</if>
+            <if test="start_date != null">and yop.happen_date &gt;= #{start_date}</if>
+            <if test="end_date != null">and yop.happen_date &lt;= #{end_date}</if>
+            <if test="car_list != null">and yop.car_id in 
+				<foreach collection="car_list" item="car" index="index" open="(" separator="," close=")">
+				#{car}
+	            </foreach>              	
+            </if>
+            <if test="org_list != null">and yop.org_id in 
+				<foreach collection="org_list" item="org" index="index" open="(" separator="," close=")">
+				#{org}
+	            </foreach>              	
+            </if>            
+        </where>
+        group by car_id,DATE_FORMAT(happen_date ,'%Y-%m-%d')
+        order by createdate desc
+        <if test="limit != null">
+         limit #{startIdx},#{limit}
+        </if>
+       
+    </select>
+
+    <!-- _____________________________________________________________________________ 11.countBy -->
+
+    <select id="countByWeb" parameterType="map" resultType="integer">
+    	select count(*) from (
+		select yop.id,org_id,car_id,DATE_FORMAT(yop.createdate,'%Y-%m-%d') createdate,DATE_FORMAT(yop.happen_date,'%Y-%m-%d') happen_date,yop.address,
+		        yc.car_no car_no,yo.name org_name,count(1) fence_num,yd.text car_type_name
+		        from yx_overstep yop
+		        left join yx_car yc on yop.car_id = yc.id and yc.car_status = 1
+		        left join yx_org yo on yop.org_id = yo.id and yo.status = 1
+		        left join yx_dictionary yd on yc.type = yd.value and parent_id = 1 
+        <where>
+            <if test="org_id != null">and yop.org_id = #{org_id}</if>
+            <if test="car_id != null">and yop.car_id = #{car_id}</if>
+            <if test="car_no != null">and yc.car_no like concat('%','${car_no}','%')</if>
+            <if test="start_date != null">and yop.happen_date &gt;= #{start_date}</if>
+            <if test="end_date != null">and yop.happen_date &lt;= #{end_date}</if>
+            <if test="car_list != null">and yop.car_id in 
+				<foreach collection="car_list" item="car" index="index" open="(" separator="," close=")">
+				#{car}
+	            </foreach>              	
+            </if>           
+            <if test="org_list != null">and yop.org_id in 
+				<foreach collection="org_list" item="org" index="index" open="(" separator="," close=")">
+				#{org}
+	            </foreach>              	
+            </if>             
+        </where>
+        group by car_id,DATE_FORMAT(happen_date ,'%Y-%m-%d')
+        order by createdate desc ) t
+    </select>
+    
+	<select id="getInfoDetail" parameterType="map"  resultType="java.util.HashMap">
+		select DATE_FORMAT(yop.happen_date,'%Y-%m-%d %H:%i:%s') happen_date,yop.time duration_time,yop.address
+		        from yx_overstep yop
+        <where>
+            <if test="org_id != null">and org_id = #{org_id}</if>
+            <if test="car_id != null">and car_id = #{car_id}</if>
+            <if test="start_date != null">and happen_date &gt;= #{start_date}</if>
+            <if test="end_date != null">and happen_date &lt;= #{end_date}</if>
+            <if test="car_list != null">and car_id in 
+				<foreach collection="car_list" item="car" index="index" open="(" separator="," close=")">
+				#{car}
+	            </foreach>              	
+            </if>
+            <if test="org_list != null">and org_id in 
+				<foreach collection="org_list" item="org" index="index" open="(" separator="," close=")">
+				#{org}
+	            </foreach>              	
+            </if>
+        </where>
+	</select>
+	
+	<!-- 按月查询 (辆) -->
+	<select id="pageByMonthL" parameterType="map" resultType="java.util.LinkedHashMap">
+		SELECT date,count(1) car_num from ( select
+		car_id,DATE_FORMAT(yos.happen_date,'%Y-%m') date,yos.address,
+		yo.name
+		org_name,count(car_id) car_num
+		from yx_overstep yos
+		left join yx_org yo
+		on yos.org_id = yo.id and yo.status = 1
+		<where>
+			<if test="start_date != null">and yos.happen_date &gt;= #{start_date}</if>
+			<if test="end_date != null">and yos.happen_date &lt;= #{end_date}</if>
+			<if test="org_id != null">and yos.org_id = #{org_id}</if>
+			<if test="org_list != null">
+				and yos.org_id in
+				<foreach collection="org_list" item="org" index="index"
+					open="(" separator="," close=")">
+					#{org}
+				</foreach>
+			</if>
+		</where>
+		group by car_id,DATE_FORMAT(happen_date ,'%Y-%m')
+		order by happen_date
+		desc ) t GROUP BY date
+	</select>
+
+	<!-- 按月查询 (次) -->
+	<select id="pageByMonthC" parameterType="map" resultType="java.util.LinkedHashMap">
+		SELECT date,sum(step_num) step_num from ( select
+		car_id,DATE_FORMAT(yos.happen_date,'%Y-%m') date,yos.address,
+		yo.name org_name,count(1) step_num
+		from yx_overstep yos
+		left join yx_org yo on yos.org_id = yo.id and yo.status = 1
+		<where>
+			<if test="start_date != null">and yos.happen_date &gt;= #{start_date}</if>
+			<if test="end_date != null">and yos.happen_date &lt;= #{end_date}</if>
+			<if test="org_id != null">and yos.org_id = #{org_id}</if>
+			<if test="org_list != null">
+				and yos.org_id in
+				<foreach collection="org_list" item="org" index="index"
+					open="(" separator="," close=")">
+					#{org}
+				</foreach>
+			</if>
+		</where>
+		group by car_id,DATE_FORMAT(happen_date ,'%Y-%m')
+		order by happen_date desc ) t GROUP BY date
+	</select>
+	
+	
+	<!-- 按天查询 (辆) -->
+	<select id="pageByDayL" parameterType="map" resultType="java.util.LinkedHashMap">
+		SELECT date,count(1) car_num from ( select
+		car_id,DATE_FORMAT(yos.happen_date,'%Y-%m-%d') date,yos.address,
+		yo.name
+		org_name,count(car_id) car_num
+		from yx_overstep yos
+		left join yx_org yo
+		on yos.org_id = yo.id and yo.status = 1
+		<where>
+			<if test="start_date != null">and yos.happen_date &gt;= #{start_date}</if>
+			<if test="end_date != null">and yos.happen_date &lt;= #{end_date}</if>
+			<if test="org_id != null">and yos.org_id = #{org_id}</if>
+			<if test="org_list != null">
+				and yos.org_id in
+				<foreach collection="org_list" item="org" index="index"
+					open="(" separator="," close=")">
+					#{org}
+				</foreach>
+			</if>
+		</where>
+		group by car_id,DATE_FORMAT(happen_date ,'%Y-%m-%d')
+		order by happen_date
+		desc ) t GROUP BY date
+	</select>
+
+	<!-- 按天查询 (次) -->
+	<select id="pageByDayC" parameterType="map" resultType="java.util.LinkedHashMap">
+		SELECT date,sum(step_num) step_num from ( select
+		car_id,DATE_FORMAT(yos.happen_date,'%Y-%m-%d') date,yos.address,
+		yo.name org_name,count(1) step_num
+		from yx_overstep yos
+		left join yx_org yo on yos.org_id = yo.id and yo.status = 1
+		<where>
+			<if test="start_date != null">and yos.happen_date &gt;= #{start_date}</if>
+			<if test="end_date != null">and yos.happen_date &lt;= #{end_date}</if>
+			<if test="org_id != null">and yos.org_id = #{org_id}</if>
+			<if test="org_list != null">
+				and yos.org_id in
+				<foreach collection="org_list" item="org" index="index"
+					open="(" separator="," close=")">
+					#{org}
+				</foreach>
+			</if>
+		</where>
+		group by car_id,DATE_FORMAT(happen_date ,'%Y-%m-%d')
+		order by happen_date desc ) t GROUP BY date
+	</select>
+	
+	<!-- 查询总数 -->
+	<select id="getAllcountByOrgId" parameterType="map" resultType="java.util.LinkedHashMap">
+				select COUNT(DISTINCT t.car_id) total,org_id,org_name,sum(step_num) step_num from (SELECT
+					org_id,
+					car_id,
+					DATE_FORMAT(yos.happen_date, '%Y-%m-%d') date,
+					yos.address,
+					yo. NAME org_name,
+					count(1) step_num,
+				yc.type,
+				yd.text,
+				yo.`name`
+				FROM
+					yx_overstep yos
+				LEFT JOIN yx_car yc on yos.car_id = yc.id
+				LEFT JOIN yx_dictionary yd on FIND_IN_SET(yc.type,yd.`value`) and yd.parent_id = 100
+				LEFT JOIN yx_org yo ON yos.org_id = yo.id
+				AND yo. STATUS = 1
+		<where>
+			<if test="start_date != null">and yos.happen_date &gt;= #{start_date}</if>
+			<if test="end_date != null">and yos.happen_date &lt;= #{end_date}</if>
+			<if test="org_id != null">and yos.org_id = #{org_id}</if>
+			<if test="org_list != null">
+				and yos.org_id in
+				<foreach collection="org_list" item="org" index="index"
+					open="(" separator="," close=")">
+					#{org}
+				</foreach>
+			</if>
+		</where>
+				GROUP BY
+					org_id,car_id,
+					DATE_FORMAT(happen_date, '%Y-%m-%d')
+				ORDER BY
+					happen_date ASC) t GROUP BY t.org_id
+					<if test="limit != null">
+					limit #{startIdx},#{limit}
+					</if>
+	</select>
+	
+	<!-- 查询总数 -->
+	<select id="getAllcount" parameterType="map" resultType="java.lang.Integer">
+			select count(*) from (
+				select COUNT(DISTINCT t.car_id) total,org_id,org_name,sum(step_num) step_num from (SELECT
+					org_id,
+					car_id,
+					DATE_FORMAT(yos.happen_date, '%Y-%m-%d') date,
+					yos.address,
+					yo. NAME org_name,
+					count(1) step_num,
+				yc.type,
+				yd.text,
+				yo.`name`
+				FROM
+					yx_overstep yos
+				LEFT JOIN yx_car yc on yos.car_id = yc.id
+				LEFT JOIN yx_dictionary yd on FIND_IN_SET(yc.type,yd.`value`) and yd.parent_id = 100
+				LEFT JOIN yx_org yo ON yos.org_id = yo.id
+				AND yo. STATUS = 1
+		<where>
+			<if test="start_date != null">and yos.happen_date &gt;= #{start_date}</if>
+			<if test="end_date != null">and yos.happen_date &lt;= #{end_date}</if>
+			<if test="org_id != null">and yos.org_id = #{org_id}</if>
+			<if test="org_list != null">
+				and yos.org_id in
+				<foreach collection="org_list" item="org" index="index"
+					open="(" separator="," close=")">
+					#{org}
+				</foreach>
+			</if>
+		</where>
+				GROUP BY
+					org_id,car_id,
+					DATE_FORMAT(happen_date, '%Y-%m-%d')
+				ORDER BY
+					happen_date ASC) t GROUP BY t.org_id ) tt
+	</select>	
+	
+	
+	<!-- 查询大小车数量 -->
+	<select id="getCountByOrgId" parameterType="map" resultType="java.util.LinkedHashMap">
+					select text,COUNT(DISTINCT t.car_id) num from (SELECT
+						org_id,
+						car_id,
+						DATE_FORMAT(yos.happen_date, '%Y-%m-%d') date,
+						yos.address,
+						yo. NAME org_name,
+						count(1) step_num,
+					yc.type,
+					yd.text,
+					yo.`name`
+					FROM
+						yx_overstep yos
+					LEFT JOIN yx_car yc on yos.car_id = yc.id
+					LEFT JOIN yx_dictionary yd on FIND_IN_SET(yc.type,yd.`value`) and yd.parent_id = 100
+					LEFT JOIN yx_org yo ON yos.org_id = yo.id
+					AND yo. STATUS = 1
+		<where>
+			<if test="start_date != null">and yos.happen_date &gt;= #{start_date}</if>
+			<if test="end_date != null">and yos.happen_date &lt;= #{end_date}</if>
+			<if test="org_id != null">and yos.org_id = #{org_id}</if>
+			<if test="text != null">and text = #{text}</if>
+			<if test="org_list != null">
+				and yos.org_id in
+				<foreach collection="org_list" item="org" index="index"
+					open="(" separator="," close=")">
+					#{org}
+				</foreach>
+			</if>
+		</where>
+					GROUP BY
+						org_id,car_id,
+						DATE_FORMAT(happen_date, '%Y-%m-%d')
+					ORDER BY
+						happen_date ASC) t GROUP BY t.text
+	</select>	
+	
+	
+	
+	<!-- p-4-3 越界统计  按车辆-->
+	<select id="overStepByCar"  parameterType="map"  resultType="Map">
+		select yop.org_id,yc.car_no,yo.name as org_name,
+		DATE_FORMAT(yop.happen_date,'%Y-%m-%d %H:%i:%s') happen_date,yop.address,
+			(case			
+			 when yop.fence_type = '1' then '驶入'
+			 when yop.fence_type = '2' then '驶出'
+			 when yop.fence_type = '3' then '驶入驶出'
+			end) fenceType
+			from yx_overstep yop
+			left join yx_car yc on yc.id = yop.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1
+			<if test="startDate != nul" >and yop.happen_date &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yop.happen_date &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			order by yop.happen_date desc
+		limit #{startIdx},#{limit}
+	</select>	
+	
+	<!-- 越界数量 -->
+	<select id="overStepNum"  parameterType="map"  resultType="integer">
+		select count(*)
+			from yx_overstep   yop
+			left join yx_car yc on yc.id = yop.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1
+			<if test="startDate != nul" >and yop.happen_date &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yop.happen_date &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+	</select>
+	
+	<!-- p-4-4 越界数据分页查询-->
+	<select id="overStepCountByOrg"  parameterType="map"  resultType="Map">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yop.happen_date,'%Y-%m-%d') ) as date,
+		sum(1) as inspection_count
+		from yx_overstep yop 
+		left join yx_org  yo on yo.id = yop.org_id
+		where 1 = 1
+			<if test="startDate != nul" >and yop.happen_date &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yop.happen_date &lt;= #{endDate}</if>
+			<if test="org_list != null">and yop.org_id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">and yop.org_id in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			and yo.status = 1
+		 group by date order by yo.id
+	</select>	
+	
+	<!-- p-4-4 越界数据查询  按月  按周-->
+	<select id="overStepMonthAndWeek"  parameterType="map"  resultType="Map">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yop.happen_date,'%Y-%m-%d') ) as date,
+		sum(1) as inspection_count
+		from yx_overstep yop 
+		left join yx_org  yo on yo.id = yop.org_id
+		where yo.status = '1' 
+			<if test="car_id != null and car_id!=''" >and yop.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yop.org_id = #{org}</if>
+			<if test="org_list != null">AND yop.org_id IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			and  yop.happen_date BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+	</select>		
+	
+	<!-- p-4-4 越界统计数据导出  按车辆-->
+	<select id="overStepByCarEx"  parameterType="map"  resultType="Map">
+		select yop.car_id,yc.car_no,yo.name as org_name,yop.happen_date,yop.address,yop.fence_type
+			from yx_overstep  yop
+			left join yx_car yc on yc.id = yop.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1
+			<if test="startDate != nul" >and yop.happen_date &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yop.happen_date &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			order by yop.happen_date desc
+	</select>		
+</mapper>

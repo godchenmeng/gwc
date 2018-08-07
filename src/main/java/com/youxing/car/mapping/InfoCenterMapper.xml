@@ -1,0 +1,2240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.InfoCenterDao">
+	<resultMap type="com.youxing.car.entity.InfoCenter" id="InfoCenterRM">
+		<id column="id" property="id" />
+		<result column="car_id" property="car_id" />
+		<result column="car_name" property="car_name" />
+		<result column="driver" property="driver" />
+		<result column="org" property="org" />
+		<result column="happen_time" property="happen_time" />
+		<result column="solve_time" property="solve_time" />
+		<result column="illegal_type" property="illegal_type" />
+	</resultMap>
+	<resultMap type="com.youxing.car.entity.CountInfo" id="CountInfoRM">
+		<id column="id" property="id" />
+		<result column="car_id" property="car_id" />
+		<result column="org_name" property="org_name" />
+		<result column="car_no" property="car_no" />
+		<result column="start_time" property="start_time" />
+		<result column="end_time" property="end_time" />
+		<result column="duration" property="duration" />
+		<result column="max_speed" property="max_speed" />
+		<result column="start_site" property="start_site" />
+		<result column="end_site" property="end_site" />
+		
+		<result column="trigger_time" property="trigger_time" />
+		<result column="trigger_type" property="trigger_type" />
+		<result column="trigger_site" property="trigger_site" />
+		
+		<result column="trip_accelerate_sum" property="trip_accelerate_sum" />
+		<result column="trip_decelerate_sum" property="trip_decelerate_sum" />
+		<result column="trip_sharp_sum" property="trip_sharp_sum" />
+		
+		<result column="date_time" property="date_time" />
+		<result column="online_rate" property="online_rate" />
+		<result column="overspeed" property="overspeed" />
+		<result column="outside" property="outside" />
+		<result column="not_return" property="not_return" />
+		<result column="foul_park" property="foul_park" />
+		<result column="foul_task" property="foul_task" />
+		<result column="foul_time" property="foul_time" />
+		<result column="break_rule" property="break_rule" />
+	</resultMap>
+	
+	<resultMap type="com.youxing.car.entity.IllegalInfo" id="IllegalInfoRM">
+		<id column="id" property="id" />
+		<result column="car_id" property="car_id" />
+		<result column="createdate" property="createdate" />
+		<result column="status" property="status" />
+		<result column="address" property="address" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,car_id,car_name,driver,org,happen_time,solve_time,illegal_type
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.InfoCenter">
+		insert into yx_info_center (
+			<if test="car_id != null and car_id!=''">car_id ,</if>
+			<if test="car_name != null and car_name!=''">car_name ,</if>
+			<if test="driver != null and driver!=''">driver ,</if>
+			<if test="org != null and org!=''">org ,</if>
+			<if test="happen_time != null and happen_time!=''">happen_time ,</if>
+			<if test="solve_time != null and solve_time!=''">solve_time ,</if>
+			<if test="illegal_type != null and illegal_type!=''">illegal_type</if>
+		)
+		values (
+			<if test="car_id != null and car_id!=''"> #{car_id},</if>
+			<if test="car_name != null and car_name!=''"> #{car_name},</if>
+			<if test="driver != null and driver!=''"> #{driver},</if>
+			<if test="org != null and org!=''"> #{org},</if>
+			<if test="happen_time != null and happen_time!=''"> #{happen_time},</if>
+			<if test="solve_time != null and solve_time!=''"> #{solve_time},</if>
+			<if test="illegal_type != null and illegal_type!=''"> #{illegal_type}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.InfoCenter">
+		update yx_info_center 
+		<set>
+			<if test="car_id != null and car_id!=''">car_id = #{car_id},</if>
+			<if test="car_name != null and car_name!=''">car_name = #{car_name},</if>
+			<if test="driver != null and driver!=''">driver = #{driver},</if>
+			<if test="org != null and org!=''">org = #{org},</if>
+			<if test="happen_time != null and happen_time!=''">happen_time = #{happen_time},</if>
+			<if test="solve_time != null and solve_time!=''">solve_time = #{solve_time},</if>
+			<if test="illegal_type != null and illegal_type!=''">illegal_type = #{illegal_type}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_info_center where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_info_center where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="InfoCenterRM">
+		select <include refid="COLUMNS" /> from yx_info_center
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="InfoCenterRM">
+		select <include refid="COLUMNS" /> from yx_info_center
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="InfoCenterRM">
+		select <include refid="COLUMNS" /> from yx_info_center
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="InfoCenterRM">
+		select <include refid="COLUMNS" /> from yx_info_center
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.InfoCenter" resultMap="InfoCenterRM">
+		select <include refid="COLUMNS" /> from yx_info_center
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="InfoCenterRM">
+		select <include refid="COLUMNS" /> from yx_info_center where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_info_center
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_info_center
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+	</select>
+	
+	<select id="countByGroup" parameterType="map" resultType="carAlmType">
+		select illegal_type as type ,count(id) as num from yx_info_center
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="start != null">and happen_time &gt;= #{start}</if>
+			<if test="end != null">and happen_time &lt;= #{end} </if>
+		group by illegal_type
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	<select id="countAlmByDay" parameterType="map" resultType="alm">
+			select DATE_FORMAT(happen_time,'%d') as day ,count(id) as count from yx_info_center
+			where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="start != null">and happen_time &gt;= #{start}</if>
+			<if test="end != null">and happen_time &lt;= #{end} </if>
+		GROUP BY
+		DATE_FORMAT(happen_time,'%d')
+	</select>
+	
+	<select id="countCarAlm" parameterType="map" resultType="int">
+		select count(*) from yx_info_center
+		where 1=1
+			<if test="id != null">and id = #{id}</if>
+			<if test="car_id != null">and car_id = #{car_id}</if>
+			<if test="car_name != null">and car_name = #{car_name}</if>
+			<if test="driver != null">and driver = #{driver}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="happen_time != null">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null">and solve_time = #{solve_time}</if>
+			<if test="illegal_type != null">and illegal_type = #{illegal_type}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+			<if test="start != null">and happen_time &gt;= #{start}</if>
+			<if test="end != null">and happen_time &lt;= #{end} </if>
+		<!-- GROUP BY car_id -->
+	</select>
+	
+	<!-- 消息提醒 -->
+	
+	<select id="findInfoList" parameterType="map" resultType="InfoCenter">
+		select LEFT(yi.happen_time, 19) happen_time,yi.illegal_speed,case when yi.limit_speed = 0 then 120 when yi.limit_speed is null then 120 else yi.limit_speed end as limit_speed,yi.illegal_address,yc.car_no
+		from yx_info_center yi 
+        left join yx_car yc on yc.id=yi.car_id    
+        where  yc.status = '1' and illegal_type = #{illegal_type} 
+		<if test="list != null">and yi.org in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+		order by happen_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	
+	<!--  web -->
+	<!-- 查询违规信息 表格显示 -消息中心-->
+	<select id="findIllegalInfo" parameterType="map" resultMap="InfoCenterRM">
+		select if(isnull(i.solve_time),0,1) status,i.id,i.car_id,i.driver,yc.brand as car_name,o.name,DATE_FORMAT(i.happen_time,'%Y-%m-%d %H:%i:%S') happen_time,
+		DATE_FORMAT(i.solve_time,'%Y-%m-%d %H:%i:%S')solve_time,i.illegal_type,i.illegal_speed,i.illegal_address,i.limit_speed,i.inspection_time,i.insurance_time,
+		(select DISTINCT c.car_no from yx_car c where i.car_id=c.id) car_no 
+		from yx_info_center i 
+        LEFT JOIN yx_org o ON i.org=o.id              
+        left join yx_car yc on yc.id = i.car_id
+		where yc.status ='1' and o.status ='1'
+			<if test="id != null and id!=''" >and i.id = #{id}</if>
+			<if test="car_id != null  and car_id!=''">and i.car_id = #{car_id}</if>
+			<if test="car_name != null and car_name!=''">and i.car_name = #{car_name}</if>
+			<if test="driver != null and driver!=''">and i.driver like CONCAT('%','${driver}','%')</if>
+			<if test="org != null and org!=''">and i.org = #{org}</if>
+			<if test="happen_time!=null and happen_time!=''">and i.happen_time = #{happen_time}</if>
+			<if test="solve_time != null and solve_time!=''">and i.solve_time = #{solve_time}</if>
+			<if test="illegal_type!= null and  illegal_type!=''">and i.illegal_type = #{illegal_type}</if>
+			<if test="illegal_speed!= null and  illegal_speed!=''">and i.illegal_speed = #{illegal_speed}</if>
+			<if test="list != null">AND i.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="startDate != null and endDate != null">
+			    and  i.happen_time BETWEEN #{startDate} and #{endDate} 
+			</if>
+			 
+		order by i.happen_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<select id="findInfoCount" parameterType="map" resultType="int">
+		select count(*)
+		from yx_info_center i LEFT JOIN yx_org o ON i.org=o.id
+		where o.status ='1'
+			<if test="id != null and id!=''" >and i.id = #{id}</if>
+			<if test="car_id != null  and car_id!=''">and i.car_id = #{car_id}</if>
+			<if test="car_name != null and car_name!=''">and i.car_name = #{car_name}</if>
+			<if test="driver != null and driver!=''">and i.driver like CONCAT('%','${driver}','%')</if>
+			<if test="org != null and org!=''">and i.org = #{org}</if>
+			<if test="happen_time!=null and happen_time!=''">and i.happen_time = #{happen_time}</if>
+			<if test="solve_time != null and solve_time!=''">and i.solve_time = #{solve_time}</if>
+			<if test="illegal_type!= null and  illegal_type!=''">and i.illegal_type = #{illegal_type}</if>
+			<if test="illegal_speed!= null and  illegal_speed!=''">and i.illegal_speed = #{illegal_speed}</if>
+			<if test="list != null">AND i.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="startDate != null and endDate != null">
+			    and  i.happen_time BETWEEN #{startDate} and #{endDate} 
+			</if>
+	</select>
+	
+	<!-- 查询异常总次数，用于返回总记录条数分页显示 -->
+	<select id="exCount" parameterType="map" resultType="Integer">
+		SELECT count(DISTINCT car_id) count  from yx_info_center
+		where 1=1
+			<if test="car_id != null and car_id!=''" >and car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and org = #{org}</if>
+			<if test="driver != null and driver!=''">and driver like CONCAT('%','${driver}','%')</if>
+			<if test="list != null">AND org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_time BETWEEN #{startDate} and #{endDate}  
+	</select>
+	
+	
+	
+	<!-- 异常统计表格显示-->
+	<select id="exceptionCount"  parameterType="map"  resultMap="InfoCenterRM">
+		select DISTINCT c.car_no,i.car_id,i.driver,
+		sum(case when illegal_type='0' then 1 else 0 end) as illegal_count,
+		sum(case when illegal_type='1' then 1 else 0 end) as inspection_count,
+		sum(case when illegal_type='2' then 1 else 0 end) as speed,
+		sum(case when illegal_type='3' then 1 else 0 end) as overtime,
+		sum(case when illegal_type='4' then 1 else 0 end) as ele_count
+		from yx_info_center i 
+		left join yx_car c on c.id = i.car_id
+		where c.status ='1'
+			<if test="car_id != null and car_id!=''" >and i.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and i.org = #{org}</if>
+			<if test="driver != null and driver!=''">and i.driver like CONCAT('%','${driver}','%')</if>
+			<if test="list != null">AND i.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_Time BETWEEN #{startDate} and #{endDate}  
+		group by car_id
+		limit #{startIdx},#{limit}
+	</select>
+	
+	
+	<!-- 饼状图，异常统计 每个违规类型的总次数-->
+	<select id="exceptionAllCount" resultType="java.util.HashMap">
+		select 
+		sum(case when illegal_type='0' then 1 else 0 end) as illegal_count,
+		sum(case when illegal_type='1' then 1 else 0 end) as inspection_count,
+		sum(case when illegal_type='2' then 1 else 0 end) as speed,
+		sum(case when illegal_type='3' then 1 else 0 end) as overtime,
+		sum(case when illegal_type='4' then 1 else 0 end) as ele_count
+		from yx_info_center
+		where 1=1
+			<if test="car_id != null and car_id!=''" >and car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and org = #{org}</if>
+			<if test="driver != null and driver!=''">and driver like CONCAT('%','${driver}','%')</if>
+			<if test="list != null">AND org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_Time BETWEEN #{startDate} and #{endDate}  
+	</select>
+	
+	<!-- 曲线图，查询某个时间段内每一天的各种违规总数 -->
+	<select id="dayExCount" parameterType="map" resultType="java.util.HashMap">
+		select   
+        DATE_FORMAT(p.happen_Time,'%Y-%m-%d') as time,  
+    	sum(case when illegal_type='0' then 1 else 0 end) as illegal_count,
+		sum(case when illegal_type='1' then 1 else 0 end) as inspection_count,
+		sum(case when illegal_type='2' then 1 else 0 end) as speed,
+		sum(case when illegal_type='3' then 1 else 0 end) as overtime,
+		sum(case when illegal_type='4' then 1 else 0 end) as ele_count
+		from yx_info_center  p   
+		where 1=1
+			<if test="car_id != null and car_id!=''" >and car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and org = #{org}</if>
+			<if test="driver != null and driver!=''">and driver like CONCAT('%','${driver}','%')</if>
+			<if test="list != null">AND org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  p.happen_Time BETWEEN #{startDate} and #{endDate}  
+		GROUP BY time  
+		ORDER BY time  
+	</select>
+	
+	<!-- 消息中心 点击未处理违规 ，变更处理时间为当前时间，-->
+	<update id="updateStatus" parameterType="String">
+			update yx_info_center set solve_time=now() where id=#{id}
+	</update>
+	
+	
+	
+	<!-- 消息中心导出Excel -->
+	<select id="exportExcel" parameterType="map" resultType="InfoCenter">
+	select if(isnull(i.solve_time),0,1) status,i.id,i.car_id,i.driver,yc.brand as car_name,o.name,DATE_FORMAT(i.happen_time,'%Y-%m-%d %H:%i:%S') happen_time,
+		DATE_FORMAT(i.solve_time,'%Y-%m-%d %H:%i:%S')solve_time,i.illegal_type,i.illegal_speed,i.illegal_address,i.limit_speed,i.inspection_time,i.insurance_time,
+		(select DISTINCT c.car_no from yx_car c where i.car_id=c.id) car_no 
+		from yx_info_center i 
+        LEFT JOIN yx_org o ON i.org=o.id              
+        left join yx_car yc on yc.id = i.car_id
+		where  o.status = '1' and yc.status = '1'
+			<if test="id != null and id!=''" >and i.id = #{id}</if>
+			<if test="car_id != null  and car_id!=''">and i.car_id = #{car_id}</if>
+			<if test="car_name != null and car_name!=''">and i.car_name = #{car_name}</if>
+			<if test="driver != null and driver!=''">and i.driver like CONCAT('%','${driver}','%')</if>
+			<if test="org != null and org!=''">and i.org = #{org}</if>
+			<if test="happen_time!=null and happen_time!=''">and i.happen_time = #{happen_time}</if>
+			<if test="solve_time != null and solve_time!=''">and i.solve_time = #{solve_time}</if>
+			<if test="illegal_type!= null and  illegal_type!=''">and i.illegal_type = #{illegal_type}</if>
+			<if test="illegal_speed!= null and  illegal_speed!=''">and i.illegal_speed = #{illegal_speed}</if>
+			<if test="list != null">and i.id in 
+				<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+				#{id}
+				</foreach>
+			</if>
+			and  i.happen_time BETWEEN #{startDate} and #{endDate}  
+		order by i.happen_time desc
+	</select>
+	
+	<!-- 异常统计导出Excel -->
+	
+	<select id="exceptionExcel" parameterType="map" resultType="InfoCenter">
+		select 
+		 DISTINCT c.car_no,
+		sum(case when illegal_type='0' then 1 else 0 end) as illegal_count,
+		sum(case when illegal_type='1' then 1 else 0 end) as inspection_count,
+		sum(case when illegal_type='2' then 1 else 0 end) as speed,
+		sum(case when illegal_type='3' then 1 else 0 end) as overtime,
+		sum(case when illegal_type='4' then 1 else 0 end) as ele_count
+		from yx_info_center i 
+        left join yx_car c on c.id = i.car_id
+		where c.status ='1'
+			<if test="driver != null and driver!=''">and driver like CONCAT('%','${driver}','%')</if>
+			<if test="org != null and org!=''">and org = #{org}</if>
+			<if test="happen_time!=null and happen_time!=''">and happen_time = #{happen_time}</if>
+			<if test="solve_time != null and solve_time!=''">and solve_time = #{solve_time}</if>
+			<if test="list != null">and car_id in 
+				<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+				#{id}
+				</foreach>
+			</if>
+			and  i.happen_Time BETWEEN #{startDate} and #{endDate}  
+		group by car_id
+	</select>
+
+
+	<!-- 追踪根据时间段获取车辆异常信息 -->
+	<select id="getInfoByCar" parameterType="map" resultType="InfoCenter">
+		select *
+		from yx_info_center
+		<where>
+			1 = 1
+			<if test="car_id != null and car_id!=''">and car_id = #{car_id}</if>
+			and  happen_Time BETWEEN #{startTime} and #{endTime}
+		</where>
+		order by happen_Time asc
+	</select>
+	
+	
+	<!-- p-4-3 超速统计  机构-->
+	<select id="overSpeedCount"  parameterType="map"  resultType="InfoCenter">
+				SELECT
+					org_id org,
+					DATE_FORMAT(yod.happen_date, '%Y-%m-%d') date,
+					yod.address,
+					yo. NAME orgName,
+					count(1) speedCount
+				FROM
+					yx_overspeed yod
+				LEFT JOIN yx_org yo ON yod.org_id = yo.id
+				AND yo. STATUS = 1
+			<where>
+			<if test="startDate != nul" >and happen_date &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and happen_date &lt;= #{endDate}</if>
+			<if test="org_list != null">AND yod.org_id IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">AND yod.org_id IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			</where>
+		 				GROUP BY
+					org_id,
+					DATE_FORMAT(happen_date, '%Y-%m-%d')
+				ORDER BY
+					org_id ASC
+	</select>
+	
+	<select id="overSpeedNum"  parameterType="map"  resultType="Integer">
+		select count(DISTINCT yo.id) from 
+			yx_info_center yi 
+			left join (select * FROM yx_org where status = '1') yo on yo.id  = yi.org
+			<if test="startDate != nul" >and yi.happen_Time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_Time &lt;= #{endDate}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+	
+	<!-- p-4-3 超速统计  按车辆-->
+	<select id="overSpeedCountByCar"  parameterType="map"  resultType="map">
+		select yod.car_id,yc.car_no,yo.name as org_name,yod.apex,yod.happen_date start_happen_date,(CASE
+			WHEN yod.end_happen_date is NULL then yod.happen_date 
+			else 
+			yod.end_happen_date
+			end) end_happen_date  ,yod.address start_address, 
+			(CASE
+			WHEN yod.end_address is NULL then yod.address 
+			else 
+			yod.end_address
+			end) end_address
+			,yod.time
+						from yx_overspeed yod
+						left join yx_car yc on yc.id = yod.car_id
+						left join yx_org yo on yo.id = yc.org
+						where 1=1
+			<if test="startDate != nul" >and yod.happen_date &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yod.happen_date &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+		order by yod.car_id,yod.id
+	</select>
+	
+	<!-- p-4-3超速统计导出数据-->
+	<select id="overSpeedCountByOrgEx"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='2' then 1 else 0 end) as speedCount
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '2'
+			<if test="car_id != null and car_id!=''" >and yi.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yi.org = #{org}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_Time BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+	</select>
+	
+	<!-- p-4-3 超速统计  按车辆 数据导出-->
+	<select id="overSpeedCountByCarEx"  parameterType="map"  resultMap="CountInfoRM">
+		select yy.device,yy.max_speed,yc1.car_no,yo.name as orgName,yo.id as org,yi.illegal_address as start_site
+			from 
+			(select yd.device,MAX(yg.car_speed) as  max_speed from yx_gps yg
+			left join yx_device yd on yd.device = yg.device
+			left join yx_car yc on yc.id = yd.car_id
+			where  1=1
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			 group by yd.device) yy
+			
+			left join yx_device yd1 on yd1.device = yy.device
+			left join yx_car yc1 on yc1.id = yd1.car_id 
+			left join yx_info_center yi on yi.car_id = yc1.id
+			left  join yx_org yo on yo.id = yi.org 
+			group by  yy.device
+	</select>
+	
+	
+	
+	<!-- p-4-4 越界数据分页查询-->
+	<select id="overBorderCountByOrg"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yii.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when yii.illegal_type='1' then 1 else 0 end) as inspection_count
+		from yx_info_center yii 
+		left join yx_org  yo on yo.id = yii.org
+		where yii.illegal_type = '1'
+			<if test="startDate != nul" >and yii.happen_Time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yii.happen_Time &lt;= #{endDate}</if>
+			<if test="org_list != null">and yii.org in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">and yii.org in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			and yo.status = 1
+		 group by date order by yo.id
+	</select>
+	
+	<!-- 越界数量 -->
+	<select id="overBorderNum"  parameterType="map"  resultType="integer">
+		select count(*)
+			from yx_illegal_info   yii
+			left join yx_car yc on yc.id = yii.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1
+			<if test="startDate != nul" >and yii.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yii.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+		
+	<!-- p-4-3 越界统计  按车辆-->
+	<select id="overBorderByCar"  parameterType="map"  resultMap="IllegalInfoRM">
+		select yii.car_id,yc.car_no,yo.name as org_name,yii.createdate,yii.address,yii.type
+			from yx_illegal_info   yii
+			left join yx_car yc on yc.id = yii.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1
+			<if test="startDate != nul" >and yii.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yii.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			order by yii.car_id,yii.id
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- p-4-4 越界数据查询  按月  按周（暂时未用）-->
+	<select id="overBorderMonthAndWeek"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='1' then 1 else 0 end) as inspection_count
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '1'
+			<if test="car_id != null and car_id!=''" >and yi.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yi.org = #{org}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_Time BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+	</select>
+	
+	
+	<!-- p-4-4 越界数据导出-->
+	<select id="overBorderByOrgEx"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='1' then 1 else 0 end) as inspection_count
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '1'
+			<if test="car_id != null and car_id!=''" >and yi.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yi.org = #{org}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_Time BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+	</select>
+		
+	<!-- p-4-4 越界统计数据导出  按车辆-->
+	<select id="overBorderByCarEx"  parameterType="map"  resultMap="IllegalInfoRM">
+		select yii.car_id,yc.car_no,yo.name as org_name,yii.createdate,yii.address,yii.type
+			from yx_illegal_info   yii
+			left join yx_car yc on yc.id = yii.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1
+			<if test="startDate != nul" >and yii.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yii.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			order by yii.car_id,yii.id
+	</select>
+	
+	<!-- p4-10  违章统计 按机构 -->
+	<select id="illegalCountByOrg"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='0' then 1 else 0 end) as illegal_count
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '0'
+			<if test="car_id != null and car_id!=''" >and yi.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yi.org = #{org}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">AND yi.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and yo.status = 1
+			and  happen_Time BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+	</select>
+	
+	<!-- 违章数量 -->
+	<select id="illegalNum"  parameterType="map"  resultType="Integer">
+		select count(*) 
+			 from yx_info_center  yi 
+			left join yx_org yo on yo.id = yi.org
+			left join yx_car  yc on yc.id =  yi.car_id
+            left join yx_driver yd on yd.id = yi.driver            
+            left join yx_user yu on yu.id = yd.uid            
+            left join yx_member ym on ym.id = yu.mid
+		    where illegal_type = '0' 
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+		
+	<!-- p-4-10 违章统计  按车辆-->
+	<select id="illegalCountByCar"  parameterType="map"  resultMap="CountInfoRM">
+		select yo.id as org,yo.name as org_name,yc.car_no,yi.happen_time as violation_time,
+			yi.illegal_address as violation_site,ym.name as driver_name
+			 from yx_info_center  yi 
+			left join yx_org yo on yo.id = yi.org
+			left join yx_car  yc on yc.id =  yi.car_id
+            left join yx_driver yd on yd.id = yi.driver            
+            left join yx_user yu on yu.id = yd.uid            
+            left join yx_member ym on ym.id = yu.mid
+		    where illegal_type = '0' 
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group  by yc.id
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- p4-10  违章统计 按月 按周--> 
+	<select id="illegalCountMonthAndWeek"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='0' then 1 else 0 end) as illegal_count
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '0'
+			<if test="car_id != null and car_id!=''" >and yi.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yi.org = #{org}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">AND yi.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_Time BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+	</select>
+	
+	
+	<!-- p-4-10 违章统计 数据导出  按车辆-->
+	<select id="illegalExByCar"  parameterType="map"  resultMap="CountInfoRM">
+		select yo.id as org,yo.name as orgName,yc.car_no,yi.happen_time as violation_time,
+			yi.illegal_address as violation_site,ym.name as driver_name
+			 from yx_info_center  yi 
+			left join yx_org yo on yo.id = yi.org
+			left join yx_car  yc on yc.id =  yi.car_id
+            left join yx_driver yd on yd.id = yi.driver            
+            left join yx_user yu on yu.id = yd.uid            
+            left join yx_member ym on ym.id = yu.mid
+		    where illegal_type = '0' 
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+	
+	<!-- 非规定时段数据统计 -->
+	<select id="foulTimeByOrg"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='3' then 1 else 0 end) as overtime
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '3'
+			<if test="car_id != null and car_id!=''" >and yi.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yi.org = #{org}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">AND yi.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and yo.status = 1
+			and  happen_time BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+		 limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- 非规定时段数量 -->
+	<select id="foulTimeNum"  parameterType="map"  resultType="integer">
+		select count(*)
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '3'
+			<if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+		
+	<!-- p-4-10 非规定时段统计  按车辆-->
+	<select id="foulTimeByCar"  parameterType="map"  resultMap="CountInfoRM">
+		select yo.id as org,yo.name as orgName,yc.car_no,yi.happen_time as trigger_time,
+			yi.illegal_address as trigger_site
+			 from yx_info_center  yi 
+			left join yx_org yo on yo.id = yi.org
+			left join yx_car  yc on yc.id =  yi.car_id
+		    where illegal_type = '3' 
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- p4-10   非规定时段统计 按月 按周--> 
+	<select id="foulTimeCountMonthAndWeek"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='3' then 1 else 0 end) as overtime
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '3'
+		   <if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">AND yi.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+		 group by date order by yo.id
+	</select>
+	<!-- p-4-10 非规定时段统计 数据导出  按机构-->
+	<select id="foulTimeExByOrg"  parameterType="map"  resultType="InfoCenter">
+		select  yo.name as orgName,yo.id as org,
+		(DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		sum(case when illegal_type='3' then 1 else 0 end) as overtime
+		from yx_info_center yi 
+		left join yx_org  yo on yo.id = yi.org
+		where yo.status = '1' and yi.illegal_type = '3'
+			<if test="car_id != null and car_id!=''" >and yi.car_id = #{car_id}</if>
+			<if test="org != null and org!=''" >and yi.org = #{org}</if>
+			<if test="org_list != null">AND yi.org IN
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">AND yi.org IN
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>			
+			<if test="car_list != null">AND car_id IN
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			and  happen_time BETWEEN #{startDate} and #{endDate}  
+		 group by date order by yo.id
+	</select>
+	<!-- p-4-10 非规定时段统计 数据导出  按车辆-->
+	<select id="foulTimeExByCar"  parameterType="map"  resultMap="CountInfoRM">
+		select yo.id as org,yo.name as orgName,yc.car_no,yi.happen_time as trigger_time,
+			yi.illegal_address as trigger_site
+			 from yx_info_center  yi 
+			left join yx_org yo on yo.id = yi.org
+			left join yx_car  yc on yc.id =  yi.car_id
+		    where illegal_type = '3' 
+		    <if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+	<!-- 驾驶统计 -->
+	<!-- 驾驶数据统计  按机构 -->
+	<select id="driveCountByOrg"  parameterType="map"  resultType="InfoCenter">
+	select (DATE_FORMAT(yb.end,'%Y-%m-%d') ) as date, ROUND(SUM(trip_distance)/1000,2) as mileSum,
+			yo.name as orgName,yo.id as org 
+			from yx_behavior yb
+			left join yx_device  yd on yd.device = yb.device 
+			left join yx_car  yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1 
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			and 
+			yb.device in 
+			(select DISTINCT yd.device from yx_car yc
+			left join yx_org  yo on yo.id = yc.org
+			left join yx_device yd on yd.car_id = yc.id 
+			where 1=1
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">and yo.id in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			)
+			GROUP BY
+	date, yo.id order by yo.id
+	</select>
+	
+	
+	<!-- 驾驶数据统计  按车辆 -->
+	<select id="driveCountByCar"  parameterType="map"  resultMap="CountInfoRM">
+		select yb.device,yc.car_no,yo.name as org_name,yo.id as org_id,
+			Round(sum(trip_distance/1000),2) as mileage,Round(sum(trip_fuel/1000),2) as fuel,Round(sum(trip_duration/3600),2) as drive_duration,
+			 CONCAT(sum(trip_accelerate),'/', sum(trip_decelerate),'/',sum(trip_sharp)) as break_drive 
+			from yx_behavior yb 
+			left join yx_device yd on yd.device = yb.device 
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.status = '1' and yo.status = '1'
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by yc.car_no
+	</select>
+	
+	<!-- 驾驶数据数量 -->
+	<select id="driverNum"  parameterType="map"  resultType="integer">
+		select count(DISTINCT yc.car_no)
+			from yx_behavior yb 
+			left join yx_device yd on yd.device = yb.device 
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.status = '1' and yo.status = '1'
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+	<select id="driveCountMonthAndWeek"  parameterType="map"  resultType="InfoCenter">
+	select (DATE_FORMAT(yb.end,'%Y-%m-%d') ) as date, ROUND(SUM(trip_distance)/1000,2) as mileSum,
+			yo.name as orgName,yo.id as org 
+			from yx_behavior yb
+			left join yx_device  yd on yd.device = yb.device 
+			left join yx_car  yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where 1=1 
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			and 
+			yb.device in 
+			(select DISTINCT yd.device from yx_car yc
+			left join yx_org  yo on yo.id = yc.org
+			left join yx_device yd on yd.car_id = yc.id 
+			where 1=1
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">and yo.id in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			)
+			group by date order by yo.id
+	</select>
+	
+	<!-- 驾驶数据统计导出  按车辆 -->
+	<select id="driveExByCar"  parameterType="map"  resultMap="CountInfoRM">
+		select yb.device,yc.car_no,yo.name as org_name,yo.id as org_id,
+			Round(sum(trip_distance/1000),2) as mileage,Round(sum(trip_fuel/1000),2) as fuel,Round(sum(trip_duration/3600),2) as drive_duration,
+			 CONCAT(sum(trip_accelerate),'/', sum(trip_decelerate),'/',sum(trip_sharp)) as break_drive 
+			from yx_behavior yb 
+			left join yx_device yd on yd.device = yb.device 
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.status = '1' and yo.status = '1'
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by yc.car_no
+	</select>
+	
+	
+	
+	<!-- 三急数据统计 -->
+	<select id="driveThree"  parameterType="map"  resultMap="CountInfoRM">
+		select  
+			sum(trip_accelerate) as trip_accelerate_sum,
+			sum(trip_decelerate) as trip_decelerate_sum,
+			sum(trip_sharp) as trip_sharp_sum
+			 from yx_behavior yb
+			left join (select * from yx_device  where status = '1') yd on yd.device = yb.device
+			left join (select * from yx_car  where status = '1') yc on yc.id = yd.car_id
+            left join (select * from yx_org  where status = '1') yo on yo.id = yc.org
+            where 1=1
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			<if test="org_list != null">and yc.org in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+	</select>
+	
+	
+	<!-- 无单违规用车 -->
+	<select id="nonTaskByOrg"  parameterType="map"  resultType="InfoCenter">
+		select 
+			DISTINCT yo.id as org,count(yo.id) as noTaskCount,yo.name as orgName,(DATE_FORMAT(yb.end,'%Y-%m-%d') ) as date,
+			TIMESTAMPDIFF(MINUTE ,yb.start,yb.end) as time
+			 from yx_behavior yb   
+			left join yx_device yd on yd.device = yb.device
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.task_status = '1'
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="list != null">and yo.id in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>			
+			and
+			(
+			(TIMESTAMPDIFF(MINUTE ,yb.start,yb.end)>10)
+			or 
+			yb.trip_distance >= 1000
+			)
+			group by yo.id, date
+			
+	</select>
+	
+	
+	<!-- 无单违规用车  按月 按周 -->
+	<select id="nonTaskMonthAndWeek"  parameterType="map"  resultType="InfoCenter">
+		select 
+			DISTINCT yo.id as org,count(yo.id) as noTaskCount,yo.name as orgName,(DATE_FORMAT(yb.end,'%Y-%m-%d') ) as date,
+			TIMESTAMPDIFF(MINUTE ,yb.start,yb.end) as time
+			 from yx_behavior yb   
+			left join yx_device yd on yd.device = yb.device
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.task_status = '1'
+			<if test="startDate != nul" >and yb.end &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.end &lt;= #{endDate}</if>
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			and
+			(
+			(TIMESTAMPDIFF(MINUTE ,yb.start,yb.end)>10)
+			or 
+			yb.trip_distance >= 1000
+			)
+			group by yo.id, date
+	</select>
+	
+	
+	
+	<!-- 综合统计  按时间-->
+	<select id="allCountByTime"  parameterType="map"  resultMap="CountInfoRM">
+		select yy.date as date_time,round(avg(yy.online),2) as online_rate,
+			xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+			zz.fuel,zz.mileage,zz.duration,
+			mm.foul_task
+			from 
+			(select (DATE_FORMAT(yb.createdate,'%Y-%m-%d') ) as date,yo.id,yb.createdate,
+	        round(
+            (
+            (
+            sum(TIMESTAMPDIFF(MINUTE,start,end))/(count(yb.device)*60*8)
+            )*100
+            ),2)
+             as online
+		    from yx_behavior yb        
+	     	left join yx_device yd on yd.device = yb.device
+		    left join  yx_car yc on yc.id = yd.car_id
+		    left join yx_org yo on yo.id = yc.org      
+		    where ((DATE_FORMAT(yb.createdate,'%H') BETWEEN  8 and 11) 
+			or (DATE_FORMAT(yb.createdate,'%H') BETWEEN  14 and 17)) 
+			<if test="startDate != nul" >and yb.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group By date) yy
+			
+			left join ( select (DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+						sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+			    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+			    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+			    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time
+			from yx_info_center yi 
+			left join yx_car yc on  yc.id = yi.car_id
+			where 1=1 
+			<if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date) xx on xx.date = yy.date 
+			
+			left join (select (DATE_FORMAT(yb1.createdate,'%Y-%m-%d') ) as date,sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+			sum(trip_duration/3600) as duration
+			from yx_behavior  yb1 
+			left join yx_device yd on yd.device = yb1.device
+			left join  yx_car yc on yc.id = yd.car_id
+			where 1=1
+			<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date )  zz on zz.date = yy.date
+			
+			left join (select (DATE_FORMAT(yb2.end,'%Y-%m-%d') ) as date,count(yo.id) as foul_task
+			from yx_behavior yb2   
+			left join yx_device yd on yd.device = yb2.device
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.task_status = '1' and
+			(
+			(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+			or 
+			yb2.trip_distance >= 1000
+			) 
+			<if test="startDate != nul" >and  yb2.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and  yb2.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date) mm on mm.date = yy.date
+			group by yy.date  
+			limit #{startIdx},#{limit} 
+	</select>
+	
+	<!-- 综合统计数量用作分页  按时间-->
+	<select id="allCountByTimeNum"  parameterType="map"  resultType="integer">
+		select count(*)
+			from 
+			(select (DATE_FORMAT(yb.createdate,'%Y-%m-%d') ) as date,yo.id,yb.createdate,
+	        round(
+            (
+            (
+            sum(TIMESTAMPDIFF(MINUTE,start,end))/(count(yb.device)*60*8)
+            )*100
+            ),2)
+             as online
+		    from yx_behavior yb        
+	     	left join yx_device yd on yd.device = yb.device
+		    left join  yx_car yc on yc.id = yd.car_id
+		    left join yx_org yo on yo.id = yc.org      
+		    where ((DATE_FORMAT(yb.createdate,'%H') BETWEEN  8 and 11) 
+			or (DATE_FORMAT(yb.createdate,'%H') BETWEEN  14 and 17)) 
+			<if test="startDate != nul" >and yb.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group By date) yy
+			
+			left join ( select (DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+						sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+			    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+			    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+			    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time
+			from yx_info_center yi 
+			left join yx_car yc on  yc.id = yi.car_id
+			where 1=1 
+			<if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date) xx on xx.date = yy.date 
+			
+			left join (select (DATE_FORMAT(yb1.createdate,'%Y-%m-%d') ) as date,sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+			sum(trip_duration/3600) as duration
+			from yx_behavior  yb1 
+			left join yx_device yd on yd.device = yb1.device
+			left join  yx_car yc on yc.id = yd.car_id
+			where 1=1
+			<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date )  zz on zz.date = yy.date
+			
+			left join (select (DATE_FORMAT(yb2.end,'%Y-%m-%d') ) as date,count(yo.id) as foul_task
+			from yx_behavior yb2   
+			left join yx_device yd on yd.device = yb2.device
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.task_status = '1' and
+			(
+			(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+			or 
+			yb2.trip_distance >= 1000
+			) 
+			<if test="startDate != nul" >and  yb2.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and  yb2.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date) mm on mm.date = yy.date 
+	</select>
+	
+	
+	
+	<!-- 综合统计  按机构-->
+	<select id="allCountByOrg"  parameterType="map"  resultMap="CountInfoRM">
+		select yy.org_name,round(avg(yy.online),2) as avg,
+		        xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+		        zz.fuel,zz.mileage,zz.duration,
+		        mm.foul_task
+		        from 
+		(select (DATE_FORMAT(yb.createdate,'%Y-%m-%d') ) as date,yo.id,yb.createdate,
+			        round(
+		            (
+		            (
+		            sum(TIMESTAMPDIFF(MINUTE,start,end))/(count(yb.device)*60*8)
+		            )*100
+		            ),2)
+		             as online,yo.name as org_name
+				    from yx_behavior yb        
+			     	left join yx_device yd on yd.device = yb.device
+				    left join  yx_car yc on yc.id = yd.car_id
+				    left join yx_org yo on yo.id = yc.org      
+				    where ((DATE_FORMAT(yb.createdate,'%H') BETWEEN  8 and 11) 
+					or (DATE_FORMAT(yb.createdate,'%H') BETWEEN  14 and 17)) 
+					<if test="startDate != nul" >and yb.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					<if test="list != null">and yo.id in
+					<foreach collection="list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+		group By yo.id) yy
+		
+		left join ( select (DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		 			    sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+			    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+			    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+			    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time    
+		from yx_info_center yi 
+		left join yx_org yo on yo.id = yi.org
+		 where  1=1  
+				 <if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+				 <if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+				 <if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+				</if>
+				<if test="list != null">and yo.id in
+					<foreach collection="list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+				</if>
+				and yo.`status` = 1
+		  group by yo.id) xx on xx.date = yy.date  
+		
+		
+		left join (select (DATE_FORMAT(yb1.createdate,'%Y-%m-%d') ) as date,sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+		sum(trip_duration/3600) as duration
+		from yx_behavior  yb1 
+		left join yx_device yd on yd.device = yb1.device
+		left join  yx_car yc on yc.id = yd.car_id
+		left join yx_org yo on yo.id = yc.org  
+		where 1=1 
+					<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					<if test="list != null">and yo.id in
+					<foreach collection="list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+		group by yo.id )  zz on zz.date = yy.date
+		
+		left join (select 
+				(DATE_FORMAT(yb2.end,'%Y-%m-%d') ) as date,count(yo.id) as foul_task
+					 from yx_behavior yb2   
+					left join yx_device yd on yd.device = yb2.device
+					left join yx_car yc on yc.id = yd.car_id
+					left join yx_org yo on yo.id = yc.org
+					where yc.task_status = '1' and
+					(
+					(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+					or 
+					yb2.trip_distance >= 1000
+					)
+					<if test="startDate != nul" >and yb2.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb2.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					<if test="list != null">and yo.id in
+					<foreach collection="list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+					group by yo.id) mm on mm.date = yy.date
+		           group by yy.id   
+		           	limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- 综合统计 数量用作分页  按机构-->
+	<select id="allCountByOrgNum"  parameterType="map" resultType="integer">
+		<!-- select count(*) from yx_org yo 
+			right join 
+			(select DISTINCT org from  yx_info_center
+			where 1 = 1
+				 <if test="startDate != nul" >and happen_time &gt;= #{startDate}</if>
+				 <if test="endDate != nul" >and happen_time &lt;= #{endDate}</if>
+				 <if test="org_list != null">and org in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+				</if>
+			
+			) yy on yy.org = yo.id -->
+		select count(*)
+		        from (
+		 select yy.org_name,round(avg(yy.online),2) as avg,
+		        xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+		        zz.fuel,zz.mileage,zz.duration,
+		        mm.foul_task
+		        from 
+		(select (DATE_FORMAT(yb.createdate,'%Y-%m-%d') ) as date,yo.id,yb.createdate,
+			        round(
+		            (
+		            (
+		            sum(TIMESTAMPDIFF(MINUTE,start,end))/(count(yb.device)*60*8)
+		            )*100
+		            ),2)
+		             as online,yo.name as org_name
+				    from yx_behavior yb        
+			     	left join yx_device yd on yd.device = yb.device
+				    left join  yx_car yc on yc.id = yd.car_id
+				    left join yx_org yo on yo.id = yc.org      
+				    where ((DATE_FORMAT(yb.createdate,'%H') BETWEEN  8 and 11) 
+					or (DATE_FORMAT(yb.createdate,'%H') BETWEEN  14 and 17)) 
+					<if test="startDate != nul" >and yb.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+		group By yo.id) yy
+		
+		left join ( select (DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		 			    sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+			    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+			    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+			    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time    
+		from yx_info_center yi 
+		left join yx_org yo on yo.id = yi.org
+		 where  1=1  
+				 <if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+				 <if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+				 <if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+				</if>
+				and yo.`status` = 1
+		  group by yo.id) xx on xx.date = yy.date  
+		
+		
+		left join (select (DATE_FORMAT(yb1.createdate,'%Y-%m-%d') ) as date,sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+		sum(trip_duration/3600) as duration
+		from yx_behavior  yb1 
+		left join yx_device yd on yd.device = yb1.device
+		left join  yx_car yc on yc.id = yd.car_id
+		left join yx_org yo on yo.id = yc.org  
+		where 1=1 
+					<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+		group by yo.id )  zz on zz.date = yy.date
+		
+		left join (select 
+				(DATE_FORMAT(yb2.end,'%Y-%m-%d') ) as date,count(yo.id) as foul_task
+					 from yx_behavior yb2   
+					left join yx_device yd on yd.device = yb2.device
+					left join yx_car yc on yc.id = yd.car_id
+					left join yx_org yo on yo.id = yc.org
+					where yc.task_status = '1' and
+					(
+					(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+					or 
+					yb2.trip_distance >= 1000
+					)
+					<if test="startDate != nul" >and yb2.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb2.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					and yd.`status` = 1 and yc.`status` = 1 and yo.`status` = 1
+					group by yo.id) mm on mm.date = yy.date
+		           group by yy.id  ) as t
+				 
+	</select>
+	
+	
+	<!-- 综合统计  按车辆-->
+	<select id="allCountByCar"  parameterType="map"  resultMap="CountInfoRM">
+		select xx.car_no,xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+			yy.fuel,yy.mileage,yy.duration, 
+			zz.foul_task
+			from
+		(select yi.car_id,
+            sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time,    
+			yc.car_no
+			from yx_info_center yi 
+			left join yx_car yc on yc.id = yi.car_id
+			where  1=1
+			<if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			group by yi.car_id) xx    
+
+			left join 
+		(select sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+			sum(trip_duration/3600) as duration,yc.id as car_id
+			from yx_behavior  yb1 
+			left join yx_device yd on yd.device = yb1.device
+			left join  yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org     
+			where 1=1 
+			<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			group by yc.id )  yy on yy.car_id = xx.car_id
+
+			left join
+		(select 
+	        count(yo.id) as foul_task,          
+            yc.id as car_id
+		    from yx_behavior yb2   
+			left join yx_device yd on yd.device = yb2.device
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.task_status = '1' and
+			(
+			(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+			or 
+			yb2.trip_distance >= 1000
+			)
+			<if test="startDate != nul" >and yb2.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb2.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			group by yc.id) zz on zz.car_id = xx.car_id
+			group by xx.car_id
+			limit #{startIdx},#{limit}
+	</select>
+	
+	
+	<!-- 综合统计数量用作分页  按车辆-->
+	<select id="allCountByCarNum"  parameterType="map"  resultType="integer">
+		select count(*) from
+		(
+		select xx.car_no,xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+			yy.fuel,yy.mileage,yy.duration, 
+			zz.foul_task
+			from
+		(select yi.car_id,
+            sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time,    
+			yc.car_no
+			from yx_info_center yi 
+			left join yx_car yc on yc.id = yi.car_id
+			where  1=1
+			<if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			group by yi.car_id) xx    
+
+			left join 
+		(select sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+			sum(trip_duration/3600) as duration,yc.id as car_id
+			from yx_behavior  yb1 
+			left join yx_device yd on yd.device = yb1.device
+			left join  yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org     
+			where 1=1 
+			<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			group by yc.id )  yy on yy.car_id = xx.car_id
+
+			left join
+		(select 
+	        count(yo.id) as foul_task,          
+            yc.id as car_id
+		    from yx_behavior yb2   
+			left join yx_device yd on yd.device = yb2.device
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.task_status = '1' and
+			(
+			(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+			or 
+			yb2.trip_distance >= 1000
+			)
+			<if test="startDate != nul" >and yb2.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb2.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+							#{carId}
+				</foreach>
+			</if>
+			group by yc.id) zz on zz.car_id = xx.car_id
+			group by xx.car_id
+			) tt
+	</select>
+	
+	
+	<!-- =========================综合统计  按周  按月查询===================================   -->
+		
+	<!-- 综合统计  按时间-->
+	<select id="allCountByTimeAndMW"  parameterType="map"  resultMap="CountInfoRM">
+		select yy.date as date_time,round(avg(yy.online),2) as online_rate,
+			xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+			zz.fuel,zz.mileage,zz.duration,
+			mm.foul_task
+			from 
+			(select (DATE_FORMAT(yb.createdate,'%Y-%m-%d') ) as date,yo.id,yb.createdate,
+	        round(
+            (
+            (
+            sum(TIMESTAMPDIFF(MINUTE,start,end))/(count(yb.device)*60*8)
+            )*100
+            ),2)
+             as online
+		    from yx_behavior yb        
+	     	left join yx_device yd on yd.device = yb.device
+		    left join  yx_car yc on yc.id = yd.car_id
+		    left join yx_org yo on yo.id = yc.org      
+		    where ((DATE_FORMAT(yb.createdate,'%H') BETWEEN  8 and 11) 
+			or (DATE_FORMAT(yb.createdate,'%H') BETWEEN  14 and 17)) 
+			<if test="startDate != nul" >and yb.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group By date) yy
+			
+			left join ( select (DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+						sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+			    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+			    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+			    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time
+			from yx_info_center yi 
+			left join yx_car yc on  yc.id = yi.car_id
+			left join yx_org yo on yo.id = yc.org     
+			where 1=1 
+			<if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date) xx on xx.date = yy.date 
+			
+			left join (select (DATE_FORMAT(yb1.createdate,'%Y-%m-%d') ) as date,sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+			sum(trip_duration/3600) as duration
+			from yx_behavior  yb1 
+			left join yx_device yd on yd.device = yb1.device
+			left join  yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org     
+			where 1=1
+			<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date )  zz on zz.date = yy.date
+			
+			left join (select (DATE_FORMAT(yb2.end,'%Y-%m-%d') ) as date,count(yo.id) as foul_task
+			from yx_behavior yb2   
+			left join yx_device yd on yd.device = yb2.device
+			left join yx_car yc on yc.id = yd.car_id
+			left join yx_org yo on yo.id = yc.org
+			where yc.task_status = '1' and
+			(
+			(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+			or 
+			yb2.trip_distance >= 1000
+			) 
+			<if test="startDate != nul" >and  yb2.createdate &gt;= #{startDate}</if>
+			<if test="endDate != nul" >and  yb2.createdate &lt;= #{endDate}</if>
+			<if test="car_list != null">and yc.id in
+				<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="org_list != null">and yo.id in
+				<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+			<if test="lists != null">and yc.id in
+				<foreach collection="lists" item="carId" open="(" separator="," close=")">
+					#{carId}
+				</foreach>
+			</if>
+			group by date) mm on mm.date = yy.date
+			group by yy.date  
+	</select>
+	
+	
+	
+	
+	<!-- 综合统计  按机构-->
+	<select id="allCountByOrgAndMW"  parameterType="map"  resultMap="CountInfoRM">
+		select yy.org_name,round(avg(yy.online),2) as avg,
+		        xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+		        zz.fuel,zz.mileage,zz.duration,
+		        mm.foul_task
+		        from 
+		(select (DATE_FORMAT(yb.createdate,'%Y-%m-%d') ) as date,yo.id,yb.createdate,
+			        round(
+		            (
+		            (
+		            sum(TIMESTAMPDIFF(MINUTE,start,end))/(count(yb.device)*60*8)
+		            )*100
+		            ),2)
+		             as online,yo.name as org_name
+				    from yx_behavior yb        
+			     	left join yx_device yd on yd.device = yb.device
+				    left join  yx_car yc on yc.id = yd.car_id
+				    left join yx_org yo on yo.id = yc.org      
+				    where ((DATE_FORMAT(yb.createdate,'%H') BETWEEN  8 and 11) 
+					or (DATE_FORMAT(yb.createdate,'%H') BETWEEN  14 and 17)) 
+					<if test="startDate != nul" >and yb.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="carId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					<if test="list != null">and yo.id in
+					<foreach collection="list" item="carId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					
+					
+		group By yo.id) yy
+		
+		left join ( select (DATE_FORMAT(yi.happen_time,'%Y-%m-%d') ) as date,
+		 			    sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+			    		sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+			    		sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,
+			    		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time    
+		from yx_info_center yi 
+		left join yx_org yo on yo.id = yi.org
+		 where  1=1  
+				 <if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+				 <if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+				 <if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+				</if>
+				<if test="list != null">and yo.id in
+					<foreach collection="list" item="carId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+				</if>
+		  group by yo.id) xx on xx.date = yy.date  
+		
+		
+		left join (select (DATE_FORMAT(yb1.createdate,'%Y-%m-%d') ) as date,sum(yb1.trip_fuel/1000) as fuel ,sum(yb1.trip_distance/1000) as mileage,
+		sum(trip_duration/3600) as duration
+		from yx_behavior  yb1 
+		left join yx_device yd on yd.device = yb1.device
+		left join  yx_car yc on yc.id = yd.car_id
+		left join yx_org yo on yo.id = yc.org  
+		where 1=1 
+					<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					<if test="list != null">and yo.id in
+					<foreach collection="list" item="carId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+		group by yo.id )  zz on zz.date = yy.date
+		
+		left join (select 
+				(DATE_FORMAT(yb2.end,'%Y-%m-%d') ) as date,count(yo.id) as foul_task
+					 from yx_behavior yb2   
+					left join yx_device yd on yd.device = yb2.device
+					left join yx_car yc on yc.id = yd.car_id
+					left join yx_org yo on yo.id = yc.org
+					where yc.task_status = '1' and
+					(
+					(TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10)
+					or 
+					yb2.trip_distance >= 1000
+					)
+					<if test="startDate != nul" >and yb2.createdate &gt;= #{startDate}</if>
+					<if test="endDate != nul" >and yb2.createdate &lt;= #{endDate}</if>
+					<if test="org_list != null">and yo.id in
+					<foreach collection="org_list" item="orgId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					<if test="list != null">and yo.id in
+					<foreach collection="list" item="carId" open="(" separator="," close=")">
+						#{orgId}
+					</foreach>
+					</if>
+					group by yo.id) mm on mm.date = yy.date
+		           group by yy.id    
+	</select>
+	
+	
+	<!-- 综合统计  按车辆-->
+	<select id="allCountByCarAndMW"  parameterType="map"  resultMap="CountInfoRM">
+	select 
+		yy.car_no,yy.fuel,yy.mileage,yy.duration,
+		xx.break_rule,xx.outside,xx.overspeed,xx.foul_time,
+		zz.foul_task 
+		from 
+		 (select yb1.device,yc.car_no,
+		sum(yb1.trip_fuel/1000) as fuel ,
+		sum(yb1.trip_distance/1000) as mileage,
+		 sum(trip_duration/3600) as duration,
+		 yc.id as car_id from yx_behavior yb1 
+		left join yx_device yd on yd.device = yb1.device 
+		left join yx_car yc on yc.id = yd.car_id 
+		left join yx_org yo on yo.id = yc.org where 1=1 
+		<if test="startDate != nul" >and yb1.createdate &gt;= #{startDate}</if>
+		<if test="endDate != nul" >and yb1.createdate &lt;= #{endDate}</if>
+		<if test="car_list != null">and yc.id in
+			<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+						#{carId}
+			</foreach>
+		</if>
+		<if test="lists != null">and yc.id in
+			<foreach collection="lists" item="carId" open="(" separator="," close=")">
+						#{carId}
+			</foreach>
+		</if>
+		 group by yc.id ) yy  
+		left join 
+		 (select yi.car_id, 
+		 sum(case when yi.illegal_type='0' then 1 else 0 end) as break_rule,
+		 sum(case when yi.illegal_type='1' then 1 else 0 end) as outside,
+		 sum(case when yi.illegal_type='2' then 1 else 0 end) as overspeed,  
+		sum(case when yi.illegal_type='3' then 1 else 0 end) as foul_time, yc.car_no
+		 from yx_info_center yi 
+		left join yx_car yc on yc.id = yi.car_id where 1=1 
+		<if test="startDate != nul" >and yi.happen_time &gt;= #{startDate}</if>
+		<if test="endDate != nul" >and yi.happen_time &lt;= #{endDate}</if>
+		<if test="car_list != null">and yc.id in
+			<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+						#{carId}
+			</foreach>
+		</if>
+		<if test="lists != null">and yc.id in
+			<foreach collection="lists" item="carId" open="(" separator="," close=")">
+						#{carId}
+			</foreach>
+		</if>
+		 group by yi.car_id) xx    on yy.car_id = xx.car_id  
+		
+		left join 
+		(select count(yo.id) as foul_task, yc.id as car_id from yx_behavior yb2 
+		left join yx_device yd on yd.device = yb2.device 
+		left join yx_car yc on yc.id = yd.car_id 
+		left join yx_org yo on yo.id = yc.org where yc.task_status = '1' 
+		and ( (TIMESTAMPDIFF(MINUTE ,yb2.start,yb2.end)>10) or yb2.trip_distance >= 1000 )
+		<if test="startDate != nul" >and yb2.createdate &gt;= #{startDate}</if>
+		<if test="endDate != nul" >and yb2.createdate &lt;= #{endDate}</if>
+		<if test="car_list != null">and yc.id in
+			<foreach collection="car_list" item="carId" open="(" separator="," close=")">
+						#{carId}
+			</foreach>
+		</if>
+		<if test="lists != null">and yc.id in
+			<foreach collection="lists" item="carId" open="(" separator="," close=")">
+						#{carId}
+			</foreach>
+		</if>
+		 group by yc.id) zz on zz.car_id = yy.car_id group by zz.car_id  
+
+	</select>
+	
+	
+	<!-- 消息列表查询 -->
+	<select id="infoPage" parameterType="map" resultMap="InfoCenterRM">
+		select  yi.id,
+        yo.name,
+        DATE_FORMAT(yi.happen_time,'%Y-%m-%d %H:%i:%S') happen_time,
+        yi.illegal_type,  
+        yi.status,      
+        yc.car_no
+		from yx_info_center yi 
+        left join  (select * from yx_org where status = '1') yo ON yi.org=yo.id              
+        left join (select * from yx_car where status = '1') yc on yc.id = yi.car_id
+        where 1=1
+			<if test="find_type_1 != null" >and yi.status in(0,2)</if>
+			<if test="find_type_2 != null  ">and yi.status  = '1'</if>
+			<if test="list != null">and yi.org in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+		order by yi.status desc,yi.happen_time desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+	<!-- 消息列表查询 -->
+	<select id="infoPageCount" parameterType="map" resultType="Integer">
+		select  count(*)
+		from yx_info_center yi 
+        left join  (select * from yx_org where status = '1') yo on yi.org=yo.id              
+        left join (select * from yx_car where status = '1') yc on yc.id = yi.car_id
+        where 1=1
+			<if test="find_type_1 != null" >and yi.status in(0,2)</if>
+			<if test="find_type_2 != null  ">and yi.status  = '1'</if>
+			<if test="list != null">and yi.org in
+				<foreach collection="list" item="orgId" open="(" separator="," close=")">
+					#{orgId}
+				</foreach>
+			</if>
+	</select>
+	
+	<update id="updateInfoStatus" parameterType="com.youxing.car.entity.InfoCenter">
+		update yx_info_center 
+		set status = #{status}
+		where 1=1
+		<if test="list != null">and id in
+				<foreach collection="list" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+	</update>
+	
+</mapper>

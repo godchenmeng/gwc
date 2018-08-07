@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.LocationInfoDao">
+	<resultMap type="com.youxing.car.entity.CarNotice" id="CarNoticeRM">
+		<id column="id" property="id" />
+		<result column="device" property="device" />
+		<result column="serial" property="serial" />
+		<result column="obd_type" property="obd_type" />
+		<result column="data_flow" property="data_flow" />
+		<result column="dianya" property="dianya" />
+		<result column="mileage_type" property="mileage_type" />
+		<result column="mileage" property="mileage" />
+		<result column="fuel" property="fuel" />
+		<result column="engine_speed" property="engine_speed" />
+		<result column="car_speed" property="car_speed" />
+		<result column="sky_flow" property="sky_flow" />
+		<result column="inlet" property="inlet" />
+		<result column="inlet_pass" property="inlet_pass" />
+		<result column="fault_status" property="fault_status" />
+		<result column="engine_fault" property="engine_fault" />
+		<result column="coolant" property="coolant" />
+		<result column="car_tempu" property="car_tempu" />
+		<result column="oil_pass" property="oil_pass" />
+		<result column="air_pass" property="air_pass" />
+		<result column="air_sensor" property="air_sensor" />
+		<result column="gas_position" property="gas_position" />
+		<result column="engine_time" property="engine_time" />
+		<result column="fault_mil" property="fault_mil" />
+		<result column="innage" property="innage" />
+		<result column="engine_load" property="engine_load" />
+		<result column="long_fuel" property="long_fuel" />
+		<result column="angle_engine" property="angle_engine" />
+		<result column="car_mileage" property="car_mileage" />
+		<result column="car_time" property="car_time" />
+		<result column="mean1" property="mean1" />
+		<result column="mean2" property="mean2" />
+		<result column="mean3" property="mean3" />
+		<result column="mean4" property="mean4" />
+		<result column="total_max" property="total_max" />
+		<result column="acc" property="acc" />
+		<result column="senddate" property="senddate" />
+		<result column="createdate" property="createdate" />
+		<result column="alm_id" property="alm_id" />
+		<result column="gps_status" property="gps_status" />
+		<result column="latitude" property="latitude" />
+		<result column="longitude" property="longitude" />
+		<result column="altitude" property="altitude" />
+		<result column="satellites" property="satellites" />
+		<result column="gps_speed" property="gps_speed" />
+		<result column="direction" property="direction" />
+		<result column="pdop" property="pdop" />
+		<result column="org" property="org" />
+		<result column="car_no" property="car_no" />
+		<result column="brand" property="brand" />
+		<result column="type" property="type" />
+		<result column="vol" property="vol" />
+		<result column="send" property="send" />
+		<result column="address" property="address" />								
+	</resultMap>
+	<resultMap type="com.youxing.car.entity.LocationInfo" id="LocationInfoRM">
+		<result column="device" property="device" />
+		<result column="senddate" property="senddate" />
+		<result column="alm_id" property="alm_id" />
+		<result column="latitude" property="latitude" />
+		<result column="longitude" property="longitude" />
+		<result column="acc" property="acc" />
+		<result column="address" property="address" />						
+	</resultMap>	
+	
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,device,serial,obd_type,data_flow,dianya,mileage_type,mileage,fuel,engine_speed,car_speed,sky_flow,inlet,inlet_pass,fault_status,engine_fault,coolant,car_tempu,oil_pass,air_pass,air_sensor,gas_position,engine_time,fault_mil,innage,engine_load,long_fuel,angle_engine,car_mileage,car_time,mean1,mean2,mean3,mean4,total_max,acc,senddate,createdate,alm_id,gps_status,latitude,longitude,altitude,satellites,gps_speed,direction,pdop,org,car_no,brand,type,vol,send,address
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.CarNotice">
+	 	<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_car_notice (
+			<if test="device != null ">device ,</if>
+			<if test="serial != null ">serial ,</if>
+			<if test="obd_type != null ">obd_type ,</if>
+			<if test="data_flow != null ">data_flow ,</if>
+			<if test="dianya != null ">dianya ,</if>
+			<if test="mileage_type != null ">mileage_type ,</if>
+			<if test="mileage != null ">mileage ,</if>
+			<if test="fuel != null ">fuel ,</if>
+			<if test="engine_speed != null ">engine_speed ,</if>
+			<if test="car_speed != null ">car_speed ,</if>
+			<if test="sky_flow != null ">sky_flow ,</if>
+			<if test="inlet != null ">inlet ,</if>
+			<if test="inlet_pass != null ">inlet_pass ,</if>
+			<if test="fault_status != null ">fault_status ,</if>
+			<if test="engine_fault != null ">engine_fault ,</if>
+			<if test="coolant != null ">coolant ,</if>
+			<if test="car_tempu != null ">car_tempu ,</if>
+			<if test="oil_pass != null ">oil_pass ,</if>
+			<if test="air_pass != null ">air_pass ,</if>
+			<if test="air_sensor != null ">air_sensor ,</if>
+			<if test="gas_position != null ">gas_position ,</if>
+			<if test="engine_time != null ">engine_time ,</if>
+			<if test="fault_mil != null ">fault_mil ,</if>
+			<if test="innage != null ">innage ,</if>
+			<if test="engine_load != null ">engine_load ,</if>
+			<if test="long_fuel != null ">long_fuel ,</if>
+			<if test="angle_engine != null ">angle_engine ,</if>
+			<if test="car_mileage != null ">car_mileage ,</if>
+			<if test="car_time != null ">car_time ,</if>
+			<if test="mean1 != null ">mean1 ,</if>
+			<if test="mean2 != null ">mean2 ,</if>
+			<if test="mean3 != null ">mean3 ,</if>
+			<if test="mean4 != null ">mean4 ,</if>
+			<if test="total_max != null ">total_max ,</if>
+			<if test="acc != null ">acc ,</if>
+			<if test="senddate != null ">senddate ,</if>
+			<if test="createdate != null ">createdate ,</if>
+			<if test="alm_id != null ">alm_id ,</if>
+			<if test="gps_status != null ">gps_status ,</if>
+			<if test="latitude != null ">latitude ,</if>
+			<if test="longitude != null ">longitude ,</if>
+			<if test="altitude != null ">altitude ,</if>
+			<if test="satellites != null ">satellites ,</if>
+			<if test="gps_speed != null ">gps_speed ,</if>
+			<if test="direction != null ">direction ,</if>
+			<if test="pdop != null ">pdop ,</if>
+			<if test="org != null ">org ,</if>
+			<if test="car_no != null ">car_no ,</if>
+			<if test="brand != null ">brand ,</if>
+			<if test="type != null ">type ,</if>
+			<if test="vol != null ">vol ,</if>
+			<if test="send != null ">send ,</if>
+			<if test="address != null ">address</if>
+		)
+		values (
+			<if test="device != null"> #{device},</if>
+			<if test="serial != null"> #{serial},</if>
+			<if test="obd_type != null"> #{obd_type},</if>
+			<if test="data_flow != null"> #{data_flow},</if>
+			<if test="dianya != null"> #{dianya},</if>
+			<if test="mileage_type != null"> #{mileage_type},</if>
+			<if test="mileage != null"> #{mileage},</if>
+			<if test="fuel != null"> #{fuel},</if>
+			<if test="engine_speed != null"> #{engine_speed},</if>
+			<if test="car_speed != null"> #{car_speed},</if>
+			<if test="sky_flow != null"> #{sky_flow},</if>
+			<if test="inlet != null"> #{inlet},</if>
+			<if test="inlet_pass != null"> #{inlet_pass},</if>
+			<if test="fault_status != null"> #{fault_status},</if>
+			<if test="engine_fault != null"> #{engine_fault},</if>
+			<if test="coolant != null"> #{coolant},</if>
+			<if test="car_tempu != null"> #{car_tempu},</if>
+			<if test="oil_pass != null"> #{oil_pass},</if>
+			<if test="air_pass != null"> #{air_pass},</if>
+			<if test="air_sensor != null"> #{air_sensor},</if>
+			<if test="gas_position != null"> #{gas_position},</if>
+			<if test="engine_time != null"> #{engine_time},</if>
+			<if test="fault_mil != null"> #{fault_mil},</if>
+			<if test="innage != null"> #{innage},</if>
+			<if test="engine_load != null"> #{engine_load},</if>
+			<if test="long_fuel != null"> #{long_fuel},</if>
+			<if test="angle_engine != null"> #{angle_engine},</if>
+			<if test="car_mileage != null"> #{car_mileage},</if>
+			<if test="car_time != null"> #{car_time},</if>
+			<if test="mean1 != null"> #{mean1},</if>
+			<if test="mean2 != null"> #{mean2},</if>
+			<if test="mean3 != null"> #{mean3},</if>
+			<if test="mean4 != null"> #{mean4},</if>
+			<if test="total_max != null"> #{total_max},</if>
+			<if test="acc != null"> #{acc},</if>
+			<if test="senddate != null"> #{senddate},</if>
+			<if test="createdate != null"> #{createdate},</if>
+			<if test="alm_id != null"> #{alm_id},</if>
+			<if test="gps_status != null"> #{gps_status},</if>
+			<if test="latitude != null"> #{latitude},</if>
+			<if test="longitude != null"> #{longitude},</if>
+			<if test="altitude != null"> #{altitude},</if>
+			<if test="satellites != null"> #{satellites},</if>
+			<if test="gps_speed != null"> #{gps_speed},</if>
+			<if test="direction != null"> #{direction},</if>
+			<if test="pdop != null"> #{pdop},</if>
+			<if test="org != null"> #{org},</if>
+			<if test="car_no != null"> #{car_no},</if>
+			<if test="brand != null"> #{brand},</if>
+			<if test="type != null"> #{type},</if>
+			<if test="vol != null"> #{vol},</if>
+			<if test="send != null"> #{send},</if>
+			<if test="address != null"> #{address}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.CarNotice">
+		update yx_car_notice 
+		<set>
+			<if test="device != null">device = #{device},</if>
+			<if test="serial != null">serial = #{serial},</if>
+			<if test="obd_type != null">obd_type = #{obd_type},</if>
+			<if test="data_flow != null">data_flow = #{data_flow},</if>
+			<if test="dianya != null">dianya = #{dianya},</if>
+			<if test="mileage_type != null">mileage_type = #{mileage_type},</if>
+			<if test="mileage != null">mileage = #{mileage},</if>
+			<if test="fuel != null">fuel = #{fuel},</if>
+			<if test="engine_speed != null">engine_speed = #{engine_speed},</if>
+			<if test="car_speed != null">car_speed = #{car_speed},</if>
+			<if test="sky_flow != null">sky_flow = #{sky_flow},</if>
+			<if test="inlet != null">inlet = #{inlet},</if>
+			<if test="inlet_pass != null">inlet_pass = #{inlet_pass},</if>
+			<if test="fault_status != null">fault_status = #{fault_status},</if>
+			<if test="engine_fault != null">engine_fault = #{engine_fault},</if>
+			<if test="coolant != null">coolant = #{coolant},</if>
+			<if test="car_tempu != null">car_tempu = #{car_tempu},</if>
+			<if test="oil_pass != null">oil_pass = #{oil_pass},</if>
+			<if test="air_pass != null">air_pass = #{air_pass},</if>
+			<if test="air_sensor != null">air_sensor = #{air_sensor},</if>
+			<if test="gas_position != null">gas_position = #{gas_position},</if>
+			<if test="engine_time != null">engine_time = #{engine_time},</if>
+			<if test="fault_mil != null">fault_mil = #{fault_mil},</if>
+			<if test="innage != null">innage = #{innage},</if>
+			<if test="engine_load != null">engine_load = #{engine_load},</if>
+			<if test="long_fuel != null">long_fuel = #{long_fuel},</if>
+			<if test="angle_engine != null">angle_engine = #{angle_engine},</if>
+			<if test="car_mileage != null">car_mileage = #{car_mileage},</if>
+			<if test="car_time != null">car_time = #{car_time},</if>
+			<if test="mean1 != null">mean1 = #{mean1},</if>
+			<if test="mean2 != null">mean2 = #{mean2},</if>
+			<if test="mean3 != null">mean3 = #{mean3},</if>
+			<if test="mean4 != null">mean4 = #{mean4},</if>
+			<if test="total_max != null">total_max = #{total_max},</if>
+			<if test="acc != null">acc = #{acc},</if>
+			<if test="senddate != null">senddate = #{senddate},</if>
+			<if test="createdate != null">createdate = #{createdate},</if>
+			<if test="alm_id != null">alm_id = #{alm_id},</if>
+			<if test="gps_status != null">gps_status = #{gps_status},</if>
+			<if test="latitude != null">latitude = #{latitude},</if>
+			<if test="longitude != null">longitude = #{longitude},</if>
+			<if test="altitude != null">altitude = #{altitude},</if>
+			<if test="satellites != null">satellites = #{satellites},</if>
+			<if test="gps_speed != null">gps_speed = #{gps_speed},</if>
+			<if test="direction != null">direction = #{direction},</if>
+			<if test="pdop != null">pdop = #{pdop},</if>
+			<if test="org != null">org = #{org},</if>
+			<if test="car_no != null">car_no = #{car_no},</if>
+			<if test="brand != null">brand = #{brand},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="vol != null">vol = #{vol},</if>
+			<if test="send != null">send = #{send},</if>
+			<if test="address != null">address = #{address}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_car_notice where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_car_notice where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="CarNoticeRM">
+		select <include refid="COLUMNS" /> from yx_car_notice
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="CarNoticeRM">
+		select <include refid="COLUMNS" /> from yx_car_notice
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="obd_type != null">and obd_type = #{obd_type}</if>
+			<if test="data_flow != null">and data_flow = #{data_flow}</if>
+			<if test="dianya != null">and dianya = #{dianya}</if>
+			<if test="mileage_type != null">and mileage_type = #{mileage_type}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="fuel != null">and fuel = #{fuel}</if>
+			<if test="engine_speed != null">and engine_speed = #{engine_speed}</if>
+			<if test="car_speed != null">and car_speed = #{car_speed}</if>
+			<if test="sky_flow != null">and sky_flow = #{sky_flow}</if>
+			<if test="inlet != null">and inlet = #{inlet}</if>
+			<if test="inlet_pass != null">and inlet_pass = #{inlet_pass}</if>
+			<if test="fault_status != null">and fault_status = #{fault_status}</if>
+			<if test="engine_fault != null">and engine_fault = #{engine_fault}</if>
+			<if test="coolant != null">and coolant = #{coolant}</if>
+			<if test="car_tempu != null">and car_tempu = #{car_tempu}</if>
+			<if test="oil_pass != null">and oil_pass = #{oil_pass}</if>
+			<if test="air_pass != null">and air_pass = #{air_pass}</if>
+			<if test="air_sensor != null">and air_sensor = #{air_sensor}</if>
+			<if test="gas_position != null">and gas_position = #{gas_position}</if>
+			<if test="engine_time != null">and engine_time = #{engine_time}</if>
+			<if test="fault_mil != null">and fault_mil = #{fault_mil}</if>
+			<if test="innage != null">and innage = #{innage}</if>
+			<if test="engine_load != null">and engine_load = #{engine_load}</if>
+			<if test="long_fuel != null">and long_fuel = #{long_fuel}</if>
+			<if test="angle_engine != null">and angle_engine = #{angle_engine}</if>
+			<if test="car_mileage != null">and car_mileage = #{car_mileage}</if>
+			<if test="car_time != null">and car_time = #{car_time}</if>
+			<if test="mean1 != null">and mean1 = #{mean1}</if>
+			<if test="mean2 != null">and mean2 = #{mean2}</if>
+			<if test="mean3 != null">and mean3 = #{mean3}</if>
+			<if test="mean4 != null">and mean4 = #{mean4}</if>
+			<if test="total_max != null">and total_max = #{total_max}</if>
+			<if test="acc != null">and acc = #{acc}</if>
+			<if test="senddate != null">and senddate = #{senddate}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="alm_id != null">and alm_id = #{alm_id}</if>
+			<if test="gps_status != null">and gps_status = #{gps_status}</if>
+			<if test="latitude != null">and latitude = #{latitude}</if>
+			<if test="longitude != null">and longitude = #{longitude}</if>
+			<if test="altitude != null">and altitude = #{altitude}</if>
+			<if test="satellites != null">and satellites = #{satellites}</if>
+			<if test="gps_speed != null">and gps_speed = #{gps_speed}</if>
+			<if test="direction != null">and direction = #{direction}</if>
+			<if test="pdop != null">and pdop = #{pdop}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="vol != null">and vol = #{vol}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="address != null">and address = #{address}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="CarNoticeRM">
+		select <include refid="COLUMNS" /> from yx_car_notice
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="obd_type != null">and obd_type = #{obd_type}</if>
+			<if test="data_flow != null">and data_flow = #{data_flow}</if>
+			<if test="dianya != null">and dianya = #{dianya}</if>
+			<if test="mileage_type != null">and mileage_type = #{mileage_type}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="fuel != null">and fuel = #{fuel}</if>
+			<if test="engine_speed != null">and engine_speed = #{engine_speed}</if>
+			<if test="car_speed != null">and car_speed = #{car_speed}</if>
+			<if test="sky_flow != null">and sky_flow = #{sky_flow}</if>
+			<if test="inlet != null">and inlet = #{inlet}</if>
+			<if test="inlet_pass != null">and inlet_pass = #{inlet_pass}</if>
+			<if test="fault_status != null">and fault_status = #{fault_status}</if>
+			<if test="engine_fault != null">and engine_fault = #{engine_fault}</if>
+			<if test="coolant != null">and coolant = #{coolant}</if>
+			<if test="car_tempu != null">and car_tempu = #{car_tempu}</if>
+			<if test="oil_pass != null">and oil_pass = #{oil_pass}</if>
+			<if test="air_pass != null">and air_pass = #{air_pass}</if>
+			<if test="air_sensor != null">and air_sensor = #{air_sensor}</if>
+			<if test="gas_position != null">and gas_position = #{gas_position}</if>
+			<if test="engine_time != null">and engine_time = #{engine_time}</if>
+			<if test="fault_mil != null">and fault_mil = #{fault_mil}</if>
+			<if test="innage != null">and innage = #{innage}</if>
+			<if test="engine_load != null">and engine_load = #{engine_load}</if>
+			<if test="long_fuel != null">and long_fuel = #{long_fuel}</if>
+			<if test="angle_engine != null">and angle_engine = #{angle_engine}</if>
+			<if test="car_mileage != null">and car_mileage = #{car_mileage}</if>
+			<if test="car_time != null">and car_time = #{car_time}</if>
+			<if test="mean1 != null">and mean1 = #{mean1}</if>
+			<if test="mean2 != null">and mean2 = #{mean2}</if>
+			<if test="mean3 != null">and mean3 = #{mean3}</if>
+			<if test="mean4 != null">and mean4 = #{mean4}</if>
+			<if test="total_max != null">and total_max = #{total_max}</if>
+			<if test="acc != null">and acc = #{acc}</if>
+			<if test="senddate != null">and senddate = #{senddate}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="alm_id != null">and alm_id = #{alm_id}</if>
+			<if test="gps_status != null">and gps_status = #{gps_status}</if>
+			<if test="latitude != null">and latitude = #{latitude}</if>
+			<if test="longitude != null">and longitude = #{longitude}</if>
+			<if test="altitude != null">and altitude = #{altitude}</if>
+			<if test="satellites != null">and satellites = #{satellites}</if>
+			<if test="gps_speed != null">and gps_speed = #{gps_speed}</if>
+			<if test="direction != null">and direction = #{direction}</if>
+			<if test="pdop != null">and pdop = #{pdop}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="vol != null">and vol = #{vol}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="address != null">and address = #{address}</if>
+		</where>
+		order by createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="CarNoticeRM">
+		select <include refid="COLUMNS" /> from yx_car_notice
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="obd_type != null">and obd_type = #{obd_type}</if>
+			<if test="data_flow != null">and data_flow = #{data_flow}</if>
+			<if test="dianya != null">and dianya = #{dianya}</if>
+			<if test="mileage_type != null">and mileage_type = #{mileage_type}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="fuel != null">and fuel = #{fuel}</if>
+			<if test="engine_speed != null">and engine_speed = #{engine_speed}</if>
+			<if test="car_speed != null">and car_speed = #{car_speed}</if>
+			<if test="sky_flow != null">and sky_flow = #{sky_flow}</if>
+			<if test="inlet != null">and inlet = #{inlet}</if>
+			<if test="inlet_pass != null">and inlet_pass = #{inlet_pass}</if>
+			<if test="fault_status != null">and fault_status = #{fault_status}</if>
+			<if test="engine_fault != null">and engine_fault = #{engine_fault}</if>
+			<if test="coolant != null">and coolant = #{coolant}</if>
+			<if test="car_tempu != null">and car_tempu = #{car_tempu}</if>
+			<if test="oil_pass != null">and oil_pass = #{oil_pass}</if>
+			<if test="air_pass != null">and air_pass = #{air_pass}</if>
+			<if test="air_sensor != null">and air_sensor = #{air_sensor}</if>
+			<if test="gas_position != null">and gas_position = #{gas_position}</if>
+			<if test="engine_time != null">and engine_time = #{engine_time}</if>
+			<if test="fault_mil != null">and fault_mil = #{fault_mil}</if>
+			<if test="innage != null">and innage = #{innage}</if>
+			<if test="engine_load != null">and engine_load = #{engine_load}</if>
+			<if test="long_fuel != null">and long_fuel = #{long_fuel}</if>
+			<if test="angle_engine != null">and angle_engine = #{angle_engine}</if>
+			<if test="car_mileage != null">and car_mileage = #{car_mileage}</if>
+			<if test="car_time != null">and car_time = #{car_time}</if>
+			<if test="mean1 != null">and mean1 = #{mean1}</if>
+			<if test="mean2 != null">and mean2 = #{mean2}</if>
+			<if test="mean3 != null">and mean3 = #{mean3}</if>
+			<if test="mean4 != null">and mean4 = #{mean4}</if>
+			<if test="total_max != null">and total_max = #{total_max}</if>
+			<if test="acc != null">and acc = #{acc}</if>
+			<if test="senddate != null">and senddate = #{senddate}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="alm_id != null">and alm_id = #{alm_id}</if>
+			<if test="gps_status != null">and gps_status = #{gps_status}</if>
+			<if test="latitude != null">and latitude = #{latitude}</if>
+			<if test="longitude != null">and longitude = #{longitude}</if>
+			<if test="altitude != null">and altitude = #{altitude}</if>
+			<if test="satellites != null">and satellites = #{satellites}</if>
+			<if test="gps_speed != null">and gps_speed = #{gps_speed}</if>
+			<if test="direction != null">and direction = #{direction}</if>
+			<if test="pdop != null">and pdop = #{pdop}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="vol != null">and vol = #{vol}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="address != null">and address = #{address}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.CarNotice" resultMap="CarNoticeRM">
+		select <include refid="COLUMNS" /> from yx_car_notice
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="obd_type != null">and obd_type = #{obd_type}</if>
+			<if test="data_flow != null">and data_flow = #{data_flow}</if>
+			<if test="dianya != null">and dianya = #{dianya}</if>
+			<if test="mileage_type != null">and mileage_type = #{mileage_type}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="fuel != null">and fuel = #{fuel}</if>
+			<if test="engine_speed != null">and engine_speed = #{engine_speed}</if>
+			<if test="car_speed != null">and car_speed = #{car_speed}</if>
+			<if test="sky_flow != null">and sky_flow = #{sky_flow}</if>
+			<if test="inlet != null">and inlet = #{inlet}</if>
+			<if test="inlet_pass != null">and inlet_pass = #{inlet_pass}</if>
+			<if test="fault_status != null">and fault_status = #{fault_status}</if>
+			<if test="engine_fault != null">and engine_fault = #{engine_fault}</if>
+			<if test="coolant != null">and coolant = #{coolant}</if>
+			<if test="car_tempu != null">and car_tempu = #{car_tempu}</if>
+			<if test="oil_pass != null">and oil_pass = #{oil_pass}</if>
+			<if test="air_pass != null">and air_pass = #{air_pass}</if>
+			<if test="air_sensor != null">and air_sensor = #{air_sensor}</if>
+			<if test="gas_position != null">and gas_position = #{gas_position}</if>
+			<if test="engine_time != null">and engine_time = #{engine_time}</if>
+			<if test="fault_mil != null">and fault_mil = #{fault_mil}</if>
+			<if test="innage != null">and innage = #{innage}</if>
+			<if test="engine_load != null">and engine_load = #{engine_load}</if>
+			<if test="long_fuel != null">and long_fuel = #{long_fuel}</if>
+			<if test="angle_engine != null">and angle_engine = #{angle_engine}</if>
+			<if test="car_mileage != null">and car_mileage = #{car_mileage}</if>
+			<if test="car_time != null">and car_time = #{car_time}</if>
+			<if test="mean1 != null">and mean1 = #{mean1}</if>
+			<if test="mean2 != null">and mean2 = #{mean2}</if>
+			<if test="mean3 != null">and mean3 = #{mean3}</if>
+			<if test="mean4 != null">and mean4 = #{mean4}</if>
+			<if test="total_max != null">and total_max = #{total_max}</if>
+			<if test="acc != null">and acc = #{acc}</if>
+			<if test="senddate != null">and senddate = #{senddate}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="alm_id != null">and alm_id = #{alm_id}</if>
+			<if test="gps_status != null">and gps_status = #{gps_status}</if>
+			<if test="latitude != null">and latitude = #{latitude}</if>
+			<if test="longitude != null">and longitude = #{longitude}</if>
+			<if test="altitude != null">and altitude = #{altitude}</if>
+			<if test="satellites != null">and satellites = #{satellites}</if>
+			<if test="gps_speed != null">and gps_speed = #{gps_speed}</if>
+			<if test="direction != null">and direction = #{direction}</if>
+			<if test="pdop != null">and pdop = #{pdop}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="vol != null">and vol = #{vol}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="address != null">and address = #{address}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="CarNoticeRM">
+		select <include refid="COLUMNS" /> from yx_car_notice where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_car_notice
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_car_notice
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="device != null">and device = #{device}</if>
+			<if test="serial != null">and serial = #{serial}</if>
+			<if test="obd_type != null">and obd_type = #{obd_type}</if>
+			<if test="data_flow != null">and data_flow = #{data_flow}</if>
+			<if test="dianya != null">and dianya = #{dianya}</if>
+			<if test="mileage_type != null">and mileage_type = #{mileage_type}</if>
+			<if test="mileage != null">and mileage = #{mileage}</if>
+			<if test="fuel != null">and fuel = #{fuel}</if>
+			<if test="engine_speed != null">and engine_speed = #{engine_speed}</if>
+			<if test="car_speed != null">and car_speed = #{car_speed}</if>
+			<if test="sky_flow != null">and sky_flow = #{sky_flow}</if>
+			<if test="inlet != null">and inlet = #{inlet}</if>
+			<if test="inlet_pass != null">and inlet_pass = #{inlet_pass}</if>
+			<if test="fault_status != null">and fault_status = #{fault_status}</if>
+			<if test="engine_fault != null">and engine_fault = #{engine_fault}</if>
+			<if test="coolant != null">and coolant = #{coolant}</if>
+			<if test="car_tempu != null">and car_tempu = #{car_tempu}</if>
+			<if test="oil_pass != null">and oil_pass = #{oil_pass}</if>
+			<if test="air_pass != null">and air_pass = #{air_pass}</if>
+			<if test="air_sensor != null">and air_sensor = #{air_sensor}</if>
+			<if test="gas_position != null">and gas_position = #{gas_position}</if>
+			<if test="engine_time != null">and engine_time = #{engine_time}</if>
+			<if test="fault_mil != null">and fault_mil = #{fault_mil}</if>
+			<if test="innage != null">and innage = #{innage}</if>
+			<if test="engine_load != null">and engine_load = #{engine_load}</if>
+			<if test="long_fuel != null">and long_fuel = #{long_fuel}</if>
+			<if test="angle_engine != null">and angle_engine = #{angle_engine}</if>
+			<if test="car_mileage != null">and car_mileage = #{car_mileage}</if>
+			<if test="car_time != null">and car_time = #{car_time}</if>
+			<if test="mean1 != null">and mean1 = #{mean1}</if>
+			<if test="mean2 != null">and mean2 = #{mean2}</if>
+			<if test="mean3 != null">and mean3 = #{mean3}</if>
+			<if test="mean4 != null">and mean4 = #{mean4}</if>
+			<if test="total_max != null">and total_max = #{total_max}</if>
+			<if test="acc != null">and acc = #{acc}</if>
+			<if test="senddate != null">and senddate = #{senddate}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="alm_id != null">and alm_id = #{alm_id}</if>
+			<if test="gps_status != null">and gps_status = #{gps_status}</if>
+			<if test="latitude != null">and latitude = #{latitude}</if>
+			<if test="longitude != null">and longitude = #{longitude}</if>
+			<if test="altitude != null">and altitude = #{altitude}</if>
+			<if test="satellites != null">and satellites = #{satellites}</if>
+			<if test="gps_speed != null">and gps_speed = #{gps_speed}</if>
+			<if test="direction != null">and direction = #{direction}</if>
+			<if test="pdop != null">and pdop = #{pdop}</if>
+			<if test="org != null">and org = #{org}</if>
+			<if test="car_no != null">and car_no = #{car_no}</if>
+			<if test="brand != null">and brand = #{brand}</if>
+			<if test="type != null">and type = #{type}</if>
+			<if test="vol != null">and vol = #{vol}</if>
+			<if test="send != null">and send = #{send}</if>
+			<if test="address != null">and address = #{address}</if>
+		</where>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	<select id="pageByLocationInfo" parameterType="map" resultMap="LocationInfoRM">
+	    select ycn.device,ycn.senddate,ycn.alm_id,ycn.latitude,ycn.longitude,(case when ycn.acc = '0' then '0'
+        when ycn.acc = '1' and (TIMESTAMPDIFF(MINUTE, ycn.senddate,now()) > 5) then '2'
+        when ycn.acc = '1' then '1' end) 'acc'
+        from yx_car_notice ycn,
+        (select device,alm_id,MAX(senddate) as senddate
+        from yx_car_notice
+        where 1=1
+        <if test="device != null"> and device in
+            <foreach collection="device" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startdate"> and senddate &gt;= #{startdate}</if>
+        <if test="enddate"> and senddate &lt;= #{enddate}</if>
+        <if test="acc != null"> and alm_id in
+            <foreach collection="acc" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        group by device,alm_id) t
+        where ycn.device = t.device
+        and ycn.alm_id = t.alm_id
+        and ycn.senddate = t.senddate
+		limit #{startIdx},#{limit}
+	</select>
+	<select id="countByLocationInfo" parameterType="map" resultType="integer">
+	    select count(*)
+		from yx_car_notice ycn,
+		    (select device,alm_id,MAX(senddate) as senddate
+		     from yx_car_notice
+		     where 1=1
+		     <if test="device != null"> and device in
+		         <foreach collection="device" item="item" index="index" open="(" separator="," close=")">
+				    #{item}
+	             </foreach>
+		     </if>
+		     <if test="startdate"> and senddate &gt;= #{startdate}</if>
+		     <if test="enddate"> and senddate &lt;= #{enddate}</if>
+		     <if test="acc != null">and alm_id in
+				 <foreach collection="acc" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+		     </if>
+		     group by device,alm_id) t
+	    where ycn.device = t.device
+	      and ycn.alm_id = t.alm_id
+	      and ycn.senddate = t.senddate
+	</select>
+	<select id="pageByLocateInfo" parameterType="map" resultMap="CarNoticeRM">
+		select ycn.device,ydi.text as type_name,ycn.senddate,ycn.alm_id,(case when gc.acc = '0' then '0'
+		when gc.acc = '1' and (TIMESTAMPDIFF(MINUTE, gc.senddate,now()) > 5) then '2'
+		when gc.acc = '1' then '1' end) 'acc',ycn.address,c.type,c.car_no,o.name as org
+		from yx_car_notice ycn
+		left join yx_device d on d.device = ycn.device
+		left join yx_car c on c.id = d.car_id
+		left join yx_org o on o.id = c.org
+		left join yx_gps_current gc on gc.device = ycn.device
+		left join yx_dictionary ydi on ydi.value = c.type and ydi.parent_id = '1'
+		where o.status = '1' and c.status ='1'
+		<if test="device != null"> and ycn.device in
+			<foreach collection="device" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="startdate"> and ycn.senddate &gt;= #{startdate}</if>
+		<if test="enddate"> and ycn.senddate &lt;= #{enddate}</if>
+		and ycn.alm_id in ('0001','0002')
+		<if test="acc == 1">
+			and gc.acc in (0, 1)
+		</if>
+		<if test="acc == 2">
+			and ((gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &lt;= 5) or gc.acc = 0)
+		</if>
+		<if test="acc == 3">
+			and ((gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &gt;= 5) or gc.acc = 0)
+		</if>
+        <if test="acc == 4">
+            and gc.acc = 1
+        </if>
+        <if test="acc == 5">
+            and gc.acc = 0
+        </if>
+        <if test="acc == 6">
+            and (gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &lt;= 5)
+        </if>
+        <if test="acc == 7">
+            and (gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &gt;= 5)
+        </if>
+		order by ycn.senddate DESC
+		limit #{startIdx},#{limit}
+	</select>
+	<select id="countByLocateInfo" parameterType="map" resultType="integer">
+		select count(*)
+		from yx_car_notice ycn
+		left join yx_gps_current gc on gc.device = ycn.device
+		where 1=1
+		<if test="device != null"> and ycn.device in
+			<foreach collection="device" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="startdate"> and ycn.senddate &gt;= #{startdate}</if>
+		<if test="enddate"> and ycn.senddate &lt;= #{enddate}</if>
+		and ycn.alm_id in ('0001','0002')
+        <if test="acc == 1">
+            and gc.acc in (0, 1)
+        </if>
+        <if test="acc == 2">
+            and ((gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &lt;= 5) or gc.acc = 0)
+        </if>
+        <if test="acc == 3">
+            and ((gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &gt;= 5) or gc.acc = 0)
+        </if>
+        <if test="acc == 4">
+            and gc.acc = 1
+        </if>
+        <if test="acc == 5">
+            and gc.acc = 0
+        </if>
+        <if test="acc == 6">
+            and (gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &lt;= 5)
+        </if>
+        <if test="acc == 7">
+            and (gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &gt;= 5)
+        </if>
+	</select>
+	
+	<!-- 下载notice excel -->
+	<select id="getNoticeExcel" parameterType="map" resultMap="CarNoticeRM">
+		select ycn.device,ycn.senddate,ycn.alm_id,ycn.address,c.type,c.car_no,o.name as org
+		from yx_car_notice ycn
+		left join yx_device d on d.device = ycn.device
+		left join yx_car c on c.id = d.car_id
+		left join yx_org o on o.id = c.org
+		left join yx_gps_current gc on gc.device = ycn.device
+		where  o.status ='1' and c.status ='1'
+		<if test="device != null"> and ycn.device in
+			<foreach collection="device" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="startdate"> and ycn.senddate &gt;= #{startdate}</if>
+		<if test="enddate"> and ycn.senddate &lt;= #{enddate}</if>
+		and ycn.alm_id in ('0001','0002')
+		<if test="acc == 1">
+			and gc.acc in (0, 1)
+		</if>
+		<if test="acc == 2">
+			and ((gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &lt;= 5) or gc.acc = 0)
+		</if>
+		<if test="acc == 3">
+			and ((gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &gt;= 5) or gc.acc = 0)
+		</if>
+        <if test="acc == 4">
+            and gc.acc = 1
+        </if>
+        <if test="acc == 5">
+            and gc.acc = 0
+        </if>
+        <if test="acc == 6">
+            and (gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &lt;= 5)
+        </if>
+        <if test="acc == 7">
+            and (gc.acc = 1 and  TIMESTAMPDIFF(MINUTE, gc.senddate,now()) &gt;= 5)
+        </if>
+		order by ycn.senddate DESC
+	</select>
+</mapper>

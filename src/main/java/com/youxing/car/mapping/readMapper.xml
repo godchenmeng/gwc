@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.ReadDao">
+	<resultMap type="com.youxing.car.entity.Read" id="ReadRM">
+	      <id column="id" property="id" />
+	      <result column="apply_id" property="apply_id" />
+	      <result column="mid" property="mid" />
+	      <result column="isread" property="isread" />
+	</resultMap>
+	<!-- 全部字段-->
+	<sql id="COLUMNS">
+     id,apply_id,mid,isread
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.Read">
+		insert into yx_read (
+			<if test="apply_id != null ">apply_id,</if>
+			<if test="mid != null ">mid,</if>
+			<if test="isread != null ">isread</if>
+		)
+		values (
+			<if test="apply_id != null ">#{apply_id} ,</if>
+			<if test="mid != null ">#{mid},</if>
+			<if test="isread != null ">#{isread}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Read">
+		update yx_read
+		<set>
+			<if test="apply_id != null ">apply_id = #{apply_id} ,</if>
+			<if test="mid != null ">mid = #{mid},</if>
+			<if test="isread != null ">isread = #{isread}</if>
+		</set>
+		where  id = #{id}
+	</update>
+	
+	<update id="updateIsRead" parameterType="map">
+		update yx_read yr
+			left join yx_sq ys on ys.id = yr.apply_id   
+			left join yx_control_apply yca on yca.apply_id = yr.apply_id   
+			set  yr.isread = '2' 
+			where 1=1
+			<if test="mid != null ">and yr.mid = #{mid} </if>
+			<if test="sp_status != null ">and ys.sp_status = #{sp_status}</if>
+			<if test="dd_status != null ">and ys.dd_status = #{dd_status}</if>
+			<if test="yca_status != null ">and yca.status = #{yca_status}</if>
+	</update>
+	
+		
+	<select id="getAllCount" parameterType="map"  resultType="java.util.HashMap">
+		select 
+		sum(case when  ys.sp_status = '1' and ys.dd_status = '1' and yr.isread = '1'  then 1 else 0 end) as apply_status_1,
+		sum(case when  ys.sp_status = '2' and ys.dd_status = '1' and yr.isread = '1' then 1 else 0 end) as apply_status_2,
+		sum(case when  ys.sp_status = '3' or ys.dd_status = '3' and yr.isread = '1' then 1 else 0 end) as apply_status_3,
+		sum(case when  ys.sp_status = '2' and ys.dd_status = '2' and yca.status = '2' and yr.isread = '1' then 1 else 0 end) as apply_status_5
+	      from yx_read yr 
+	      left join yx_sq ys on ys.id = yr.apply_id   
+	      left join yx_control_apply yca on yca.apply_id = yr.apply_id   
+	      where mid = #{mid}
+	</select>
+
+</mapper>

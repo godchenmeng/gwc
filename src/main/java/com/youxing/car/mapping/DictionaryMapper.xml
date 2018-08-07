@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.DictionaryDao">
+	<resultMap type="com.youxing.car.entity.Dictionary" id="DicRM">
+	      <id column="id" property="id" />
+	      <result column="text" property="text" />
+	      <result column="priority" property="priority" />
+	      <result column="type" property="type" />
+	      <result column="value" property="value" />
+	      <result column="parent_id" property="parent_id" />
+	      <result column="code" property="code" />
+	      <result column="description" property="description" />
+	</resultMap>
+	
+	<sql id="COLUMNS">
+     id,text,priority,type,value,parent_id,code,description
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.Dictionary">
+		insert into yx_dictionary (
+			<if test="text != null ">text,</if>
+			<if test="priority != null ">priority,</if>
+			<if test="type != null ">type,</if>
+			<if test="value != null ">value,</if>
+			<if test="parent_id != null ">parent_id,</if>
+			<if test="code != null ">code,</if>
+			<if test="description != null ">description</if>
+		)
+		values (
+			<if test="text != null ">#{text},</if>
+			<if test="priority != null ">#{priority},</if>
+			<if test="type != null ">#{type},</if>
+			<if test="value != null ">#{value},</if>
+			<if test="parent_id != null ">#{parent_id},</if>
+			<if test="code != null ">#{code},</if>
+			<if test="description != null ">#{description}</if>
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.youxing.car.entity.Dictionary">
+		update yx_dictionary
+		<set>
+			<if test="text != null ">text = #{text},</if>
+			<if test="priority != null ">priority = #{priority},</if>
+			<if test="type != null ">type = #{type},</if>
+			<if test="value != null ">value = #{value},</if>
+			<if test="parent_id != null ">parent_id = #{parent_id},</if>
+			<if test="code != null ">code = #{code},</if>
+			<if test="description != null ">description = #{description}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+	<delete id="removeById" parameterType="long">
+		delete from yx_dictionary where id=#{id} 
+	</delete>
+	
+	<delete id="removeByIp" parameterType="com.youxing.car.entity.Dictionary">
+		delete from yx_dictionary where id=#{id} 
+	</delete>
+
+
+		<select id="listAll" resultMap="DicRM">
+		select <include refid="COLUMNS" /> from yx_dictionary
+	</select>
+	
+	<select id="listBy" parameterType="map" resultMap="DicRM">
+		select <include refid="COLUMNS" /> from yx_dictionary
+		where 1=1
+			<if test="text != null ">and text = #{text}</if>
+			<if test="priority != null ">and priority = #{priority}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="value != null ">and value = #{value}</if>
+			<if test="parent_id != null ">and parent_id = #{parent_id}</if>
+			<if test="code != null ">and code = #{code}</if>
+			<if test="description != null ">and description = #{description}</if>
+	</select>
+	
+	<select id="findBy" parameterType="com.youxing.car.entity.Dictionary" resultMap="DicRM">
+		select <include refid="COLUMNS" /> from yx_dictionary
+		where 1=1
+			<if test="text != null ">and text = #{text}</if>
+			<if test="priority != null ">and priority = #{priority}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="value != null ">and value = #{value}</if>
+			<if test="parent_id != null ">and parent_id = #{parent_id}</if>
+			<if test="code != null ">and code = #{code}</if>
+			<if test="description != null ">and description = #{description}</if>
+	</select>
+	
+	<select id="findById" parameterType="long" resultMap="DicRM">
+		select <include refid="COLUMNS" /> from yx_dictionary where id = #{id}
+	</select>
+	
+		<select id="countAll" resultType="integer">
+		select count(id) from yx_dictionary
+	</select>
+	
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_dictionary
+		where 1=1
+			<if test="text != null ">and text = #{text}</if>
+			<if test="priority != null ">and priority = #{priority}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="value != null ">and value = #{value}</if>
+			<if test="parent_id != null ">and parent_id = #{parent_id}</if>
+			<if test="code != null ">and code = #{code}</if>
+			<if test="description != null ">and description = #{description}</if>
+	</select>
+	
+	
+	<select id="pageBy" parameterType="map" resultMap="DicRM">
+		select <include refid="COLUMNS" /> from yx_dictionary
+	    where 1=1
+			<if test="text != null ">and text = #{text}</if>
+			<if test="priority != null ">and priority = #{priority}</if>
+			<if test="type != null ">and type = #{type}</if>
+			<if test="value != null ">and value = #{value}</if>
+			<if test="parent_id != null ">and parent_id = #{parent_id}</if>
+			<if test="code != null ">and code = #{code}</if>
+			<if test="description != null ">and description = #{description}</if>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+	
+		
+	<select id="findtextAndValue" parameterType="map" resultType="java.util.HashMap">
+		select text,value from yx_dictionary
+	    where parent_id = #{parent_id}
+		order by priority asc
+	</select>
+	
+	
+</mapper>

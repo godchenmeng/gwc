@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.RegionRelationDao">
+	<resultMap type="com.youxing.car.entity.RegionRelation" id="rRelationRM">
+	      <id column="id" property="id" />
+	      <result column="region_id" property="region_id" />
+	      <result column="lon" property="lon" />
+	      <result column="lat" property="lat" />
+	      <result column="relation_index" property="index"/>
+	</resultMap>
+	<!-- 全部字段-->
+	<sql id="COLUMNS">
+     id,region_id,lon,lat
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.RegionRelation">
+		insert into yx_region_relation (region_id,lon,lat)
+		values (#{region_id},#{lon},#{lat})
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.RegionRelation">
+		update yx_region_relation
+		<set>
+			<if test="region_id != null ">region_id = #{region_id}, </if>
+			<if test="lon != null ">lon = #{lon},</if>
+			<if test="lat != null ">lat = #{lat}</if>
+		</set>
+		where region_id =#{region_id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_region_relation where region_id =#{region_id}
+	</delete>
+	
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_region_relation where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="rRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_relation
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="rRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_relation
+		<where>
+			<if test="region_id != null "> and region_id = #{region_id}</if>
+			<if test="lon != null ">lon = #{lon}</if>
+			<if test="lat != null ">lat = #{lat}</if>
+		</where>
+	</select>
+
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.RegionRelation" resultMap="rRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_relation
+		<where>
+			<if test="region_id != null ">region_id = #{region_id}, </if>
+			<if test="lon != null ">lon = #{lon},</if>
+			<if test="lat != null ">lat = #{lat}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="rRelationRM">
+		select <include refid="COLUMNS" /> from yx_region_relation where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_region_relation
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_region_relation
+		<where>
+			<if test="region_id != null ">region_id = #{region_id}, </if>
+			<if test="lon != null ">lon = #{lon},</if>
+			<if test="lat != null ">lat = #{lat}</if>
+		</where>
+	</select>
+	
+	<insert id="insertBatch" parameterType="List">
+		insert into yx_region_relation (
+			region_id,lon,lat,relation_index
+			
+		)values
+		<foreach collection="list" item="obj" index="index" separator=",">
+	        (#{obj.region_id},#{obj.lon},#{obj.lat},#{obj.index})
+	    </foreach>
+	</insert>
+	
+</mapper>

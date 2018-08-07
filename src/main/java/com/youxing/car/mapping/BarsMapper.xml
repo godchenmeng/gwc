@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.BarsDao">
+	<resultMap type="com.youxing.car.entity.Bars" id="BarsRM">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="status" property="status" />
+		<result column="drawingType" property="drawingType" />
+		<result column="radius" property="radius" />		
+		<result column="org" property="org" />
+		<result column="createdate" property="createdate" />
+		<result column="createby" property="createby" />
+	</resultMap>
+	<resultMap type="com.youxing.car.entity.Bars" id="BarsAndBarsLatsRM">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="status" property="status" />
+		<result column="drawingType" property="drawingType" />
+		<result column="radius" property="radius" />
+		<result column="org" property="org" />
+		<result column="createdate" property="createdate" />
+		<result column="createby" property="createby" />
+		<association property="barsRule" javaType="com.youxing.car.entity.BarsRule">
+            <id property="id" column="r_id"/>
+		    <result column="type" property="type" />
+		    <result column="startdate" property="startdate" />
+		    <result column="enddate" property="enddate" />
+		    <collection property="barsRuleRelations" ofType="com.youxing.car.entity.BarsRuleRelation">
+		        <id property="id" column="rr_id"/>
+		        <result property="fenceid" column="fenceid"/>
+		        <association property="car" javaType="com.youxing.car.entity.Car">
+                    <id property="id" column="c_id"/>
+		            <result column="car_no" property="car_no" />
+		            <result column="driver_no" property="driver_no" />
+                </association>
+		    </collection>
+        </association>
+		<collection property="barsLats" ofType="com.youxing.car.entity.BarsLat">
+		    <id property="id" column="l_id"/>
+		    <result property="lat" column="lat"/>
+		    <result property="lon" column="lon"/>
+		</collection>	
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,name,status,drawingType,radius,org,createdate,createby
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.Bars">
+	 	<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into yx_bars (
+			<if test="name != null and name!=''">name ,</if>
+			<if test="status != null and status!=''">status ,</if>
+			<if test="drawingType != null and drawingType!=''">drawingType ,</if>
+			<if test="radius != null and radius!=''">radius ,</if>
+			<if test="org != null and org!=''">org ,</if>
+			<if test="createdate != null ">createdate ,</if>
+			<if test="createby != null and createby!=''">createby</if>
+		)
+		values (
+			<if test="name != null and name!=''"> #{name},</if>
+			<if test="status != null and status!=''"> #{status},</if>
+			<if test="drawingType != null and drawingType!=''">#{drawingType} ,</if>
+			<if test="radius != null and radius!=''">#{radius} ,</if>
+			<if test="org != null and org!=''"> #{org},</if>
+			<if test="createdate != null "> #{createdate},</if>
+			<if test="createby != null and createby!=''"> #{createby}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Bars">
+		update yx_bars 
+		<set>
+			<if test="name != null and name!=''">name = #{name},</if>
+			<if test="status != null and status!=''">status = #{status},</if>
+			<if test="drawingType != null and drawingType!=''">drawingType = #{drawingType},</if>
+			<if test="radius != null and radius!=''">radius = #{radius},</if>
+			<if test="org != null and org!=''">org = #{org},</if>
+			<if test="createdate != null and createdate!=''">createdate = #{createdate},</if>
+			<if test="createby != null and createby!=''">createby = #{createby}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_bars where id=#{id} 
+	</delete>
+	
+	<delete id="removeBybarId" parameterType="long">
+		delete from yx_bars where barid = #{barid} 
+	</delete>
+	
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_bars where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="BarsRM">
+		select <include refid="COLUMNS" /> from yx_bars
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="BarsRM">
+		select <include refid="COLUMNS" /> from yx_bars
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="drawingType != null">and drawingType = #{drawingType},</if>
+			<if test="radius != null">and radius = #{radius},</if>			
+			<if test="org != null">and org = #{org}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="BarsRM">
+		select <include refid="COLUMNS" /> from yx_bars
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="drawingType != null">and drawingType = #{drawingType},</if>
+			<if test="radius != null">and radius = #{radius},</if>			
+			<if test="org != null">and org = #{org}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		</where>
+		order by createdate desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="BarsRM">
+		select <include refid="COLUMNS" /> from yx_bars
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="drawingType != null">and drawingType = #{drawingType},</if>
+			<if test="radius != null">and radius = #{radius},</if>			
+			<if test="org != null">and org = #{org}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Bars" resultMap="BarsRM">
+		select <include refid="COLUMNS" /> from yx_bars
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="drawingType != null">and drawingType = #{drawingType},</if>
+			<if test="radius != null">and radius = #{radius},</if>			
+			<if test="org != null">and org = #{org}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="BarsRM">
+		select <include refid="COLUMNS" /> from yx_bars where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_bars
+	</select>
+	 <!-- 查询电栅栏名称，用于判断是否重复 -->
+	<select id="findName" resultMap="BarsRM">
+		select name from yx_bars where name != null or name != ''
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_bars
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="name != null">and name = #{name}</if>
+			<if test="status != null">and status = #{status}</if>
+			<if test="drawingType != null">and drawingType = #{drawingType},</if>
+			<if test="radius != null">and radius = #{radius},</if>			
+			<if test="org != null">and org = #{org}</if>
+			<if test="createdate != null">and createdate = #{createdate}</if>
+			<if test="createby != null">and createby = #{createby}</if>
+			<if test="list != null">and org in 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+	            </foreach>            
+			</if>
+		</where>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	<select id="pageBarsAndLatsBy" parameterType="map" resultMap="BarsAndBarsLatsRM">
+		select t.*,l.id as l_id,l.lat,l.lon,rr.id as rr_id,rr.fenceid,c.id as c_id,c.car_no,c.driver_no
+		from (select b.id,b.`name`,b.`status`,b.`drawingType`,b.radius,b.org,b.createdate,b.createby,r.id as r_id,r.type,r.startdate,r.enddate 
+		      from yx_bars b
+		      join yx_bars_rule r on b.id = r.barid
+		      <where>
+		          <if test="id != null">and b.id = #{id}</if>
+		          <if test="name != null">and b.name = #{name}</if>
+		          <if test="status != null">and b.status = #{status}</if>
+		          <if test="drawingType != null">and b.drawingType = #{drawingType},</if>
+		          <if test="radius != null">and b.radius = #{radius},</if>		          
+		          <if test="org != null">and b.org = #{org}</if>
+		          <if test="createdate != null">and b.createdate = #{createdate}</if>
+		          <if test="createby != null">and b.createby = #{createby}</if>
+		          <if test="list != null">and b.org in 
+		              <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+		                  #{item}
+		              </foreach>
+		          </if>
+		      </where>) t
+		left join yx_bars_lat l on t.id = l.barid
+		left join yx_bars_rule_relation rr on t.r_id = rr.ruleid
+		left join yx_car c on rr.carid = c.id
+		order by t.createdate desc,l.id desc       
+	</select>
+	
+	<update id="updateStatusByIds" parameterType="map">
+		update yx_bars set status = #{status}
+		where id in
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<select id="countBarsAndLatsBy" parameterType="map" resultType="integer">
+		select count(b.id) from yx_bars b join yx_bars_rule r on b.id = r.barid
+      <where>
+          <if test="id != null">and b.id = #{id}</if>
+          <if test="name != null">and b.name = #{name}</if>
+          <if test="status != null">and b.status = #{status}</if>
+          <if test="drawingType != null">and b.drawingType = #{drawingType},</if>
+          <if test="radius != null">and b.radius = #{radius},</if>		          
+          <if test="org != null">and b.org = #{org}</if>
+          <if test="createdate != null">and b.createdate = #{createdate}</if>
+          <if test="createby != null">and b.createby = #{createby}</if>
+          <if test="list != null">and b.org in 
+              <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+          </if>
+      </where>
+	</select>
+</mapper>

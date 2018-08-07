@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.BarsLatDao">
+	<resultMap type="com.youxing.car.entity.BarsLat" id="BarsLatRM">
+		<id column="id" property="id" />
+		<result column="barid" property="barid" />
+		<result column="lat" property="lat" />
+		<result column="lon" property="lon" />
+	</resultMap>
+	<!-- _____________________________________________________________________________ 全部字段 -->
+	<sql id="COLUMNS">
+		id,barid,lat,lon
+	</sql>
+
+
+	<!-- _____________________________________________________________________________ 1.add -->
+
+	<insert id="add" parameterType="com.youxing.car.entity.BarsLat">
+		insert into yx_bars_lat (
+			<if test="barid != null and barid!=''">barid ,</if>
+			<if test="lat != null and lat!=''">lat ,</if>
+			<if test="lon != null and lon!=''">lon</if>
+		)
+		values (
+			<if test="barid != null and barid!=''"> #{barid},</if>
+			<if test="lat != null and lat!=''"> #{lat},</if>
+			<if test="lon != null and lon!=''"> #{lon}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.BarsLat">
+		update yx_bars_lat 
+		<set>
+			<if test="barid != null and barid!=''">barid = #{barid},</if>
+			<if test="lat != null and lat!=''">lat = #{lat},</if>
+			<if test="lon != null and lon!=''">lon = #{lon}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_bars_lat where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_bars_lat where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="BarsLatRM">
+		select <include refid="COLUMNS" /> from yx_bars_lat
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="BarsLatRM">
+	select ybl.lat,ybl.lon
+		from yx_bars yb 
+		 LEFT JOIN yx_bars_lat ybl ON ybl.barid=yb.id
+		 LEFT JOIN yx_bars_rule ybr on ybr.barid = ybl.barid
+		 LEFT JOIN yx_bars_rule_relation ybrr on ybrr.ruleid = ybr.id
+        where 1=1
+			<if test="id != null">and ybl.id = #{id}</if>
+			<if test="barid != null">and ybl.barid = #{barid}</if>
+			<if test="lat != null">and ybl.lat = #{lat}</if>
+			<if test="lon != null">and ybl.lon = #{lon}</if>
+			<if test="car != null">and ybrr.carid = #{car}</if>
+	</select>
+
+	<select id="listBarid" parameterType="map" resultMap="BarsLatRM">
+	   select ybr.barid
+		 from  yx_bars yb
+		 LEFT JOIN yx_bars_rule ybr ON ybr.barid = yb.id
+		 LEFT JOIN yx_bars_rule_relation ybrr on ybrr.ruleid = ybr.id
+        where 1=1
+			<if test="car != null">and ybrr.carid = #{car}</if>
+	</select>
+	
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="BarsLatRM">
+		select <include refid="COLUMNS" /> from yx_bars_lat
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="barid != null">and barid = #{barid}</if>
+			<if test="lat != null">and lat = #{lat}</if>
+			<if test="lon != null">and lon = #{lon}</if>
+		</where>
+		order by id desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="BarsLatRM">
+		select <include refid="COLUMNS" /> from yx_bars_lat
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="barid != null">and barid = #{barid}</if>
+			<if test="lat != null">and lat = #{lat}</if>
+			<if test="lon != null">and lon = #{lon}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.BarsLat" resultMap="BarsLatRM">
+		select <include refid="COLUMNS" /> from yx_bars_lat
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="barid != null">and barid = #{barid}</if>
+			<if test="lat != null">and lat = #{lat}</if>
+			<if test="lon != null">and lon = #{lon}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="BarsLatRM">
+		select <include refid="COLUMNS" /> from yx_bars_lat where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_bars_lat
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_bars_lat
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="barid != null">and barid = #{barid}</if>
+			<if test="lat != null">and lat = #{lat}</if>
+			<if test="lon != null">and lon = #{lon}</if>
+		</where>
+	</select>
+	<!-- ******************扩展Mapper****************** -->
+	
+	<!-- ******************WEB****************** -->
+	<insert id="insertBatch" parameterType="ArrayList">
+	    insert into yx_bars_lat
+	    (barid,lat,lon)
+	    values
+	    <foreach collection="list" item="obj" index="index" separator=",">
+	        (#{obj.barid},#{obj.lat},#{obj.lon})
+	    </foreach>
+	</insert>
+	
+	<delete id="removeByBarid" parameterType="Long">
+		delete from yx_bars_lat where barid = #{barid}
+	</delete>
+	
+</mapper>

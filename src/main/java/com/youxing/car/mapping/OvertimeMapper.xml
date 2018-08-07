@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.OvertimeDao">
+	<resultMap type="com.youxing.car.entity.OverTime" id="OvertimeRM">
+	      <id column="id" property="id" />
+	      <result column="url" property="url" />
+	      <result column="duration" property="duration" />
+	      <result column="uid" property="uid" />
+	      <result column="ip" property="ip" />
+	      <result column="exchange" property="exchange" />
+	      <result column="createtime" property="createtime" />
+	</resultMap>
+	<!-- 全部字段-->
+	<sql id="COLUMNS">
+     id,url,duration,uid,ip,exchange,createtime
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.OverTime">
+		insert into yx_overtime (
+			<if test="url != null ">url,</if>
+			<if test="duration != null ">duration,</if>
+			<if test="uid != null ">uid,</if>
+			<if test="ip != null ">ip,</if>
+			<if test="exchange != null ">exchange,</if>
+			<if test="createtime != null ">createtime</if>
+		)
+		values (
+			<if test="url != null ">#{url} ,</if>
+			<if test="duration != null ">#{duration},</if>
+			<if test="uid != null ">#{uid},</if>
+			<if test="ip != null ">#{ip},</if>
+			<if test="exchange != null ">#{exchange},</if>
+			<if test="createtime != null ">#{createtime}</if>
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.OverTime">
+		update yx_overtime
+		<set>
+			<if test="url != null "> url = #{url} ,</if>
+			<if test="duration != null ">duration = #{duration},</if>
+			<if test="uid != null ">uid  = #{uid},</if>
+			<if test="ip != null ">ip = #{ip},</if>
+			<if test="exchange != null ">exchange = #{exchange},</if>
+			<if test="createtime != null ">createtime = #{createtime}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="setRead" parameterType="List">
+		update yx_overtime
+		<set>
+			isRead = 1
+		</set>
+		where id in
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="String">
+		delete from yx_overtime where  id = #{id}
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_overtime where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="OvertimeRM">
+		select <include refid="COLUMNS" /> from yx_overtime
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="OvertimeRM">
+		select id,url,duration,createtime from yx_overtime
+		where 1=1
+		<if test="lastID != null "> and id > #{lastID}</if>
+		order by createtime desc
+		limit 0,10
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.OverTime" resultMap="OvertimeRM">
+		select <include refid="COLUMNS" /> from yx_overtime
+		where 1=1
+			<if test="url != null "> and url = #{url}</if>
+			<if test="duration != null ">and duration = #{duration}</if>
+			<if test="uid != null "> and uid  = #{uid}</if>
+			<if test="ip != null ">and ip = #{ip}</if>
+			<if test="exchange != null ">and exchange = #{exchange}</if>
+			<if test="createtime != null ">and createtime = #{createtime}</if>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="OvertimeRM">
+		select <include refid="COLUMNS" /> from yx_overtime where id = #{id}
+	</select>
+
+
+</mapper>

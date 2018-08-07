@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youxing.car.dao.VersionDao">
+	<resultMap type="com.youxing.car.entity.Version" id="VersionRM">
+	      <id column="id" property="id" />
+	      <result column="type" property="type" />
+	      <result column="content" property="content" />
+	      <result column="version" property="version" />
+	      <result column="versionno" property="versionno" />
+	      <result column="download" property="download" />
+	      <result column="createdate" property="createdate" />
+	</resultMap>
+	<!-- 全部字段-->
+	<sql id="COLUMNS">
+     id,content,versionno,createdate,download,version,type
+    </sql>
+	
+	<insert id="add" parameterType="com.youxing.car.entity.Version">
+		insert into yx_version (
+			<if test="type != null and type!=''">type ,</if>
+			<if test="content != null and content!=''">content ,</if>
+			<if test="version != null and version !=''">version,</if>
+			<if test="versionno != null and versionno !=''">versionno,</if>
+			<if test="download != null and download !=''">download,</if>
+			createdate
+		)
+		values (
+			<if test="type != null and type!=''">#{type} ,</if>
+			<if test="content != null and content!=''">#{content} ,</if>
+			<if test="version != null and version !=''">#{version},</if>
+			<if test="versionno != null and versionno !=''">#{versionno},</if>
+			<if test="download != null and download !=''">#{download},</if>
+			now()	
+		)
+	</insert>
+
+	<!-- ______________________________________________________________________________ 2.modify -->
+
+	<update id="modify" parameterType="com.youxing.car.entity.Version">
+		update yx_version 
+		<set>
+			<if test="type != null and type!=''">type=#{type} ,</if>
+			<if test="content != null and content!=''">content =#{content} ,</if>
+			<if test="version != null and version !=''">version = #{version},</if>
+			<if test="versionno != null and versionno !=''">versionno = #{versionno},</if>
+			<if test="download != null and download !=''">download = #{download}</if>
+			
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- _____________________________________________________________________________ 3.removeById -->
+
+	<delete id="removeById" parameterType="long">
+		delete from yx_version where id=#{id} 
+	</delete>
+
+	<!-- _____________________________________________________________________________ 4.removeByIds -->
+
+	<delete id="removeByIds" parameterType="List">
+		delete from yx_version where id in 
+		<foreach collection = "list" index="index"  item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- _____________________________________________________________________________ 5.listAll -->
+
+	<select id="listAll" resultMap="VersionRM">
+		select <include refid="COLUMNS" /> from yx_version
+	</select>
+
+	<!-- _____________________________________________________________________________ 6.listBy -->
+
+	<select id="listBy" parameterType="map" resultMap="VersionRM">
+		select <include refid="COLUMNS" /> from yx_version
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="type != null and type!=''"> and type=#{type} ,</if>
+			<if test="content != null and content!=''">and content =#{content} ,</if>
+			<if test="version != null and version !=''">and version = #{version},</if>
+			<if test="versionno != null and versionno !=''">and versionno = #{versionno},</if>
+			<if test="download != null and download !=''">and download = #{download}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 7.pageBy -->
+
+	<select id="pageBy" parameterType="map" resultMap="VersionRM">
+		select <include refid="COLUMNS" /> from yx_version
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="type != null and type!=''"> and type=#{type} </if>
+			<if test="content != null and content!=''">and content =#{content} </if>
+			<if test="version != null and version !=''">and version = #{version}</if>
+			<if test="versionno != null and versionno !=''">and versionno = #{versionno}</if>
+			<if test="download != null and download !=''">and download = #{download}</if>
+		</where>
+		order by createdate  desc
+		limit #{startIdx},#{limit}
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.1.findByMap -->
+
+	<select id="findByMap" parameterType="map" resultMap="VersionRM">
+		select <include refid="COLUMNS" /> from yx_version
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="type != null and type!=''"> and type=#{type} </if>
+			<if test="content != null and content!=''">and content =#{content} </if>
+			<if test="version != null and version !=''">and version = #{version}</if>
+			<if test="versionno != null and versionno !=''">and versionno = #{versionno}</if>
+			<if test="download != null and download !=''">and download = #{download}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 8.2.findBy -->
+
+	<select id="findBy" parameterType="com.youxing.car.entity.Version" resultMap="VersionRM">
+		select <include refid="COLUMNS" /> from yx_version
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="type != null and type!=''"> and type=#{type} </if>
+			<if test="content != null and content!=''">and content =#{content} </if>
+			<if test="version != null and version !=''">and version = #{version}</if>
+			<if test="versionno != null and versionno !=''">and versionno = #{versionno}</if>
+			<if test="download != null and download !=''">and download = #{download}</if>
+		</where>
+	</select>
+
+	<!-- _____________________________________________________________________________ 9.findById -->
+
+	<select id="findById" parameterType="long" resultMap="VersionRM">
+		select <include refid="COLUMNS" /> from yx_version where id = #{id}
+	</select>
+
+	<!-- _____________________________________________________________________________ 10.countAll -->
+
+	<select id="countAll" resultType="integer">
+		select count(id) from yx_version
+	</select>
+
+	<!-- _____________________________________________________________________________ 11.countBy -->
+
+	<select id="countBy" parameterType="map" resultType="integer">
+		select count(id) from yx_version
+		<where>
+			<if test="id != null">and id = #{id}</if>
+			<if test="type != null and type!=''"> and type=#{type} </if>
+			<if test="content != null and content!=''">and content =#{content}</if>
+			<if test="version != null and version !=''">and version = #{version}</if>
+			<if test="versionno != null and versionno !=''">and versionno = #{versionno}</if>
+			<if test="download != null and download !=''">and download = #{download}</if>
+		</where>
+	</select>
+</mapper>
